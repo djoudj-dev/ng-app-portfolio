@@ -1,1 +1,717 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+/* --- Mode clair par défaut --- */
+:root {
+  --color-text: oklch(30.15% 0.01 270);
+  --color-background: oklch(100% 0 0);
+
+  --color-primary: oklch(45% 0.05 265);
+  --color-secondary: oklch(58% 0.04 260);
+  --color-accent: oklch(72% 0.17 55);
+
+  /* Déclinaisons PRIMARY */
+  --color-primary-100: oklch(95% 0.01 265);
+  --color-primary-200: oklch(85% 0.02 265);
+  --color-primary-300: oklch(70% 0.03 265);
+  --color-primary-400: oklch(60% 0.04 265);
+  --color-primary-500: oklch(45% 0.05 265);
+  --color-primary-600: oklch(35% 0.05 265);
+  --color-primary-700: oklch(25% 0.04 265);
+  --color-primary-800: oklch(18% 0.03 265);
+  --color-primary-900: oklch(12% 0.02 265);
+
+  /* Déclinaisons SECONDARY */
+  --color-secondary-100: oklch(95% 0.01 260);
+  --color-secondary-200: oklch(85% 0.02 260);
+  --color-secondary-300: oklch(70% 0.03 260);
+  --color-secondary-400: oklch(60% 0.035 260);
+  --color-secondary-500: oklch(58% 0.04 260);
+  --color-secondary-600: oklch(45% 0.035 260);
+  --color-secondary-700: oklch(30% 0.03 260);
+  --color-secondary-800: oklch(20% 0.02 260);
+  --color-secondary-900: oklch(12% 0.015 260);
+
+  /* Déclinaisons ACCENT */
+  --color-accent-100: oklch(95% 0.03 55);
+  --color-accent-200: oklch(88% 0.07 55);
+  --color-accent-300: oklch(80% 0.12 55);
+  --color-accent-400: oklch(75% 0.15 55);
+  --color-accent-500: oklch(72% 0.17 55);
+  --color-accent-600: oklch(60% 0.16 55);
+  --color-accent-700: oklch(48% 0.13 55);
+  --color-accent-800: oklch(36% 0.09 55);
+  --color-accent-900: oklch(22% 0.06 55);
+}
+
+/* --- Mode sombre via data-theme --- */
+[data-theme="dark"] {
+  --color-text: oklch(92% 0.01 260);
+  --color-background: oklch(25% 0.005 260);
+
+  --color-primary: oklch(76% 0.02 250);
+  --color-secondary: oklch(63% 0.03 260);
+  --color-accent: oklch(77% 0.17 55);
+
+  --color-primary-100: oklch(92% 0.01 250);
+  --color-primary-200: oklch(85% 0.015 250);
+  --color-primary-300: oklch(78% 0.018 250);
+  --color-primary-400: oklch(76% 0.02 250);
+  --color-primary-500: oklch(60% 0.02 250);
+  --color-primary-600: oklch(45% 0.015 250);
+  --color-primary-700: oklch(35% 0.01 250);
+  --color-primary-800: oklch(25% 0.008 250);
+  --color-primary-900: oklch(15% 0.005 250);
+
+  --color-secondary-100: oklch(90% 0.01 260);
+  --color-secondary-200: oklch(80% 0.015 260);
+  --color-secondary-300: oklch(70% 0.02 260);
+  --color-secondary-400: oklch(63% 0.03 260);
+  --color-secondary-500: oklch(50% 0.025 260);
+  --color-secondary-600: oklch(40% 0.02 260);
+  --color-secondary-700: oklch(30% 0.015 260);
+  --color-secondary-800: oklch(20% 0.01 260);
+  --color-secondary-900: oklch(12% 0.005 260);
+
+  --color-accent-100: oklch(95% 0.04 55);
+  --color-accent-200: oklch(90% 0.08 55);
+  --color-accent-300: oklch(85% 0.12 55);
+  --color-accent-400: oklch(77% 0.17 55);
+  --color-accent-500: oklch(65% 0.16 55);
+  --color-accent-600: oklch(50% 0.13 55);
+  --color-accent-700: oklch(38% 0.1 55);
+  --color-accent-800: oklch(28% 0.06 55);
+  --color-accent-900: oklch(18% 0.03 55);
+}
+
+@layer utilities {
+  [data-theme="dark"] .icon-invert {
+    filter: invert(1);
+  }
+
+  .bg-background {
+    background-color: var(--color-background);
+  }
+  .text-text {
+    color: var(--color-text);
+  }
+  .text-primary {
+    color: var(--color-primary);
+  }
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+  .text-accent {
+    color: var(--color-accent);
+  }
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+  .bg-primary-100 {
+    background-color: var(--color-primary-100);
+  }
+  .text-primary-100 {
+    color: var(--color-primary-100);
+  }
+  .border-primary-100 {
+    border-color: var(--color-primary-100);
+  }
+  .outline-primary-100 {
+    outline-color: var(--color-primary-100);
+  }
+  .ring-primary-100 {
+    --tw-ring-color: var(--color-primary-100);
+  }
+  .fill-primary-100 {
+    fill: var(--color-primary-100);
+  }
+  .stroke-primary-100 {
+    stroke: var(--color-primary-100);
+  }
+  .bg-primary-200 {
+    background-color: var(--color-primary-200);
+  }
+  .text-primary-200 {
+    color: var(--color-primary-200);
+  }
+  .border-primary-200 {
+    border-color: var(--color-primary-200);
+  }
+  .outline-primary-200 {
+    outline-color: var(--color-primary-200);
+  }
+  .ring-primary-200 {
+    --tw-ring-color: var(--color-primary-200);
+  }
+  .fill-primary-200 {
+    fill: var(--color-primary-200);
+  }
+  .stroke-primary-200 {
+    stroke: var(--color-primary-200);
+  }
+  .bg-primary-300 {
+    background-color: var(--color-primary-300);
+  }
+  .text-primary-300 {
+    color: var(--color-primary-300);
+  }
+  .border-primary-300 {
+    border-color: var(--color-primary-300);
+  }
+  .outline-primary-300 {
+    outline-color: var(--color-primary-300);
+  }
+  .ring-primary-300 {
+    --tw-ring-color: var(--color-primary-300);
+  }
+  .fill-primary-300 {
+    fill: var(--color-primary-300);
+  }
+  .stroke-primary-300 {
+    stroke: var(--color-primary-300);
+  }
+  .bg-primary-400 {
+    background-color: var(--color-primary-400);
+  }
+  .text-primary-400 {
+    color: var(--color-primary-400);
+  }
+  .border-primary-400 {
+    border-color: var(--color-primary-400);
+  }
+  .outline-primary-400 {
+    outline-color: var(--color-primary-400);
+  }
+  .ring-primary-400 {
+    --tw-ring-color: var(--color-primary-400);
+  }
+  .fill-primary-400 {
+    fill: var(--color-primary-400);
+  }
+  .stroke-primary-400 {
+    stroke: var(--color-primary-400);
+  }
+  .bg-primary-500 {
+    background-color: var(--color-primary-500);
+  }
+  .text-primary-500 {
+    color: var(--color-primary-500);
+  }
+  .border-primary-500 {
+    border-color: var(--color-primary-500);
+  }
+  .outline-primary-500 {
+    outline-color: var(--color-primary-500);
+  }
+  .ring-primary-500 {
+    --tw-ring-color: var(--color-primary-500);
+  }
+  .fill-primary-500 {
+    fill: var(--color-primary-500);
+  }
+  .stroke-primary-500 {
+    stroke: var(--color-primary-500);
+  }
+  .bg-primary-600 {
+    background-color: var(--color-primary-600);
+  }
+  .text-primary-600 {
+    color: var(--color-primary-600);
+  }
+  .border-primary-600 {
+    border-color: var(--color-primary-600);
+  }
+  .outline-primary-600 {
+    outline-color: var(--color-primary-600);
+  }
+  .ring-primary-600 {
+    --tw-ring-color: var(--color-primary-600);
+  }
+  .fill-primary-600 {
+    fill: var(--color-primary-600);
+  }
+  .stroke-primary-600 {
+    stroke: var(--color-primary-600);
+  }
+  .bg-primary-700 {
+    background-color: var(--color-primary-700);
+  }
+  .text-primary-700 {
+    color: var(--color-primary-700);
+  }
+  .border-primary-700 {
+    border-color: var(--color-primary-700);
+  }
+  .outline-primary-700 {
+    outline-color: var(--color-primary-700);
+  }
+  .ring-primary-700 {
+    --tw-ring-color: var(--color-primary-700);
+  }
+  .fill-primary-700 {
+    fill: var(--color-primary-700);
+  }
+  .stroke-primary-700 {
+    stroke: var(--color-primary-700);
+  }
+  .bg-primary-800 {
+    background-color: var(--color-primary-800);
+  }
+  .text-primary-800 {
+    color: var(--color-primary-800);
+  }
+  .border-primary-800 {
+    border-color: var(--color-primary-800);
+  }
+  .outline-primary-800 {
+    outline-color: var(--color-primary-800);
+  }
+  .ring-primary-800 {
+    --tw-ring-color: var(--color-primary-800);
+  }
+  .fill-primary-800 {
+    fill: var(--color-primary-800);
+  }
+  .stroke-primary-800 {
+    stroke: var(--color-primary-800);
+  }
+  .bg-primary-900 {
+    background-color: var(--color-primary-900);
+  }
+  .text-primary-900 {
+    color: var(--color-primary-900);
+  }
+  .border-primary-900 {
+    border-color: var(--color-primary-900);
+  }
+  .outline-primary-900 {
+    outline-color: var(--color-primary-900);
+  }
+  .ring-primary-900 {
+    --tw-ring-color: var(--color-primary-900);
+  }
+  .fill-primary-900 {
+    fill: var(--color-primary-900);
+  }
+  .stroke-primary-900 {
+    stroke: var(--color-primary-900);
+  }
+  .bg-secondary-100 {
+    background-color: var(--color-secondary-100);
+  }
+  .text-secondary-100 {
+    color: var(--color-secondary-100);
+  }
+  .border-secondary-100 {
+    border-color: var(--color-secondary-100);
+  }
+  .outline-secondary-100 {
+    outline-color: var(--color-secondary-100);
+  }
+  .ring-secondary-100 {
+    --tw-ring-color: var(--color-secondary-100);
+  }
+  .fill-secondary-100 {
+    fill: var(--color-secondary-100);
+  }
+  .stroke-secondary-100 {
+    stroke: var(--color-secondary-100);
+  }
+  .bg-secondary-200 {
+    background-color: var(--color-secondary-200);
+  }
+  .text-secondary-200 {
+    color: var(--color-secondary-200);
+  }
+  .border-secondary-200 {
+    border-color: var(--color-secondary-200);
+  }
+  .outline-secondary-200 {
+    outline-color: var(--color-secondary-200);
+  }
+  .ring-secondary-200 {
+    --tw-ring-color: var(--color-secondary-200);
+  }
+  .fill-secondary-200 {
+    fill: var(--color-secondary-200);
+  }
+  .stroke-secondary-200 {
+    stroke: var(--color-secondary-200);
+  }
+  .bg-secondary-300 {
+    background-color: var(--color-secondary-300);
+  }
+  .text-secondary-300 {
+    color: var(--color-secondary-300);
+  }
+  .border-secondary-300 {
+    border-color: var(--color-secondary-300);
+  }
+  .outline-secondary-300 {
+    outline-color: var(--color-secondary-300);
+  }
+  .ring-secondary-300 {
+    --tw-ring-color: var(--color-secondary-300);
+  }
+  .fill-secondary-300 {
+    fill: var(--color-secondary-300);
+  }
+  .stroke-secondary-300 {
+    stroke: var(--color-secondary-300);
+  }
+  .bg-secondary-400 {
+    background-color: var(--color-secondary-400);
+  }
+  .text-secondary-400 {
+    color: var(--color-secondary-400);
+  }
+  .border-secondary-400 {
+    border-color: var(--color-secondary-400);
+  }
+  .outline-secondary-400 {
+    outline-color: var(--color-secondary-400);
+  }
+  .ring-secondary-400 {
+    --tw-ring-color: var(--color-secondary-400);
+  }
+  .fill-secondary-400 {
+    fill: var(--color-secondary-400);
+  }
+  .stroke-secondary-400 {
+    stroke: var(--color-secondary-400);
+  }
+  .bg-secondary-500 {
+    background-color: var(--color-secondary-500);
+  }
+  .text-secondary-500 {
+    color: var(--color-secondary-500);
+  }
+  .border-secondary-500 {
+    border-color: var(--color-secondary-500);
+  }
+  .outline-secondary-500 {
+    outline-color: var(--color-secondary-500);
+  }
+  .ring-secondary-500 {
+    --tw-ring-color: var(--color-secondary-500);
+  }
+  .fill-secondary-500 {
+    fill: var(--color-secondary-500);
+  }
+  .stroke-secondary-500 {
+    stroke: var(--color-secondary-500);
+  }
+  .bg-secondary-600 {
+    background-color: var(--color-secondary-600);
+  }
+  .text-secondary-600 {
+    color: var(--color-secondary-600);
+  }
+  .border-secondary-600 {
+    border-color: var(--color-secondary-600);
+  }
+  .outline-secondary-600 {
+    outline-color: var(--color-secondary-600);
+  }
+  .ring-secondary-600 {
+    --tw-ring-color: var(--color-secondary-600);
+  }
+  .fill-secondary-600 {
+    fill: var(--color-secondary-600);
+  }
+  .stroke-secondary-600 {
+    stroke: var(--color-secondary-600);
+  }
+  .bg-secondary-700 {
+    background-color: var(--color-secondary-700);
+  }
+  .text-secondary-700 {
+    color: var(--color-secondary-700);
+  }
+  .border-secondary-700 {
+    border-color: var(--color-secondary-700);
+  }
+  .outline-secondary-700 {
+    outline-color: var(--color-secondary-700);
+  }
+  .ring-secondary-700 {
+    --tw-ring-color: var(--color-secondary-700);
+  }
+  .fill-secondary-700 {
+    fill: var(--color-secondary-700);
+  }
+  .stroke-secondary-700 {
+    stroke: var(--color-secondary-700);
+  }
+  .bg-secondary-800 {
+    background-color: var(--color-secondary-800);
+  }
+  .text-secondary-800 {
+    color: var(--color-secondary-800);
+  }
+  .border-secondary-800 {
+    border-color: var(--color-secondary-800);
+  }
+  .outline-secondary-800 {
+    outline-color: var(--color-secondary-800);
+  }
+  .ring-secondary-800 {
+    --tw-ring-color: var(--color-secondary-800);
+  }
+  .fill-secondary-800 {
+    fill: var(--color-secondary-800);
+  }
+  .stroke-secondary-800 {
+    stroke: var(--color-secondary-800);
+  }
+  .bg-secondary-900 {
+    background-color: var(--color-secondary-900);
+  }
+  .text-secondary-900 {
+    color: var(--color-secondary-900);
+  }
+  .border-secondary-900 {
+    border-color: var(--color-secondary-900);
+  }
+  .outline-secondary-900 {
+    outline-color: var(--color-secondary-900);
+  }
+  .ring-secondary-900 {
+    --tw-ring-color: var(--color-secondary-900);
+  }
+  .fill-secondary-900 {
+    fill: var(--color-secondary-900);
+  }
+  .stroke-secondary-900 {
+    stroke: var(--color-secondary-900);
+  }
+  .bg-accent-100 {
+    background-color: var(--color-accent-100);
+  }
+  .text-accent-100 {
+    color: var(--color-accent-100);
+  }
+  .border-accent-100 {
+    border-color: var(--color-accent-100);
+  }
+  .outline-accent-100 {
+    outline-color: var(--color-accent-100);
+  }
+  .ring-accent-100 {
+    --tw-ring-color: var(--color-accent-100);
+  }
+  .fill-accent-100 {
+    fill: var(--color-accent-100);
+  }
+  .stroke-accent-100 {
+    stroke: var(--color-accent-100);
+  }
+  .bg-accent-200 {
+    background-color: var(--color-accent-200);
+  }
+  .text-accent-200 {
+    color: var(--color-accent-200);
+  }
+  .border-accent-200 {
+    border-color: var(--color-accent-200);
+  }
+  .outline-accent-200 {
+    outline-color: var(--color-accent-200);
+  }
+  .ring-accent-200 {
+    --tw-ring-color: var(--color-accent-200);
+  }
+  .fill-accent-200 {
+    fill: var(--color-accent-200);
+  }
+  .stroke-accent-200 {
+    stroke: var(--color-accent-200);
+  }
+  .bg-accent-300 {
+    background-color: var(--color-accent-300);
+  }
+  .text-accent-300 {
+    color: var(--color-accent-300);
+  }
+  .border-accent-300 {
+    border-color: var(--color-accent-300);
+  }
+  .outline-accent-300 {
+    outline-color: var(--color-accent-300);
+  }
+  .ring-accent-300 {
+    --tw-ring-color: var(--color-accent-300);
+  }
+  .fill-accent-300 {
+    fill: var(--color-accent-300);
+  }
+  .stroke-accent-300 {
+    stroke: var(--color-accent-300);
+  }
+  .bg-accent-400 {
+    background-color: var(--color-accent-400);
+  }
+  .text-accent-400 {
+    color: var(--color-accent-400);
+  }
+  .border-accent-400 {
+    border-color: var(--color-accent-400);
+  }
+  .outline-accent-400 {
+    outline-color: var(--color-accent-400);
+  }
+  .ring-accent-400 {
+    --tw-ring-color: var(--color-accent-400);
+  }
+  .fill-accent-400 {
+    fill: var(--color-accent-400);
+  }
+  .stroke-accent-400 {
+    stroke: var(--color-accent-400);
+  }
+  .bg-accent-500 {
+    background-color: var(--color-accent-500);
+  }
+  .text-accent-500 {
+    color: var(--color-accent-500);
+  }
+  .border-accent-500 {
+    border-color: var(--color-accent-500);
+  }
+  .outline-accent-500 {
+    outline-color: var(--color-accent-500);
+  }
+  .ring-accent-500 {
+    --tw-ring-color: var(--color-accent-500);
+  }
+  .fill-accent-500 {
+    fill: var(--color-accent-500);
+  }
+  .stroke-accent-500 {
+    stroke: var(--color-accent-500);
+  }
+  .bg-accent-600 {
+    background-color: var(--color-accent-600);
+  }
+  .text-accent-600 {
+    color: var(--color-accent-600);
+  }
+  .border-accent-600 {
+    border-color: var(--color-accent-600);
+  }
+  .outline-accent-600 {
+    outline-color: var(--color-accent-600);
+  }
+  .ring-accent-600 {
+    --tw-ring-color: var(--color-accent-600);
+  }
+  .fill-accent-600 {
+    fill: var(--color-accent-600);
+  }
+  .stroke-accent-600 {
+    stroke: var(--color-accent-600);
+  }
+  .bg-accent-700 {
+    background-color: var(--color-accent-700);
+  }
+  .text-accent-700 {
+    color: var(--color-accent-700);
+  }
+  .border-accent-700 {
+    border-color: var(--color-accent-700);
+  }
+  .outline-accent-700 {
+    outline-color: var(--color-accent-700);
+  }
+  .ring-accent-700 {
+    --tw-ring-color: var(--color-accent-700);
+  }
+  .fill-accent-700 {
+    fill: var(--color-accent-700);
+  }
+  .stroke-accent-700 {
+    stroke: var(--color-accent-700);
+  }
+  .bg-accent-800 {
+    background-color: var(--color-accent-800);
+  }
+  .text-accent-800 {
+    color: var(--color-accent-800);
+  }
+  .border-accent-800 {
+    border-color: var(--color-accent-800);
+  }
+  .outline-accent-800 {
+    outline-color: var(--color-accent-800);
+  }
+  .ring-accent-800 {
+    --tw-ring-color: var(--color-accent-800);
+  }
+  .fill-accent-800 {
+    fill: var(--color-accent-800);
+  }
+  .stroke-accent-800 {
+    stroke: var(--color-accent-800);
+  }
+  .bg-accent-900 {
+    background-color: var(--color-accent-900);
+  }
+  .text-accent-900 {
+    color: var(--color-accent-900);
+  }
+  .border-accent-900 {
+    border-color: var(--color-accent-900);
+  }
+  .outline-accent-900 {
+    outline-color: var(--color-accent-900);
+  }
+  .ring-accent-900 {
+    --tw-ring-color: var(--color-accent-900);
+  }
+  .fill-accent-900 {
+    fill: var(--color-accent-900);
+  }
+  .stroke-accent-900 {
+    stroke: var(--color-accent-900);
+  }
+
+  .shadow-primary {
+    box-shadow: 0 1px 4px 0 var(--color-primary-300);
+  }
+
+  .shadow-primary-md {
+    box-shadow: 0 4px 6px -1px var(--color-primary-400),
+    0 2px 4px -2px var(--color-primary-300);
+  }
+
+  .shadow-secondary {
+    box-shadow: 0 2px 4px 0 var(--color-secondary-300);
+  }
+
+  .shadow-accent {
+    box-shadow: 0 2px 4px 0 var(--color-accent-300);
+  }
+
+  .shadow-accent-md {
+    box-shadow: 0 4px 6px -1px var(--color-accent-400),
+    0 2px 4px -2px var(--color-accent-300);
+  }
+
+  .shadow-subtle {
+    box-shadow: 0 1px 3px 0 var(--color-text),
+    0 1px 2px -1px var(--color-background);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to left, var(--color-accent-500), var(--color-text));
+    -webkit-background-clip: text; /* Safari */
+    background-clip: text; /* Pour les autres navigateurs */
+    color: transparent; /* Rend le texte transparent pour voir le gradient */
+  }
+
+}
