@@ -1,0 +1,66 @@
+<section class="bg-background mx-auto px-2 sm:px-4 md:px-6 min-h-screen flex flex-col justify-center">
+  <div class="container mx-auto px-4 md:px-6">
+    <!-- Titre -->
+    <div class="flex justify-center mb-8" id="stacks">
+      <h2 class="text-3xl sm:text-4xl font-bold bg-gradient-to-l from-accent to-text text-gradient text-center">
+        Mes compétences techniques
+      </h2>
+    </div>
+
+    <!-- Cartes par catégorie -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16">
+      @for (group of groupedSkills(); track group.category.id) {
+        <div
+          class="bg-background-200 rounded-xl shadow-primary-md p-6 border border-primary-200 transition-transform hover:scale-105"
+        >
+          <div class="flex items-center mb-4">
+            <img
+              [ngSrc]="group.category.icon"
+              [alt]="group.category.label"
+              class="w-8 h-8 mr-3 icon-invert"
+              width="32"
+              height="32"
+            />
+            <h3 class="text-xl font-bold text-text">{{ group.category.label }}</h3>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            @for (skill of group.skills; track skill.id) {
+              <div class="flex flex-col items-center rounded-lg px-3 py-2 text-text">
+                <img [ngSrc]="skill.icon" [alt]="skill.label" class="w-14 h-14" width="56" height="56" />
+                <span class="text-sm font-medium mt-2">{{ skill.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Soft Skills -->
+    <div>
+      <div class="flex justify-center mb-6">
+        <h3 class="text-2xl font-bold bg-gradient-to-l from-accent to-text text-gradient">
+          Mes compétences personnelles
+        </h3>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        @for (skill of softskills(); track skill.id) {
+          <div
+            class="w-full sm:w-[45%] md:w-[30%] lg:w-[22%] xl:w-[18%] bg-background rounded-xl p-4 shadow-accent-md border border-accent-200 text-center transition-transform hover:scale-105"
+          >
+            <img [ngSrc]="skill.icon" [alt]="skill.label" class="w-10 h-10 mb-2 icon-invert" width="40" height="40" />
+            <span class="text-sm font-medium text-text block">
+              {{ skill.label }}
+            </span>
+            @if (skill.description) {
+              <p class="text-xs mt-1 text-text opacity-80 leading-snug">
+                {{ skill.description }}
+              </p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
