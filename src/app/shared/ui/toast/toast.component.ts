@@ -57,9 +57,9 @@ export class ToastComponent {
   getIconForType(type: string): string {
     switch (type) {
       case 'success':
-        return '/icons/admin.svg';
+        return '/icons/contact/mail.svg';
       case 'error':
-        return '/icons/close.svg';
+        return '/icons/navbar/close.svg';
       case 'warning':
         return '/icons/menu.svg';
       case 'auth-login':
