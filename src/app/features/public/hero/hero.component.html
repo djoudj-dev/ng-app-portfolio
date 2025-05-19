@@ -1,0 +1,102 @@
+<section class="w-full bg-background pt-14 md:pt-4 lg:pt-6 xl:pt-24">
+  <div
+    class="flex flex-col items-center justify-around gap-y-16 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-x-hidden lg:flex-row lg:gap-x-20"
+  >
+    <header class="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left">
+      <div class="relative z-10">
+        <h1 class="pt-2 sm:pt-4 text-3xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-bold text-text">
+          Bonjour, je suis <br />
+          <span
+            class="bg-gradient-to-l from-accent to-text text-gradient inline-block text-transparent bg-clip-text pt-2"
+          >
+            {{ hero()?.firstName }} {{ hero()?.lastName }}
+          </span>
+        </h1>
+
+        <h2 class="text-xl sm:text-3xl text-secondary-500 font-medium mt-2">
+          {{ hero()?.jobTitle }}
+        </h2>
+
+        <p class="mt-6 text-sm sm:text-lg text-text font-medium max-w-2xl mx-auto lg:mx-0">
+          {{ hero()?.jobDescription }}
+        </p>
+
+        <!-- 🎯 Boutons stylés -->
+        <div
+          class="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-2 sm:gap-6 max-w-2xl w-full mx-auto lg:mx-0 mt-8 px-4 sm:px-0"
+        >
+          <a (click)="downloadCV()" class="block">
+            <app-button
+              color="secondary"
+              aria-label="Télécharger mon CV"
+              [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
+            >
+              <div class="flex items-center justify-center gap-2 sm:gap-3">
+                <span class="font-medium text-text text-sm sm:text-base">Télécharger mon CV</span>
+                <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
+                  <img
+                    [ngSrc]="'icons/hero/download.svg'"
+                    alt="Télécharger"
+                    class="absolute inset-0 w-full h-full object-contain icon-invert"
+                    width="20"
+                    height="20"
+                  />
+                </div>
+              </div>
+            </app-button>
+          </a>
+
+          <app-button
+            color="accent"
+            aria-label="Découvrir mes projets"
+            [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
+          >
+            <div class="flex items-center justify-center gap-2 sm:gap-3">
+              <span class="font-medium text-text text-sm sm:text-base">Découvrir mes projets</span>
+              <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
+                <img
+                  [ngSrc]="'icons/hero/arrow.svg'"
+                  alt="Découvrir"
+                  class="absolute inset-0 w-full h-full object-contain icon-invert"
+                  width="20"
+                  height="20"
+                />
+              </div>
+            </div>
+          </app-button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 💻 Partie droite : Image laptop responsive, équilibrée -->
+    <div class="w-full lg:w-1/2 flex justify-center lg:justify-end items-center pt-2 lg:pt-8 relative">
+      <img
+        [ngSrc]="'images/laptop.webp'"
+        width="500"
+        height="500"
+        alt="Laptop"
+        priority
+        class="w-[90%] sm:w-[95%] md:w-[100%] lg:w-[115%] xl:w-[160%] max-w-none object-contain"
+      />
+    </div>
+  </div>
+
+  <!-- Bouton de défilement vers la section "about" -->
+  <div class="flex justify-center pt-6 sm:pt-10 lg:pt-12">
+    <button
+      (click)="scrollToSection('about')"
+      aria-label="Défiler vers À propos"
+      class="animate-bounce p-2 rounded-full bg-accent hover:bg-accent-600 transition-colors shadow-md hover:shadow-lg"
+    >
+      <div class="w-10 h-10 relative flex-shrink-0">
+        <img
+          [ngSrc]="'icons/hero/arrow-b.svg'"
+          alt="Défiler vers le bas"
+          class="absolute inset-0 w-full h-full object-contain icon-invert"
+          width="24"
+          height="24"
+        />
+      </div>
+    </button>
+  </div>
+</section>
