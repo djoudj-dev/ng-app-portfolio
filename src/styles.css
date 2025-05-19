@@ -714,4 +714,118 @@
     color: transparent; /* Rend le texte transparent pour voir le gradient */
   }
 
+  /* Toast Styles */
+  .toast-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    max-width: 24rem;
+    width: 100%;
+    z-index: 50;
+    animation: fadeIn 0.3s ease-in-out;
+    transition: all 0.3s ease;
+    opacity: 1;
+  }
+
+  /* Toast positioning */
+  .toast-container:not(.inside) {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .toast-container.inside {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  /* Toast types */
+  .toast-success {
+    border-left: 4px solid var(--color-accent-500);
+    background-color: var(--color-background);
+  }
+
+  .toast-error {
+    border-left: 4px solid var(--color-primary-600);
+    background-color: var(--color-background);
+  }
+
+  .toast-warning {
+    border-left: 4px solid var(--color-accent-600);
+    background-color: var(--color-background);
+  }
+
+  .toast-auth-login {
+    border-left: 4px solid var(--color-primary-500);
+    background-color: var(--color-background);
+  }
+
+  .toast-auth-logout {
+    border-left: 4px solid var(--color-secondary-500);
+    background-color: var(--color-background);
+  }
+
+  .toast-confirm {
+    border-left: 4px solid var(--color-accent-400);
+    background-color: var(--color-background);
+  }
+
+  /* Toast content */
+  .toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .toast-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toast-content p {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Toast actions */
+  .toast-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .toast-actions button {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  /* Close button */
+  .close-btn {
+    font-size: 1.5rem;
+    line-height: 1;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+  }
+
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
