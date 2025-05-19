@@ -1,0 +1,150 @@
+<section class="bg-background mx-auto px-4 sm:px-6 md:px-8 min-h-screen flex flex-col justify-center pb-12 pt-12">
+  <div class="container mx-auto">
+    <!-- Header: Title -->
+    <div class="flex justify-center mb-6" id="projects">
+      <h2 class="text-2xl md:text-3xl xl:text-4xl font-bold bg-gradient-to-l from-accent to-text text-gradient">
+        Mes Projets
+      </h2>
+    </div>
+
+    <!-- Filters: Search Bar + Category Filter -->
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+      <div class="relative w-full sm:w-72">
+        <input
+          type="text"
+          class="w-full px-4 py-2 rounded-lg bg-background-200 text-text border border-primary focus:outline-none focus:ring-2 focus:ring-accent"
+          placeholder="Rechercher un projet..."
+          [value]="searchQuery()"
+          (input)="onSearch($event)"
+        />
+        @if (searchQuery()) {
+          <button
+            (click)="clearSearch()"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text opacity-70 hover:opacity-100"
+            aria-label="Réinitialiser"
+          >
+            ✕
+          </button>
+        }
+      </div>
+
+      <select
+        class="w-full sm:w-52 px-4 py-2 rounded-lg bg-background-200 text-text border border-primary focus:outline-none focus:ring-2 focus:ring-accent"
+        (change)="onCategoryChange($event)"
+      >
+        <option value="all">Toutes les catégories</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.label }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-16">
+      @for (project of paginatedProjects(); track project.id) {
+        <div
+          class="bg-background-200 rounded-xl shadow-primary-md p-5 flex flex-col h-full border border-primary-200 transition-transform hover:scale-105"
+        >
+          <div class="mb-4 overflow-hidden rounded-lg h-44">
+            <img
+              [ngSrc]="project.image || 'images/projects/default.webp'"
+              [alt]="project.title"
+              class="w-full h-full object-cover"
+              width="400"
+              height="176"
+              priority
+            />
+          </div>
+
+          <h3 class="text-xl font-bold text-text mb-2">{{ project.title }}</h3>
+          <p class="text-sm text-text opacity-80 flex-grow mb-3">{{ project.description }}</p>
+
+          <div class="flex flex-wrap gap-2 mb-3">
+            @for (tech of project.technologies; track tech) {
+              <div class="flex items-center gap-2 px-2 py-1 bg-background text-text text-xs rounded-full shadow-accent">
+                <img
+                  [ngSrc]="hardskillsMap().get(tech)?.icon || 'icons/stacks/default.svg'"
+                  [alt]="tech"
+                  class="w-4 h-4"
+                  width="16"
+                  height="16"
+                />
+                <span>{{ hardskillsMap().get(tech)?.label ?? tech }}</span>
+              </div>
+            }
+          </div>
+
+          <div class="flex flex-wrap gap-4 mt-2">
+            @for (repo of project.repos; track repo.label) {
+              <a
+                [href]="repo.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-2 text-sm text-accent hover:underline"
+              >
+                <img [ngSrc]="repo.icon" [alt]="repo.label" class="w-5 h-5 icon-invert" width="20" height="20" />
+                <span>{{ repo.label }}</span>
+              </a>
+            }
+            @if (project.deployUrl) {
+              <a
+                [href]="project.deployUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center gap-2 text-sm text-accent hover:underline"
+              >
+                <img [ngSrc]="project.iconDeploy" [alt]="'Démo'" class="w-5 h-5 icon-invert" width="20" height="20" />
+                <span>Démo</span>
+              </a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (paginatedProjects().length === 0) {
+      <div class="text-center py-10">
+        <p class="text-text text-lg">Aucun projet ne correspond à votre recherche.</p>
+        <button
+          (click)="clearSearch()"
+          class="mt-4 px-4 py-2 bg-primary text-background rounded-lg hover:bg-accent transition-colors"
+        >
+          Réinitialiser
+        </button>
+      </div>
+    }
+
+    @if (totalPages() > 1) {
+      <div class="flex justify-center items-center gap-2 mt-10">
+        <button
+          (click)="prevPage()"
+          [disabled]="currentPage() === 1"
+          class="px-3 py-1 rounded-lg bg-background-200 text-text disabled:opacity-50 hover:bg-primary hover:text-background transition-colors"
+        >
+          Précédente
+        </button>
+
+        @for (page of pageNumbers(); track page) {
+          <button
+            (click)="goToPage(page)"
+            class="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+            [class.bg-primary]="currentPage() === page"
+            [class.text-background]="currentPage() === page"
+            [class.bg-background-200]="currentPage() !== page"
+            [class.text-text]="currentPage() !== page"
+          >
+            {{ page }}
+          </button>
+        }
+
+        <button
+          (click)="nextPage()"
+          [disabled]="currentPage() === totalPages()"
+          class="px-3 py-1 rounded-lg bg-background-200 text-text disabled:opacity-50 hover:bg-primary hover:text-background transition-colors"
+        >
+          Suivante
+        </button>
+      </div>
+    }
+  </div>
+</section>
