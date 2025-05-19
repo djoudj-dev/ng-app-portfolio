@@ -6,10 +6,19 @@ import { StacksComponent } from './features/public/stacks/stacks.component';
 import { ProjectComponent } from './features/public/project/project.component';
 import { ContactComponent } from './features/public/contact/contact.component';
 import emailjs from '@emailjs/browser';
+import { FooterComponent } from './shared/ui/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [NavbarComponent, HeroComponent, AboutComponent, StacksComponent, ProjectComponent, ContactComponent],
+  imports: [
+    NavbarComponent,
+    HeroComponent,
+    AboutComponent,
+    StacksComponent,
+    ProjectComponent,
+    ContactComponent,
+    FooterComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

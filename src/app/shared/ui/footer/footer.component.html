@@ -1,0 +1,36 @@
+<footer class="bg-background shadow-lg shadow-primary w-full z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-14">
+      <!-- Copyright -->
+      <div class="flex flex-col justify-center">
+        <p class="text-sm text-text font-bold">&copy; {{ currentYear() }} Julien Nédellec. Tous droits réservés.</p>
+      </div>
+
+      <!-- Social Media Icons -->
+      <div class="flex items-center space-x-4">
+        <a
+          href="https://www.linkedin.com/in/nedellec-julien/"
+          target="_blank"
+          class="text-text hover:text-accent transition-colors"
+          aria-label="LinkedIn"
+        >
+          <img
+            [ngSrc]="'icons/contact/linkedin.svg'"
+            alt="LinkedIn"
+            class="w-6 h-6 icon-invert"
+            width="24"
+            height="24"
+          />
+        </a>
+        <a
+          href="https://github.com/djoudj-dev"
+          target="_blank"
+          class="text-text hover:text-accent transition-colors"
+          aria-label="GitHub"
+        >
+          <img [ngSrc]="'icons/contact/github.svg'" alt="GitHub" class="w-6 h-6 icon-invert" width="24" height="24" />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
