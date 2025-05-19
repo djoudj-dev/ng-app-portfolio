@@ -1,0 +1,114 @@
+<nav class="bg-background shadow-lg shadow-primary fixed w-full z-50 overflow-x-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pr-1">
+    <div class="flex items-center justify-between h-14">
+      <!-- Logo -->
+      <div class="flex items-center min-w-[100px] flex-shrink-0">
+        <h1 class="text-3xl text-text font-bold whitespace-nowrap">Julien<span class="text-accent-500">.</span>N</h1>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex flex-grow justify-center">
+        <ul class="flex space-x-6">
+          @for (item of navigationItems(); track item.label) {
+            <li>
+              <a
+                class="flex items-center text-text relative group active-link cursor-pointer"
+                (click)="scrollToSection(item.fragment)"
+                [routerLink]="item.route"
+              >
+                <div class="w-5 h-5 mr-2 relative flex-shrink-0">
+                  <img
+                    [alt]="item.label"
+                    class="w-5 h-5 icon-invert absolute inset-0"
+                    width="20"
+                    height="20"
+                    [ngSrc]="item.icon"
+                  />
+                </div>
+                <span>{{ item.label }}</span>
+                <span
+                  class="absolute left-0 bottom-[-2px] w-full h-[2px] bg-accent-500 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+                ></span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="flex items-center gap-1 sm:gap-2 min-w-[140px] w-auto flex-shrink-0 justify-end">
+        <app-badge />
+
+        <button
+          (click)="toggleTheme()"
+          [attr.aria-label]="isDarkMode() ? 'Activer clair' : 'Activer sombre'"
+          class="p-1 sm:p-2 rounded-full hover:bg-accent-400 transition-colors icon-invert flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center"
+          type="button"
+        >
+          <div class="w-5 sm:w-6 h-5 sm:h-6 relative">
+            @if (!isDarkMode()) {
+              <img
+                alt="Mode clair"
+                class="w-5 sm:w-6 h-5 sm:h-6 absolute inset-0"
+                width="24"
+                height="24"
+                [ngSrc]="'icons/navbar/sun.svg'"
+              />
+            } @else {
+              <img
+                alt="Mode sombre"
+                class="w-5 sm:w-6 h-5 sm:h-6 absolute inset-0"
+                width="24"
+                height="24"
+                [ngSrc]="'icons/navbar/moon.svg'"
+              />
+            }
+          </div>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button
+          (click)="toggleMenu()"
+          aria-label="Menu mobile"
+          class="lg:hidden p-1 sm:p-2 rounded-full hover:bg-accent-400 transition-transform flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center"
+          type="button"
+        >
+          <div class="w-5 sm:w-6 h-5 sm:h-6 relative">
+            <img
+              [class.rotate-180]="isMenuOpen()"
+              [ngSrc]="isMenuOpen() ? 'icons/navbar/close.svg' : 'icons/navbar/menu.svg'"
+              alt="Menu"
+              class="w-5 sm:w-6 h-5 sm:h-6 absolute inset-0 transform transition-transform duration-300 icon-invert"
+              height="24"
+              width="24"
+            />
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMenuOpen()) {
+    <div class="lg:hidden flex flex-col items-center space-y-4 py-4 bg-background shadow-md animate-fadeSlideIn">
+      @for (item of navigationItems(); track item.route) {
+        <a
+          class="flex items-center text-text hover:text-accent-500 cursor-pointer w-full justify-center"
+          (click)="scrollToSection(item.fragment); closeMenu()"
+        >
+          @if (item.icon) {
+            <div class="w-5 h-5 mr-2 relative flex-shrink-0">
+              <img
+                class="w-5 h-5 icon-invert absolute inset-0"
+                width="20"
+                height="20"
+                [ngSrc]="item.icon"
+                [alt]="item.label"
+              />
+            </div>
+          }
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </div>
+  }
+</nav>
