@@ -100,9 +100,6 @@ export class ProjectComponent implements OnInit {
 
   // --- Accès simplifiés pour le template ---
   readonly searchQuery = this.search.asReadonly();
-  readonly selectedCat = this.selectedCategory.asReadonly();
-  readonly current = this.currentPage.asReadonly();
-
   // --- Gestion du chargement des images ---
   onImageLoad(projectId: string): void {
     this.loadedImages.update((images) => ({
