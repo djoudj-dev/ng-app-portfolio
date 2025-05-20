@@ -52,8 +52,8 @@ jobs:
       - name: Create environment file
         run: |
           mkdir -p src/environments
-          echo "Creating production environment file..."
-          echo "${{ secrets.PORTFOLIO_CONFIG }}" >> src/environments/environment.ts
+          printf "${{ secrets.PORTFOLIO_CONFIG }}" > src/environments/environment.ts
+          cat src/environments/environment.ts
 
       # Tests
       - name: Test
