@@ -24,7 +24,10 @@ WORKDIR /app
 # Installer pnpm dans l'étape de build
 RUN npm install -g pnpm
 
-# Créer le fichier d'environnement à partir de la variable d'environnement Coolify
+# 👇 Ajoute ceci pour que la variable soit reçue
+ARG PORTFOLIO_CONFIG_B64
+ENV PORTFOLIO_CONFIG_B64=$PORTFOLIO_CONFIG_B64
+
 RUN mkdir -p src/environments && \
     echo "$PORTFOLIO_CONFIG_B64" | base64 -d > src/environments/environment.ts && \
     cat src/environments/environment.ts
