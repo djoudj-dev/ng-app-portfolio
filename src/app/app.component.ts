@@ -26,6 +26,6 @@ export class AppComponent implements OnInit {
   title = 'ng-app-portfolio';
 
   ngOnInit(): void {
-    emailjs.init(environment.emailjsPublicKey);
+    emailjs.init(environment.emailJsPublicKey);
   }
 }
