@@ -1,12 +1,12 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Category, HardSkills, SoftSkills } from '../interface/stacks.interface';
+import { DataService } from '../../../../core/services/data.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StacksService {
-  private readonly http = inject(HttpClient);
+  private readonly dataService = inject(DataService);
 
   // Signals pour stocker les données
   private readonly _categories = signal<Category[]>([]);
@@ -19,19 +19,19 @@ export class StacksService {
   readonly softSkills = this._softSkills.asReadonly();
 
   load(): void {
-    this.http
-      .get<{
+    this.dataService
+      .getSection<{
         categories: Category[];
         hardskills: HardSkills[];
         softskills: SoftSkills[];
-      }>('http://localhost:3000/stacks')
+      }>('stacks')
       .subscribe({
         next: (res) => {
           this._categories.set(res.categories);
           this._hardSkills.set(res.hardskills);
           this._softSkills.set(res.softskills);
         },
-        error: (err) => console.error('Erreur API stacks:', err),
+        error: (err) => console.error('Erreur chargement stacks:', err),
       });
   }
 }
