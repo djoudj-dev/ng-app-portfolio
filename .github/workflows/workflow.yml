@@ -17,13 +17,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Cache des dépendances pnpm
+      - name: Cache pnpm modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
       # Configuration de Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Installation des dépendances avec npm
+      # Installation des dépendances avec pnpm
       - name: Install dependencies
         run: pnpm ci
 
@@ -34,8 +43,6 @@ jobs:
       # Linter
       - name: Lint
         run: pnpm run lint
-
-
 
       # Set environment variables
       - name: Create environment file
