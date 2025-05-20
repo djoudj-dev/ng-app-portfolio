@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
 import { ProjectService } from './service/project.service';
-import { NgOptimizedImage } from '@angular/common';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 import { ProjectCategory } from './interface/project.interface';
 import { StacksService } from '../stacks/service/stacks.service';
 import { HardSkills } from '../stacks/interface/stacks.interface';
 
 @Component({
   selector: 'app-project',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, NgClass],
   templateUrl: './project.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,6 +20,7 @@ export class ProjectComponent implements OnInit {
   private readonly selectedCategory = signal('all');
   readonly currentPage = signal(1);
   private readonly itemsPerPage = 3;
+  readonly loadedImages = signal<Record<string, boolean>>({});
 
   // --- Chargement des données au ngOnInit ---
   ngOnInit(): void {
@@ -101,6 +102,18 @@ export class ProjectComponent implements OnInit {
   readonly searchQuery = this.search.asReadonly();
   readonly selectedCat = this.selectedCategory.asReadonly();
   readonly current = this.currentPage.asReadonly();
+
+  // --- Gestion du chargement des images ---
+  onImageLoad(projectId: string): void {
+    this.loadedImages.update((images) => ({
+      ...images,
+      [projectId]: true,
+    }));
+  }
+
+  isImageLoaded(projectId: string): boolean {
+    return this.loadedImages()[projectId];
+  }
 
   // --- Map des hardskills pour afficher les technologies ---
   readonly hardskillsMap = computed(() => {

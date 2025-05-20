@@ -45,14 +45,21 @@
         <div
           class="bg-background-200 rounded-xl shadow-primary-md p-5 flex flex-col h-full border border-primary-200 transition-transform hover:scale-105"
         >
-          <div class="mb-4 overflow-hidden rounded-lg h-44">
+          <div class="mb-4 overflow-hidden rounded-lg h-44 relative bg-background-300 flex items-center justify-center">
+            @if (!isImageLoaded(project.id)) {
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-8 h-8 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            }
             <img
-              [ngSrc]="project.image || 'images/projects/default.webp'"
-              [alt]="project.title"
-              class="w-full h-full object-cover"
-              width="400"
-              height="176"
+              [ngSrc]="project.image!"
+              fill="fill"
               priority
+              alt="Portfolio"
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              (load)="onImageLoad(project.id)"
+              [ngClass]="{ 'opacity-0': !isImageLoaded(project.id), 'opacity-100': isImageLoaded(project.id) }"
+              class="transition-opacity duration-300"
             />
           </div>
 
@@ -65,9 +72,10 @@
                 <img
                   [ngSrc]="hardskillsMap().get(tech)?.icon || 'icons/stacks/default.svg'"
                   [alt]="tech"
-                  class="w-4 h-4"
+                  class="w-6 h-6"
                   width="16"
                   height="16"
+                  sizes="(min-width: 768px) 4vw, 10vw"
                 />
                 <span>{{ hardskillsMap().get(tech)?.label ?? tech }}</span>
               </div>
@@ -82,7 +90,14 @@
                 rel="noopener noreferrer"
                 class="flex items-center gap-2 text-sm text-accent hover:underline"
               >
-                <img [ngSrc]="repo.icon" [alt]="repo.label" class="w-5 h-5 icon-invert" width="20" height="20" />
+                <img
+                  [ngSrc]="repo.icon"
+                  [alt]="repo.label"
+                  class="w-6 h-6 icon-invert"
+                  width="20"
+                  height="20"
+                  sizes="(min-width: 768px) 5vw, 10vw"
+                />
                 <span>{{ repo.label }}</span>
               </a>
             }
@@ -93,7 +108,7 @@
                 rel="noopener noreferrer"
                 class="flex items-center gap-2 text-sm text-accent hover:underline"
               >
-                <img [ngSrc]="project.iconDeploy" [alt]="'Démo'" class="w-5 h-5 icon-invert" width="20" height="20" />
+                <img [ngSrc]="project.iconDeploy" [alt]="'Démo'" class="w-6 h-6 icon-invert" width="20" height="20" />
                 <span>Démo</span>
               </a>
             }
