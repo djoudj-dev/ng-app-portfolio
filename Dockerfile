@@ -1,5 +1,5 @@
 # Étape 1 : Utiliser une image Node.js comme base
-FROM node:22.14 as node
+FROM node:22.14 AS node
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -17,7 +17,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Étape 2 : Builder l'application Angular
-FROM node:22.14 as build
+FROM node:22.14 AS build
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 # Créer le fichier d'environnement à partir de la variable d'environnement Coolify
-RUN mkdir -p src/environments && echo "$PORTFOLIO_CONFIG" > src/environments/environment.ts
+RUN mkdir -p src/environments && (echo "$PORTFOLIO_CONFIG_B64" | base64 -d | sed 's/emailJs/emailjs/g' | tr -d '%' > src/environments/environment.ts) || echo "export const environment = { production: true, emailjsServiceId: 'service_7775dum', emailjsTemplateId: 'template_99lis6j', recipientEmail: 'contact@nedellec-julien.fr', emailjsPublicKey: 'RF_1J9PnDw2QM1OIB' };" > src/environments/environment.ts
 
 # Copier les fichiers nécessaires pour le build
 COPY --from=node /app/node_modules ./node_modules
