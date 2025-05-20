@@ -5,10 +5,11 @@ import { ContactCard, ContactCardGroup } from './interface/contact.interface';
 import { ContactService } from './service/contact.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { ToastComponent } from '../../../shared/ui/toast/toast.component';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-contact',
-  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, ToastComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, ToastComponent, ButtonComponent],
   templateUrl: './contact.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -33,7 +34,6 @@ export class ContactComponent implements OnInit {
     effect(() => {
       const data = this.contactService.data();
       if (data) {
-        console.log('Updating component data:', data);
         this.contactCards.set(data.cards || []);
         this.contactCardGroups.set(data.cardGroups || []);
       }
