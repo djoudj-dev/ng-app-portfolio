@@ -1,0 +1,53 @@
+name: Portfolio Workflow
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [ 22.14 ]
+
+    steps:
+      # Vérification du dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Configuration de Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Installation des dépendances avec npm
+      - name: Install dependencies
+        run: pnpm ci
+
+      # Audit de sécurité
+      - name: Audit
+        run: pnpm audit --audit-level=high || true
+
+      # Linter
+      - name: Lint
+        run: pnpm run lint
+
+
+
+      # Set environment variables
+      - name: Create environment file
+        run: |
+          mkdir -p src/environments
+          echo "Creating production environment file..."
+          echo "${{ secrets.PORTFOLIO_CONFIG }}" >> src/environments/environment.ts
+
+      # Tests
+      - name: Test
+        run: pnpm run test
+
+      # Build
+      - name: Build
+        run: pnpm run build
