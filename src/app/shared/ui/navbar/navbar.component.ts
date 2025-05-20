@@ -3,9 +3,9 @@ import { inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { NavigationItem } from './navigation-item.interface';
-import { ThemeService } from '../../../core/services/theme.service';
+import { ThemeService } from '@core/services/theme.service';
 import { NAVIGATION_ITEMS } from './navigation-items.constant';
-import { ScrollService } from '../../../core/services/scroll.service';
+import { ScrollService } from '@core/services/scroll.service';
 import { BadgeComponent } from '../badge/badge.component';
 
 @Component({

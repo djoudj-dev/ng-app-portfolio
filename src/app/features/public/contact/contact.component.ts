@@ -3,9 +3,9 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactCard, ContactCardGroup } from './interface/contact.interface';
 import { ContactService } from './service/contact.service';
-import { ToastService } from '../../../core/services/toast.service';
-import { ToastComponent } from '../../../shared/ui/toast/toast.component';
-import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { ToastService } from '@core/services/toast.service';
+import { ToastComponent } from '@shared/ui/toast/toast.component';
+import { ButtonComponent } from '@shared/ui/button/button.component';
 
 @Component({
   selector: 'app-contact',

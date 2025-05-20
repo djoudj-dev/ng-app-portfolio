@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
-import { BadgeDirective } from '../../../core/directives/badge.directive';
-import { BadgeDatePipe } from '../../../core/pipes/badge.pipe';
+import { BadgeDirective } from '@core/directives/badge.directive';
+import { BadgeDatePipe } from '@core/pipes/badge.pipe';
 
 @Component({
   selector: 'app-badge',

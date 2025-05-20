@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Project } from '../interface/project.interface';
-import { DataService } from '../../../../core/services/data.service';
+import { DataService } from '@core/services/data.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
