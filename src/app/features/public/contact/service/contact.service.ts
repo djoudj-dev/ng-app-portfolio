@@ -16,8 +16,8 @@ interface Contact {
 export class ContactService {
   private readonly dataService = inject(DataService);
 
-  private readonly emailjsServiceId = environment.emailjsServiceId;
-  private readonly emailjsTemplateId = environment.emailjsTemplateId;
+  private readonly emailJsServiceId = environment.emailJsServiceId;
+  private readonly emailJsTemplateId = environment.emailJsTemplateId;
   private readonly recipientEmail = environment.recipientEmail;
 
   private readonly _data = signal<Contact | null>(null);
@@ -42,7 +42,7 @@ export class ContactService {
       time: new Date().toLocaleString(),
     };
 
-    return from(emailjs.send(this.emailjsServiceId, this.emailjsTemplateId, templateParams)).pipe(
+    return from(emailjs.send(this.emailJsServiceId, this.emailJsTemplateId, templateParams)).pipe(
       map(() => ({ success: true, message: 'Email sent successfully' })),
       catchError((error) => {
         console.error('Error sending email:', error);
