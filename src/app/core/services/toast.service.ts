@@ -5,7 +5,7 @@ import { Toast } from '../../shared/ui/toast/toast.interface';
 export class ToastService {
   private readonly _toast = signal<Toast | null>(null);
 
-  readonly toast = this._toast.asReadonly(); // ✅ Plus de `.asObservable()`, c'est un vrai Signal !
+  readonly toast = this._toast.asReadonly();
 
   constructor() {
     effect(() => {
@@ -19,27 +19,9 @@ export class ToastService {
   showSuccess(message: string, duration = 3000) {
     this._toast.set({ message, type: 'success', duration });
   }
-
-  showWarning(message: string, duration = 3000) {
-    this._toast.set({ message, type: 'warning', duration });
-  }
-
   showError(message: string, duration = 3000) {
     this._toast.set({ message, type: 'error', duration });
   }
-
-  showAuthLogin(message: string, duration = 3000) {
-    this._toast.set({ message, type: 'auth-login', duration });
-  }
-
-  showAuthLogout(message: string, duration = 3000) {
-    this._toast.set({ message, type: 'auth-logout', duration });
-  }
-
-  showConfirm(message: string, onConfirm: () => void, onCancel: () => void) {
-    this._toast.set({ message, type: 'confirm', onConfirm, onCancel });
-  }
-
   hideToast() {
     this._toast.set(null);
   }

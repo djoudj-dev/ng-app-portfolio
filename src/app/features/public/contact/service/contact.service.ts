@@ -5,7 +5,7 @@ import { DataService } from '../../../../core/services/data.service';
 
 // Import EmailJS
 import emailjs from '@emailjs/browser';
-import { environment } from '../../../../../environments/environment.development';
+import { environment } from '../../../../../environments/environment';
 
 interface Contact {
   cards: ContactCard[];

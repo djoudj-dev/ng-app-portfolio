@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "vitest",
-    "lint": "ng lint",
+    "lint": "eslint . --ext .ts,.html",
     "lint:fix": "eslint . --ext .ts,.html --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -35,6 +35,7 @@
     "@analogjs/vitest-angular": "^1.16.1",
     "@angular-devkit/build-angular": "^19.2.12",
     "@angular-eslint/eslint-plugin": "^19.4.0",
+    "@angular-eslint/schematics": "19.4.0",
     "@angular-eslint/template-parser": "^19.4.0",
     "@angular/cli": "^19.2.12",
     "@angular/compiler-cli": "^19.2.0",

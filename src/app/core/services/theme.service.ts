@@ -34,10 +34,9 @@ export class ThemeService {
     const savedTheme = typeof localStorage !== 'undefined' ? localStorage.getItem(this.themeKey) : null;
 
     const theme = savedTheme === 'dark' ? 'dark' : 'light';
-    this.setTheme(theme); // utilise setTheme directement
+    this.setTheme(theme);
   }
 
-  // ✨ Getter bonus si besoin du type string
   get theme(): 'light' | 'dark' {
     return this.isDarkMode() ? 'dark' : 'light';
   }

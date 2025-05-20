@@ -23,9 +23,22 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Installation des dépendances avec npm
+      # Installation de pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm@latest
+
+      # Cache des dépendances pnpm
+      - name: Cache pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      # Installation des dépendances avec pnpm
       - name: Install dependencies
-        run: pnpm ci
+        run: pnpm install --no-frozen-lockfile
 
       # Audit de sécurité
       - name: Audit
@@ -34,8 +47,6 @@ jobs:
       # Linter
       - name: Lint
         run: pnpm run lint
-
-
 
       # Set environment variables
       - name: Create environment file

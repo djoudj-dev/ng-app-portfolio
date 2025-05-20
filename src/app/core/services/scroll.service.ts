@@ -12,7 +12,6 @@ export class ScrollService {
       return;
     }
 
-    // Laisse le temps au DOM de se stabiliser (ex : router-outlet)
     queueMicrotask(() => {});
 
     const target = document.getElementById(fragment);
