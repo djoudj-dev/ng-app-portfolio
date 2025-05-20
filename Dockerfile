@@ -44,10 +44,10 @@ RUN ls -l /app/dist/ng-app-portfolio
 FROM nginx:alpine
 
 # Copier les fichiers de build dans le répertoire de Nginx
-COPY --from=build /app/dist/ng-app-portfolio /usr/share/nginx/html
+COPY --from=build /app/dist/ng-app-portfolio/browser /usr/share/nginx/html
 
 # Copier le fichier de configuration Nginx personnalisé si nécessaire
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exposer le port 80
 EXPOSE 80
