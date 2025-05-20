@@ -1,6 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ToastService } from '../../../core/services/toast.service';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-toast',

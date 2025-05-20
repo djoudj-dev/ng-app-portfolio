@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Category, HardSkills, SoftSkills } from '../interface/stacks.interface';
-import { DataService } from '../../../../core/services/data.service';
+import { DataService } from '@core/services/data.service';
 
 @Injectable({
   providedIn: 'root',

@@ -1,11 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ContactCard, ContactCardGroup, ContactForm } from '../interface/contact.interface';
 import { Observable, catchError, from, map, tap } from 'rxjs';
-import { DataService } from '../../../../core/services/data.service';
+import { DataService } from '@core/services/data.service';
 
 // Import EmailJS
 import emailjs from '@emailjs/browser';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '@environments/environment';
 
 interface Contact {
   cards: ContactCard[];
