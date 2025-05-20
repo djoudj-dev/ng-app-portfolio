@@ -21,6 +21,9 @@ FROM node:22.14 as build
 
 WORKDIR /app
 
+# Installer pnpm dans l'étape de build
+RUN npm install -g pnpm
+
 # Copier les fichiers nécessaires pour le build
 COPY --from=node /app/node_modules ./node_modules
 COPY . .
