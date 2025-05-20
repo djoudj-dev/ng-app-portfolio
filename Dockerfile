@@ -38,6 +38,7 @@ COPY . .
 
 # Builder l'application
 RUN pnpm run build
+RUN ls -l /app/dist/ng-app-portfolio
 
 # Étape 3 : Utiliser une image Nginx pour servir l'application
 FROM nginx:alpine
