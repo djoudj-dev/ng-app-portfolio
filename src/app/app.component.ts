@@ -21,7 +21,6 @@ import { environment } from '../environments/environment';
     FooterComponent,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   title = 'ng-app-portfolio';
