@@ -1,6 +1,6 @@
 export interface Toast {
   message: string;
-  type: 'success' | 'error' | 'confirm' | 'warning' | 'auth-login' | 'auth-logout';
+  type: 'success' | 'error' | 'confirm' | 'warning' | 'info';
   duration?: number;
   onConfirm?: () => void;
   onCancel?: () => void;

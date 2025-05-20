@@ -22,6 +22,12 @@ export class ToastService {
   showError(message: string, duration = 3000) {
     this._toast.set({ message, type: 'error', duration });
   }
+  showInfo(message: string, duration = 3000) {
+    this._toast.set({ message, type: 'info', duration });
+  }
+  showWarning(message: string, duration = 3000) {
+    this._toast.set({ message, type: 'warning', duration });
+  }
   hideToast() {
     this._toast.set(null);
   }

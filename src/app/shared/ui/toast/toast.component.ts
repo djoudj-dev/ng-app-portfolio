@@ -68,6 +68,8 @@ export class ToastComponent {
         return '/icons/logout.svg';
       case 'confirm':
         return '/icons/sun.svg';
+      case 'info':
+        return '/icons/sun.svg';
       default:
         return '';
     }
