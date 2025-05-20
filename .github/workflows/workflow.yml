@@ -17,6 +17,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Configuration de Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Installation de pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       # Cache des dépendances pnpm
       - name: Cache pnpm modules
         uses: actions/cache@v4
@@ -25,12 +35,6 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
-
-      # Configuration de Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
 
       # Installation des dépendances avec pnpm
       - name: Install dependencies
