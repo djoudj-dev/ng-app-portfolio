@@ -25,8 +25,7 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 # Créer le fichier d'environnement à partir de la variable d'environnement Coolify
-RUN mkdir -p src/environments && \
-    echo "$PORTFOLIO_CONFIG" > src/environments/environment.ts
+RUN mkdir -p src/environments && echo "$PORTFOLIO_CONFIG" > src/environments/environment.ts
 
 # Copier les fichiers nécessaires pour le build
 COPY --from=node /app/node_modules ./node_modules
