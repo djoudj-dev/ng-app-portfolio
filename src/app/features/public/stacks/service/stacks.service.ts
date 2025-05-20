@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Category, HardSkills, SoftSkills } from '../interface/stacks.interface';
+import { Category, HardSkills, SoftSkills } from '@feat/public/stacks/interface/stacks.interface';
 import { DataService } from '@core/services/data.service';
 
 @Injectable({

@@ -2,11 +2,11 @@ import { Component, computed, ElementRef, HostListener, signal } from '@angular/
 import { inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { NavigationItem } from './navigation-item.interface';
+import { NavigationItem } from '@shared/ui/navbar/navigation-item.interface';
 import { ThemeService } from '@core/services/theme.service';
-import { NAVIGATION_ITEMS } from './navigation-items.constant';
+import { NAVIGATION_ITEMS } from '@shared/ui/navbar/navigation-items.constant';
 import { ScrollService } from '@core/services/scroll.service';
-import { BadgeComponent } from '../badge/badge.component';
+import { BadgeComponent } from '@shared/ui/badge/badge.component';
 
 @Component({
   selector: 'app-navbar',

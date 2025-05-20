@@ -1,5 +1,5 @@
 import { Injectable, signal, inject } from '@angular/core';
-import { Hero } from '../interface/hero.interface';
+import { Hero } from '@feat/public/hero/interface/hero.interface';
 import { DataService } from '@core/services/data.service';
 
 @Injectable({ providedIn: 'root' })

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContactCard, ContactCardGroup } from './interface/contact.interface';
-import { ContactService } from './service/contact.service';
+import { ContactCard, ContactCardGroup } from '@feat/public/contact/interface/contact.interface';
+import { ContactService } from '@feat/public/contact/service/contact.service';
 import { ToastService } from '@core/services/toast.service';
 import { ToastComponent } from '@shared/ui/toast/toast.component';
 import { ButtonComponent } from '@shared/ui/button/button.component';
@@ -25,10 +25,18 @@ export class ContactComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.contactForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      subject: ['', Validators.required],
-      message: ['', [Validators.required, Validators.minLength(10)]],
+      name: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-ZÀ-ÿ]+([ '-][a-zA-ZÀ-ÿ]+)*$/)],
+      ],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/)]],
+      subject: [
+        '',
+        [Validators.required, Validators.minLength(3), Validators.pattern(/^[\wÀ-ÿ0-9 .,'"!?()\-]{3,100}$/)],
+      ],
+      message: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^(?!.*[<>]).{10,1000}$/s)]],
+      honeypot: [''],
+      formStartTime: [Date.now()],
     });
 
     effect(() => {
@@ -47,6 +55,16 @@ export class ContactComponent implements OnInit {
   onSubmit(): void {
     this.formSubmitted.set(true);
 
+    const honeypotValue = this.contactForm.get('honeypot')?.value;
+
+    // 🛡️ Protection anti-bot par champ honeypot
+    if (honeypotValue) {
+      console.warn('Honeypot déclenché – formulaire bloqué (bot détecté).');
+      this.toastService.showInfo('Merci pour votre message !');
+      return;
+    }
+
+    // ✅ Si le formulaire est valide et honeypot vide
     if (this.contactForm.valid) {
       this.isSending.set(true); // Activer le spinner
 

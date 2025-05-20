@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, computed } from '@angular/core';
-import { AboutService } from './service/about.service';
+import { AboutService } from '@feat/public/about/service/about.service';
 import { NgOptimizedImage } from '@angular/common';
 
 @Component({

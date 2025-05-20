@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { NgOptimizedImage, CommonModule } from '@angular/common';
-import { StacksService } from './service/stacks.service';
-import { Category, HardSkills } from './interface/stacks.interface';
+import { StacksService } from '@feat/public/stacks/service/stacks.service';
+import { Category, HardSkills } from '@feat/public/stacks/interface/stacks.interface';
 
 @Component({
   selector: 'app-stacks',
