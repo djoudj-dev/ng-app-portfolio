@@ -29,7 +29,7 @@ ARG PORTFOLIO_CONFIG_B64
 ENV PORTFOLIO_CONFIG_B64=$PORTFOLIO_CONFIG_B64
 
 RUN mkdir -p src/environments && \
-    echo "$PORTFOLIO_CONFIG_B64" | base64 -d > src/environments/environment.ts && \
+    echo "$PORTFOLIO_CONFIG_B64" | base64 -d | tr -d '%' > src/environments/environment.ts && \
     cat src/environments/environment.ts
 
 # Copier les fichiers nécessaires pour le build
