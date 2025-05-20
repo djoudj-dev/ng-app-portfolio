@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
 import { ScrollService } from '@core/services/scroll.service';
-import { HeroService } from './service/hero.service';
+import { HeroService } from '@feat/public/hero/service/hero.service';
 
 @Component({
   selector: 'app-hero',

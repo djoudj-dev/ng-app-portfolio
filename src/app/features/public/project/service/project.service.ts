@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Project } from '../interface/project.interface';
+import { Project } from '@feat/public/project/interface/project.interface';
 import { DataService } from '@core/services/data.service';
 
 @Injectable({ providedIn: 'root' })

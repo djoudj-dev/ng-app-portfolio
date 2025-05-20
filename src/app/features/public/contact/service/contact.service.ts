@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { ContactCard, ContactCardGroup, ContactForm } from '../interface/contact.interface';
+import { ContactCard, ContactCardGroup, ContactForm } from '@feat/public/contact/interface/contact.interface';
 import { Observable, catchError, from, map, tap } from 'rxjs';
 import { DataService } from '@core/services/data.service';
 

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
-import { ProjectService } from './service/project.service';
+import { ProjectService } from '@feat/public/project/service/project.service';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ProjectCategory } from './interface/project.interface';
-import { StacksService } from '../stacks/service/stacks.service';
-import { HardSkills } from '../stacks/interface/stacks.interface';
+import { ProjectCategory } from '@feat/public/project/interface/project.interface';
+import { StacksService } from '@feat/public/stacks/service/stacks.service';
+import { HardSkills } from '@feat/public/stacks/interface/stacks.interface';
 
 @Component({
   selector: 'app-project',

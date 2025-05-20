@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContactCard, ContactCardGroup } from './interface/contact.interface';
-import { ContactService } from './service/contact.service';
+import { ContactCard, ContactCardGroup } from '@feat/public/contact/interface/contact.interface';
+import { ContactService } from '@feat/public/contact/service/contact.service';
 import { ToastService } from '@core/services/toast.service';
 import { ToastComponent } from '@shared/ui/toast/toast.component';
 import { ButtonComponent } from '@shared/ui/button/button.component';
