@@ -7,6 +7,7 @@ import { ProjectComponent } from './features/public/project/project.component';
 import { ContactComponent } from './features/public/contact/contact.component';
 import emailjs from '@emailjs/browser';
 import { FooterComponent } from './shared/ui/footer/footer.component';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,6 @@ export class AppComponent implements OnInit {
   title = 'ng-app-portfolio';
 
   ngOnInit(): void {
-    emailjs.init('RF_1J9PnDw2QM1OIB');
+    emailjs.init(environment.emailjsPublicKey);
   }
 }

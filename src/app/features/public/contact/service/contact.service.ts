@@ -5,6 +5,7 @@ import { DataService } from '../../../../core/services/data.service';
 
 // Import EmailJS
 import emailjs from '@emailjs/browser';
+import { environment } from '../../../../../environments/environment.development';
 
 interface Contact {
   cards: ContactCard[];
@@ -15,9 +16,9 @@ interface Contact {
 export class ContactService {
   private readonly dataService = inject(DataService);
 
-  private readonly emailjsServiceId = 'service_7775dum';
-  private readonly emailjsTemplateId = 'template_99lis6j';
-  private readonly recipientEmail = 'contact@nedellec-julien.fr';
+  private readonly emailjsServiceId = environment.emailjsServiceId;
+  private readonly emailjsTemplateId = environment.emailjsTemplateId;
+  private readonly recipientEmail = environment.recipientEmail;
 
   private readonly _data = signal<Contact | null>(null);
   readonly data = this._data.asReadonly();
