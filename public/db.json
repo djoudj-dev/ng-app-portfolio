@@ -331,6 +331,28 @@
           "tailwindcss"
         ],
         "priority": 1
+      },
+      {
+        "id": "calculator",
+        "title": "Calculateur d'investissement",
+        "description": "Une application web moderne pour simuler et projeter les rendements potentiels des investissements en Bitcoin sur plusieurs années.",
+        "image": "images/projects/calculator.webp",
+        "categoryId": "web",
+        "deployUrl": "https://calculator-bitcoin.vercel.app/",
+        "iconDeploy": "icons/project/link.svg",
+        "repos": [
+          {
+            "url": "https://github.com/djoudj-dev/calculator_bitcoin",
+            "label": "GitHub",
+            "icon": "icons/about/github.svg"
+          }
+        ],
+        "technologies": [
+          "angular",
+          "html5",
+          "css3"
+        ],
+        "priority": 2
       }
     ]
   },
