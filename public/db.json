@@ -335,7 +335,7 @@
       {
         "id": "arcadia",
         "title": "Zoo Arcadia - Application de Gestion de Parc Zoologique",
-        "description": "Application complète de gestion de parc zoologique développée avec Angular et NestJS. Cette solution fullstack permet l'administration des animaux, des habitats, du personnel et des services du zoo. L'interface utilisateur intuitive offre un tableau de bord complet pour suivre les soins animaliers, la planification des services et la gestion des ressources. L'architecture modulaire s'appuie sur PostgreSQL et MongoDB pour le stockage des données, le tout déployé via Docker pour une scalabilité optimale.",
+        "description": "Application complète de gestion de parc zoologique développée avec Angular et NestJS. Cette solution fullstack permet l'administration des animaux, des habitats, du personnel et des services du zoo.",
         "image": "images/projects/arcadia.webp",
         "categoryId": "web",
         "deployUrl": "https://arcadia.nedellec-julien.fr",
