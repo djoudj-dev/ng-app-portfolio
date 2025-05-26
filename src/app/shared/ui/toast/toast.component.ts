@@ -27,12 +27,10 @@ import { ToastService } from '@core/services/toast.service';
           <p class="text-text">{{ toast.message }}</p>
           @if (toast.type === 'confirm') {
             <div class="toast-actions">
-              <button (click)="onConfirm()" class="confirm-btn bg-accent-500 hover:bg-accent-600 text-text">
+              <button (click)="onConfirm()" class="confirm-btn bg-green-800 hover:bg-green-600 text-text">
                 Confirmer
               </button>
-              <button (click)="onCancel()" class="cancel-btn bg-primary-500 hover:bg-primary-600 text-text">
-                Annuler
-              </button>
+              <button (click)="onCancel()" class="cancel-btn bg-red-500 hover:bg-red-600 text-text">Annuler</button>
             </div>
           }
         </div>
@@ -57,11 +55,11 @@ export class ToastComponent {
   getIconForType(type: string): string {
     switch (type) {
       case 'success':
-        return '/icons/contact/mail.svg';
+        return '/icons/navbar/success.svg';
       case 'error':
-        return '/icons/navbar/close.svg';
+        return '/icons/navbar/error.svg';
       case 'warning':
-        return '/icons/menu.svg';
+        return '/icons/navbar/warning.svg';
       case 'auth-login':
         return '/icons/login.svg';
       case 'auth-logout':
