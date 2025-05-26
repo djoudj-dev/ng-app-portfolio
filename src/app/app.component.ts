@@ -8,6 +8,7 @@ import { ContactComponent } from '@feat/public/contact/contact.component';
 import emailjs from '@emailjs/browser';
 import { FooterComponent } from '@shared/ui/footer/footer.component';
 import { environment } from '@environments/environment';
+import { ToastComponent } from '@shared/ui/toast/toast.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import { environment } from '@environments/environment';
     ProjectComponent,
     ContactComponent,
     FooterComponent,
+    ToastComponent,
   ],
   templateUrl: './app.component.html',
 })
