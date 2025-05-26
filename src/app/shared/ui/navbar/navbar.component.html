@@ -12,8 +12,10 @@
           @for (item of navigationItems(); track item.label) {
             <li>
               <a
+                role="menuitem"
+                [attr.aria-label]="item.label"
                 class="flex items-center text-text relative group active-link cursor-pointer"
-                (click)="scrollToSection(item.fragment)"
+                (click)="$event.preventDefault(); $event.stopPropagation(); scrollToSection(item.fragment)"
                 [routerLink]="item.route"
               >
                 <div class="w-5 h-5 mr-2 relative flex-shrink-0">
@@ -38,9 +40,37 @@
       <div class="flex items-center gap-1 sm:gap-2 min-w-[140px] w-auto flex-shrink-0 justify-end">
         <app-badge />
 
+        <!-- Settings Button -->
+        <div class="relative">
+          <button
+            id="settings-button"
+            (click)="$event.preventDefault(); $event.stopPropagation(); toggleSettingsModal()"
+            data-settings-button
+            aria-label="Paramètres"
+            aria-haspopup="true"
+            [attr.aria-expanded]="isSettingsModalOpen()"
+            role="button"
+            class="p-1 sm:p-2 rounded-full hover:bg-accent-400 transition-colors icon-invert flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center"
+            type="button"
+          >
+            <div class="w-5 sm:w-6 h-5 sm:h-6 relative">
+              <img
+                alt="Paramètres"
+                class="w-5 sm:w-6 h-5 sm:h-6 absolute inset-0"
+                width="24"
+                height="24"
+                [ngSrc]="'icons/navbar/settings.svg'"
+              />
+            </div>
+          </button>
+        </div>
+
         <button
+          id="theme-toggle-button"
           (click)="toggleTheme()"
           [attr.aria-label]="isDarkMode() ? 'Activer clair' : 'Activer sombre'"
+          role="button"
+          aria-pressed="false"
           class="p-1 sm:p-2 rounded-full hover:bg-accent-400 transition-colors icon-invert flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center"
           type="button"
         >
@@ -67,8 +97,12 @@
 
         <!-- Mobile Menu Toggle -->
         <button
+          id="mobile-menu-button"
           (click)="toggleMenu()"
           aria-label="Menu mobile"
+          role="button"
+          aria-haspopup="true"
+          [attr.aria-expanded]="isMenuOpen()"
           class="lg:hidden p-1 sm:p-2 rounded-full hover:bg-accent-400 transition-transform flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center"
           type="button"
         >
@@ -89,11 +123,18 @@
 
   <!-- Mobile Menu -->
   @if (isMenuOpen()) {
-    <div class="lg:hidden flex flex-col items-center space-y-4 py-4 bg-background shadow-md animate-fadeSlideIn">
+    <div
+      role="menu"
+      aria-labelledby="mobile-menu-button"
+      class="lg:hidden flex flex-col items-center space-y-4 py-4 bg-background shadow-md animate-fadeSlideIn"
+      style="display: flex; visibility: visible"
+    >
       @for (item of navigationItems(); track item.route) {
         <a
+          role="menuitem"
+          [attr.aria-label]="item.label"
           class="flex items-center text-text hover:text-accent-500 cursor-pointer w-full justify-center"
-          (click)="scrollToSection(item.fragment); closeMenu()"
+          (click)="$event.preventDefault(); $event.stopPropagation(); scrollToSection(item.fragment); closeMenu()"
         >
           @if (item.icon) {
             <div class="w-5 h-5 mr-2 relative flex-shrink-0">
@@ -112,3 +153,71 @@
     </div>
   }
 </nav>
+
+<!-- Settings Mini Modal (outside navbar) -->
+@if (isSettingsModalOpen()) {
+  <div
+    role="menu"
+    aria-labelledby="settings-button"
+    (click)="$event.stopPropagation()"
+    data-settings-modal
+    class="fixed z-50 w-[150px] rounded-lg border border-accent-400 bg-background p-3 shadow-xl animate-bubbleIn"
+    [style.top.px]="settingsPosition().top"
+    [style.left.px]="settingsPosition().left"
+    style="transform-origin: top left"
+  >
+    @if (!isAuthenticated()) {
+      <button
+        type="button"
+        role="menuitem"
+        aria-label="Connexion"
+        data-login-button
+        (click)="$event.preventDefault(); $event.stopPropagation(); showLoginForm()"
+        class="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent-400 transition-colors"
+      >
+        <img [ngSrc]="'icons/navbar/login.svg'" alt="Connexion" width="20" height="20" class="w-5 h-5 icon-invert" />
+        <span class="text-sm text-text">Connexion</span>
+      </button>
+    } @else {
+      <!-- Admin Button -->
+      <button
+        id="admin-button"
+        type="button"
+        role="menuitem"
+        aria-label="Administration"
+        class="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent-400 transition-colors mb-2"
+      >
+        <img
+          [ngSrc]="'icons/navbar/admin.svg'"
+          alt="Administration"
+          width="20"
+          height="20"
+          class="w-5 h-5 icon-invert"
+        />
+        <span class="text-sm text-text">Admin</span>
+      </button>
+
+      <!-- Logout Button -->
+      <button
+        type="button"
+        role="menuitem"
+        aria-label="Déconnexion"
+        (click)="$event.preventDefault(); $event.stopPropagation(); logout()"
+        class="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent-400 transition-colors"
+      >
+        <img [ngSrc]="'icons/navbar/logout.svg'" alt="Déconnexion" width="20" height="20" class="w-5 h-5 icon-invert" />
+        <span class="text-sm text-text">Déconnexion</span>
+      </button>
+    }
+  </div>
+}
+
+<!-- Login Modal (outside navbar and settings modal) -->
+@if (isLoginFormVisible()) {
+  <app-login
+    [position]="settingsPosition()"
+    [isCompact]="false"
+    (closeModal)="hideLoginForm()"
+    (loginSuccess)="handleLoginSuccess()"
+  />
+}
