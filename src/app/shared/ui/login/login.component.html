@@ -1,0 +1,189 @@
+<div
+  role="dialog"
+  aria-labelledby="login-modal-title"
+  (click)="$event.stopPropagation()"
+  data-login-modal
+  [class]="
+    isCompact()
+      ? 'p-2'
+      : 'fixed z-50 w-[400px] rounded-lg border border-accent-400 bg-background p-5 shadow-xl animate-fadeIn'
+  "
+  [style.top.px]="!isCompact() ? position().top : null"
+  [style.left.px]="!isCompact() ? position().left : null"
+>
+  <div [class]="isCompact() ? 'mb-3' : 'mb-4'">
+    <!-- Titre + Bouton Fermer en flex -->
+    <div class="flex justify-between items-center">
+      <h2
+        id="login-modal-title"
+        [class]="isCompact() ? 'text-sm font-semibold text-text' : 'text-lg font-semibold text-text'"
+      >
+        Connexion
+      </h2>
+      <button
+        type="button"
+        aria-label="Fermer"
+        (click)="$event.preventDefault(); $event.stopPropagation(); close()"
+        class="p-1 rounded-full hover:bg-accent-400 transition-colors"
+      >
+        <img
+          [ngSrc]="'icons/navbar/close.svg'"
+          alt="Fermer"
+          [width]="isCompact() ? 12 : 16"
+          [height]="isCompact() ? 12 : 16"
+          [class]="isCompact() ? 'w-3 h-3 icon-invert' : 'w-4 h-4 icon-invert'"
+        />
+      </button>
+    </div>
+
+    <!-- Paragraphe en dessous du titre -->
+    <p [class]="isCompact() ? 'text-xs text-muted' : 'mt-1 text-sm text-muted'">Espace réservé au grand barbu !!</p>
+  </div>
+
+  <form (submit)="$event.preventDefault(); login()">
+    <!-- Username/Email Field -->
+    <div [class]="isCompact() ? 'mb-3' : 'mb-4'">
+      <label
+        for="email"
+        [class]="isCompact() ? 'block text-xs font-medium text-text mb-1' : 'block text-sm font-medium text-text mb-1'"
+        >Email</label
+      >
+      <input
+        type="text"
+        id="email"
+        [value]="formService.email()"
+        (input)="updateEmail($event)"
+        [class]="
+          isCompact()
+            ? 'w-full px-2 py-1 text-sm border border-accent-400 rounded-md bg-background text-text focus:outline-none focus:ring-1 focus:ring-accent-500'
+            : 'w-full px-3 py-2 border border-accent-400 rounded-md bg-background text-text focus:outline-none focus:ring-2 focus:ring-accent-500'
+        "
+        required
+      />
+    </div>
+
+    <!-- Password Field -->
+    <div [class]="isCompact() ? 'mb-3' : 'mb-4'">
+      <label
+        for="password"
+        [class]="isCompact() ? 'block text-xs font-medium text-text mb-1' : 'block text-sm font-medium text-text mb-1'"
+        >Mot de passe</label
+      >
+      <div class="relative">
+        <input
+          [type]="formService.passwordVisible() ? 'text' : 'password'"
+          id="password"
+          [value]="formService.password()"
+          (input)="updatePassword($event)"
+          [class]="
+            isCompact()
+              ? 'w-full px-2 py-1 text-sm border border-accent-400 rounded-md bg-background text-text focus:outline-none focus:ring-1 focus:ring-accent-500 pr-8'
+              : 'w-full px-3 py-2 border border-accent-400 rounded-md bg-background text-text focus:outline-none focus:ring-2 focus:ring-accent-500 pr-10'
+          "
+          required
+        />
+        <button
+          type="button"
+          (click)="$event.preventDefault(); togglePasswordVisibility()"
+          [class]="
+            isCompact()
+              ? 'absolute inset-y-0 right-0 pr-2 flex items-center'
+              : 'absolute inset-y-0 right-0 pr-3 flex items-center'
+          "
+          aria-label="Toggle password visibility"
+        >
+          <!-- Toggle between visibility and invisibility icons -->
+          @if (formService.passwordVisible()) {
+            <img
+              [ngSrc]="'icons/navbar/invisibility.svg'"
+              alt="Hide password"
+              [width]="isCompact() ? 16 : 20"
+              [height]="isCompact() ? 16 : 20"
+              [class]="isCompact() ? 'w-4 h-4 icon-invert' : 'w-5 h-5 icon-invert'"
+            />
+          } @else {
+            <img
+              [ngSrc]="'icons/navbar/visibility.svg'"
+              alt="Show password"
+              [width]="isCompact() ? 16 : 20"
+              [height]="isCompact() ? 16 : 20"
+              [class]="isCompact() ? 'w-4 h-4 icon-invert' : 'w-5 h-5 icon-invert'"
+            />
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- Remember Me & Forgot Password -->
+    <div [class]="isCompact() ? 'flex justify-between items-center mb-3' : 'flex justify-between items-center mb-4'">
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          id="remember-me"
+          [checked]="formService.rememberMe()"
+          (change)="updateRememberMe($event)"
+          [class]="
+            isCompact()
+              ? 'h-3 w-3 text-accent-500 focus:ring-accent-400 border-accent-300 rounded'
+              : 'h-4 w-4 text-accent-500 focus:ring-accent-400 border-accent-300 rounded'
+          "
+        />
+        <label for="remember-me" [class]="isCompact() ? 'ml-1 block text-xs text-text' : 'ml-2 block text-sm text-text'"
+          >Se souvenir de moi</label
+        >
+      </div>
+      <button
+        type="button"
+        (click)="$event.preventDefault(); forgotPassword()"
+        [class]="isCompact() ? 'text-xs text-accent-500 hover:underline' : 'text-sm text-accent-500 hover:underline'"
+      >
+        Mot de passe oublié?
+      </button>
+    </div>
+
+    <!-- Error Message -->
+    @if (formService.errorMessage()) {
+      <div
+        [class]="
+          isCompact()
+            ? 'mb-3 p-1 bg-red-100 border border-red-400 text-red-700 rounded text-xs'
+            : 'mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded'
+        "
+      >
+        {{ formService.errorMessage() }}
+      </div>
+    }
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      [disabled]="formService.isLoading()"
+      [class]="
+        isCompact()
+          ? 'w-full bg-accent-500 text-white py-1 px-3 text-sm rounded-md hover:bg-accent-600 transition-colors focus:outline-none focus:ring-1 focus:ring-accent-400 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center'
+          : 'w-full bg-accent-500 text-white py-2 px-4 rounded-md hover:bg-accent-600 transition-colors focus:outline-none focus:ring-2 focus:ring-accent-400 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center'
+      "
+    >
+      @if (formService.isLoading()) {
+        <svg
+          [class]="
+            isCompact() ? 'animate-spin -ml-1 mr-2 h-3 w-3 text-white' : 'animate-spin -ml-1 mr-2 h-4 w-4 text-white'
+          "
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        {{ isCompact() ? 'Connexion...' : 'Connexion en cours...' }}
+      } @else {
+        Se connecter
+      }
+    </button>
+  </form>
+</div>
