@@ -1,6 +1,5 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { AuthService } from '@core/auth/service/auth.service';
-import { inject } from '@angular/core';
 import { ToastService } from '@core/services/toast.service';
 import { AuthFormService } from '@core/auth/service/auth-form.service';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
