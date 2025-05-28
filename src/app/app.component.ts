@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '@shared/ui/navbar/navbar.component';
 import { HeroComponent } from '@feat/public/hero/hero.component';
 import { AboutComponent } from '@feat/public/about/about.component';
@@ -9,10 +10,14 @@ import emailjs from '@emailjs/browser';
 import { FooterComponent } from '@shared/ui/footer/footer.component';
 import { environment } from '@environments/environment';
 import { ToastComponent } from '@shared/ui/toast/toast.component';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
+    CommonModule,
     NavbarComponent,
     HeroComponent,
     AboutComponent,
@@ -21,13 +26,22 @@ import { ToastComponent } from '@shared/ui/toast/toast.component';
     ContactComponent,
     FooterComponent,
     ToastComponent,
+    RouterOutlet,
   ],
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
-  title = 'ng-app-portfolio';
+export class AppComponent {
+  private readonly router = inject(Router);
 
-  ngOnInit(): void {
+  title = 'ng-app-portfolio';
+  isAdminRoute = signal<boolean>(false);
+
+  constructor() {
+    // Initialize EmailJS
     emailjs.init(environment.emailJsPublicKey);
+
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: any) => {
+      this.isAdminRoute.set(event.url.startsWith('/admin'));
+    });
   }
 }
