@@ -2,7 +2,8 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
 import { ScrollService } from '@core/services/scroll.service';
-import { HeroService } from '@feat/public/hero/service/hero.service';
+import { HeroService } from '@feat/admin/hero/service/hero.service';
+import { FileUrlService } from '@core/services/file-url.service';
 
 @Component({
   selector: 'app-hero',
@@ -11,9 +12,12 @@ import { HeroService } from '@feat/public/hero/service/hero.service';
 })
 export class HeroComponent implements OnInit {
   private readonly scrollService = inject(ScrollService);
-  private readonly heroService = inject(HeroService);
+  private readonly fileUrlService = inject(FileUrlService);
+  readonly heroService = inject(HeroService);
 
   readonly hero = computed(() => this.heroService.data());
+  readonly loading = computed(() => this.heroService.loading());
+  readonly error = computed(() => this.heroService.error());
 
   ngOnInit(): void {
     this.heroService.load();
@@ -25,6 +29,13 @@ export class HeroComponent implements OnInit {
 
   downloadCV(): void {
     const hero = this.hero();
-    if (hero) window.open(hero.cvPath, '_blank');
+    if (hero && hero.cvPath) {
+      const fileUrl = this.fileUrlService.getFileUrl(hero.cvPath);
+      window.open(fileUrl, '_blank');
+    }
+  }
+
+  getFileUrl(path: string): string {
+    return this.fileUrlService.getFileUrl(path);
   }
 }
