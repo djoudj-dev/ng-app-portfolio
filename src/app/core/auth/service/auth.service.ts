@@ -3,8 +3,9 @@ import { HttpAdapterService } from '@app/core/http/http.adapter';
 import { ToastService } from '@app/core/services/toast.service';
 import { TokenService } from '@core/auth/service/token.service';
 import { AuthResponse, LoginCredentials } from '@core/auth/interface/auth.interface';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
   private readonly toast = inject(ToastService);
   private readonly tokenService = inject(TokenService);
   private readonly errorHandler = inject(ErrorHandlerService);
+  private readonly router = inject(Router);
 
   readonly isAuthenticated = computed(() => this.tokenService.authState.isAuthenticated);
   readonly user = computed(() => this.tokenService.authState.user);
@@ -44,10 +46,36 @@ export class AuthService {
   }
 
   logout(): void {
-    this.tokenService.clear();
-    this.toast.showSuccess('Déconnexion réussie !');
-    // Optionnel : informer le serveur
-    // this.http.post('/auth/logout', {}).subscribe();
+    // Informer le serveur pour invalider les tokens
+    this.http
+      .post<{ message: string }>('/auth/logout', {})
+      .pipe(
+        tap(() => {
+          // Nettoyer les tokens côté client
+          this.tokenService.clear();
+          this.toast.showSuccess('Déconnexion réussie !');
+
+          // Rediriger vers la page d'accueil
+          this.router.navigate(['/']);
+        }),
+        catchError((error) => {
+          console.error('Erreur lors de la déconnexion:', error);
+
+          // Même en cas d'erreur, on nettoie les tokens côté client et on redirige
+          this.tokenService.clear();
+          this.toast.showSuccess('Déconnexion réussie !');
+          this.router.navigate(['/']);
+
+          return of(null);
+        }),
+        finalize(() => {
+          // S'assurer que l'utilisateur est redirigé même si une erreur se produit
+          if (this.router.url.includes('/admin')) {
+            this.router.navigate(['/']);
+          }
+        })
+      )
+      .subscribe();
   }
 
   getAccessToken(): string | null {

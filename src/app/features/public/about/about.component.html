@@ -11,7 +11,7 @@
             <img
               class="object-cover w-72 h-72 transition-transform hover:scale-105"
               [ngSrc]="a.imageUrl"
-              alt="Portrait"
+              alt="Portrait de {{ a.fullname }}"
               width="288"
               height="288"
               priority
@@ -28,19 +28,19 @@
 
           <ul class="flex flex-col sm:flex-row sm:flex-wrap gap-x-6 gap-y-2 pt-4">
             <li class="flex items-center gap-2">
-              <img [ngSrc]="'icons/about/name.svg'" alt="name" class="w-5 h-5 icon-invert" width="20" height="20" />
+              <img [ngSrc]="'icons/about/name.svg'" alt="Nom" class="w-5 h-5 icon-invert" width="20" height="20" />
               <span class="font-semibold text-primary">Nom :</span>
               <span class="text-accent">{{ a.fullname }}</span>
             </li>
             <li class="flex items-center gap-2">
-              <img [ngSrc]="'icons/about/mail.svg'" alt="email" class="w-5 h-5 icon-invert" width="20" height="20" />
+              <img [ngSrc]="'icons/about/mail.svg'" alt="Email" class="w-5 h-5 icon-invert" width="20" height="20" />
               <span class="font-semibold text-primary">Email :</span>
               <span class="text-accent">{{ a.email }}</span>
             </li>
             <li class="flex items-center gap-2">
               <img
                 [ngSrc]="'icons/about/location.svg'"
-                alt="location"
+                alt="Localisation"
                 class="w-5 h-5 icon-invert"
                 width="20"
                 height="20"
@@ -59,11 +59,10 @@
               >
                 <img
                   [ngSrc]="'icons/about/linkedin.svg'"
-                  alt="LinkedIn"
+                  alt="Icône LinkedIn"
                   class="w-6 h-6 icon-invert"
                   width="48"
                   height="48"
-                  priority
                 />
                 LinkedIn
               </a>
@@ -76,11 +75,10 @@
               >
                 <img
                   [ngSrc]="'icons/about/github.svg'"
-                  alt="GitHub"
+                  alt="Icône GitHub"
                   class="w-6 h-6 icon-invert"
                   width="48"
                   height="48"
-                  priority
                 />
                 GitHub
               </a>

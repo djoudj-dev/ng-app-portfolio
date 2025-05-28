@@ -5,8 +5,8 @@ import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class HttpAdapterService {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = environment.apiUrl;
+  private readonly http: HttpClient = inject(HttpClient);
+  private readonly baseUrl: string = environment.apiUrl;
 
   get<T>(path: string, params?: HttpParams): Observable<T> {
     return this.http.get<T>(`${this.baseUrl}${path}`, {
@@ -57,6 +57,25 @@ export class HttpAdapterService {
     }
 
     return this.http.post<T>(`${this.baseUrl}${path}`, formData, {
+      withCredentials: true,
+    });
+  }
+
+  /**
+   * Uploads a file using PATCH method
+   * @param path The API endpoint path
+   * @param file The file to upload
+   * @param extraData Additional data to include in the form
+   * @returns An Observable of the response
+   */
+  patchFile<T>(path: string, file: File, extraData: Record<string, string> = {}): Observable<T> {
+    const formData = new FormData();
+    formData.append('file', file);
+    for (const key in extraData) {
+      formData.append(key, extraData[key]);
+    }
+
+    return this.http.patch<T>(`${this.baseUrl}${path}`, formData, {
       withCredentials: true,
     });
   }

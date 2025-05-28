@@ -1,32 +1,51 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, map, shareReplay } from 'rxjs';
+import { HttpAdapterService } from '@core/http/http.adapter';
+import { About } from '@feat/public/about/interface/about.interface';
+import { Category, HardSkills, SoftSkills } from '@feat/public/stacks/interface/stacks.interface';
+import { Project, ProjectCategory } from '@feat/public/project/interface/project.interface';
+import { ContactCard, ContactCardGroup } from '@feat/public/contact/interface/contact.interface';
+
+/**
+ * Interface representing the structure of the portfolio data JSON file
+ */
+export interface PortfolioData {
+  about: About;
+  stacks: {
+    categories: Category[];
+    hardskills: HardSkills[];
+    softskills: SoftSkills[];
+  };
+  projects: {
+    items: Project[];
+    categories: ProjectCategory[];
+  };
+  contact: {
+    cards: ContactCard[];
+    groups: ContactCardGroup[];
+  };
+  [key: string]: any; // For any other sections not explicitly typed
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  private readonly http = inject(HttpClient);
-  private jsonData$: Observable<any> | null = null;
+  private readonly http = inject(HttpAdapterService);
+  private jsonData$: Observable<PortfolioData> | null = null;
 
-  /**
-   * Loads the entire JSON data file once and caches it
-   */
-  loadData(): Observable<any> {
+  loadData(): Observable<PortfolioData> {
     if (!this.jsonData$) {
-      // In production, load the file from the assets directory
-      this.jsonData$ = this.http.get<any>('db.json').pipe(
+      // Load the file from the public directory using getLocal
+      this.jsonData$ = this.http.getLocal<PortfolioData>('/db.json').pipe(
         shareReplay(1) // Cache the result
       );
     }
     return this.jsonData$;
   }
 
-  /**
-   * Gets a specific section from the JSON data
-   * @param section The section name to retrieve (e.g., 'hero', 'about', 'stacks')
-   */
   getSection<T>(section: string): Observable<T> {
+    // For backward compatibility, still use local data
     return this.loadData().pipe(map((data) => data[section] as T));
   }
 }
