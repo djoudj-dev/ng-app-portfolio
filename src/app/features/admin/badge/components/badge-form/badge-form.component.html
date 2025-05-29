@@ -1,0 +1,76 @@
+<div class="card bg-background text-text shadow-accent-md animate-bubbleIn rounded-xl border border-primary-200">
+  <div class="card-header border-b border-primary-100 px-6 py-4">
+    <h5 class="card-title text-xl font-semibold text-primary tracking-tight">
+      {{ isEditMode() ? 'Modifier le badge' : 'Créer un badge' }}
+    </h5>
+  </div>
+
+  <div class="card-body px-6 py-6 space-y-6">
+    <form [formGroup]="badgeForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      <!-- Statut -->
+      <div>
+        <label for="status" class="block text-sm font-medium text-text mb-1">Statut</label>
+        <select
+          id="status"
+          formControlName="status"
+          class="block w-full rounded-lg border border-primary-200 bg-background text-text p-2.5 shadow-sm focus:border-primary-500 focus:ring-primary-300"
+        >
+          @for (status of badgeStatusOptions(); track status) {
+            <option [value]="status">{{ getStatusLabel(status) }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Date -->
+      @if (showDateField()) {
+        <div>
+          <label for="availableUntil" class="block text-sm font-medium text-text mb-1">Disponible à partir de</label>
+          <input
+            id="availableUntil"
+            type="date"
+            formControlName="availableUntil"
+            class="block w-full rounded-lg border p-2.5 text-text bg-background shadow-sm border-primary-200 focus:border-accent-500 focus:ring-accent-300"
+            [class.border-red-500]="
+              badgeForm.get('availableUntil')?.invalid && badgeForm.get('availableUntil')?.touched
+            "
+          />
+          @if (badgeForm.get('availableUntil')?.invalid && badgeForm.get('availableUntil')?.touched) {
+            <p class="mt-1 text-sm text-red-500">La date est requise pour ce statut</p>
+          }
+        </div>
+      }
+
+      <!-- Checkbox -->
+      <div class="flex items-center space-x-2">
+        <input
+          id="isAvailable"
+          type="checkbox"
+          [checked]="isCurrentlyAvailable()"
+          disabled
+          class="h-4 w-4 rounded border-primary-300 accent-primary focus:ring-primary"
+        />
+        <label for="isAvailable" class="text-sm text-text">Actuellement disponible</label>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end space-x-3 pt-4 border-t border-primary-100">
+        <app-button
+          type="button"
+          color="secondary"
+          [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
+          (buttonClick)="onCancel()"
+        >
+          Annuler
+        </app-button>
+        <app-button
+          type="submit"
+          color="accent"
+          [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200 text-text'"
+          [disabled]="badgeForm.invalid"
+        >
+          {{ isEditMode() ? 'Mettre à jour' : 'Créer' }}
+        </app-button>
+      </div>
+    </form>
+  </div>
+</div>

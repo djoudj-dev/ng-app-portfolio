@@ -134,6 +134,12 @@ export class SidebarComponent {
       exact: false,
     },
     {
+      label: 'Badge disponibilité',
+      icon: 'icons/navbar/badge.svg',
+      route: '/admin/badges',
+      exact: false,
+    },
+    {
       label: 'About',
       icon: 'icons/navbar/about.svg',
       route: '/admin/about',
