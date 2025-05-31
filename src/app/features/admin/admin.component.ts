@@ -17,34 +17,9 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   selector: 'app-admin',
   imports: [CommonModule, RouterOutlet, SidebarComponent],
   template: `
-    <app-sidebar #sidebar (expandedChange)="onSidebarExpandedChange($event)" />
-    <div
-      class="admin-container p-5 bg-background min-h-screen"
-      [class.ml-16]="!sidebarExpanded()"
-      [class.ml-64]="sidebarExpanded()"
-    >
-      <router-outlet></router-outlet>
-    </div>
+    <app-sidebar #sidebar [(expanded)]="sidebarOpen" />
+    <router-outlet></router-outlet>
   `,
-  styles: [
-    `
-      .admin-container {
-        padding: 20px;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-        background-color: var(--color-background);
-        min-height: 100vh;
-      }
-
-      @media (max-width: 768px) {
-        .admin-container {
-          margin-left: 0 !important;
-          width: 100%;
-        }
-      }
-    `,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminComponent implements AfterViewInit {
@@ -52,6 +27,7 @@ export class AdminComponent implements AfterViewInit {
   private readonly injector = inject(Injector);
 
   sidebarExpanded = signal<boolean>(false);
+  sidebarOpen = signal<boolean>(true);
 
   ngAfterViewInit(): void {
     // Initial state from sidebar
@@ -65,7 +41,6 @@ export class AdminComponent implements AfterViewInit {
     });
   }
 
-  // Event handler for sidebar expanded changes
   onSidebarExpandedChange(expanded: boolean): void {
     this.sidebarExpanded.set(expanded);
   }

@@ -1,5 +1,6 @@
 export enum MetricType {
   VISIT = 'VISIT',
+  CV_CLICK = 'CV_CLICK',
   // Add other metric types as needed
 }
 

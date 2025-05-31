@@ -80,7 +80,6 @@ export class HeroAdminComponent {
     this.success.set(null);
     this.heroService.resetError();
 
-    // Get the current hero data to preserve the ID
     const currentHero = this.hero();
     const heroData: Hero = {
       ...this.heroForm.value,
@@ -111,7 +110,6 @@ export class HeroAdminComponent {
     this.uploadError.set(null);
   }
 
-  // File upload methods
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -142,7 +140,6 @@ export class HeroAdminComponent {
   }
 
   handleFile(file: File): void {
-    // Check file type
     const allowedTypes = [
       'application/pdf',
       'application/msword',
@@ -154,7 +151,6 @@ export class HeroAdminComponent {
       return;
     }
 
-    // Check file size (5MB max)
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
     if (file.size > maxSize) {
       this.uploadError.set('Le fichier est trop volumineux. La taille maximale est de 5MB.');
@@ -164,36 +160,26 @@ export class HeroAdminComponent {
     this.uploadError.set(null);
     this.uploadedFile.set(file);
 
-    // Get the current hero
     const currentHero = this.hero();
 
-    // If a hero exists, update its CV; otherwise, upload a new CV
     if (currentHero?.id) {
-      // Update existing hero's CV
       this.heroService.updateCV(currentHero.id, file).subscribe({
         next: (updatedHero) => {
-          console.log('CV updated successfully:', updatedHero);
-          // Update the form with the updated hero data
           this.heroForm.patchValue(updatedHero);
           this.success.set('CV mis à jour avec succès!');
         },
-        error: (err) => {
-          console.error('Error updating CV:', err);
+        error: () => {
           this.uploadError.set('Erreur lors de la mise à jour du CV. Veuillez réessayer.');
           this.uploadedFile.set(null);
         },
       });
     } else {
-      // Upload new CV
       this.heroService.uploadCV(file).subscribe({
         next: (result) => {
-          console.log('CV uploaded successfully:', result);
-          // Update the form with the new CV path
           this.heroForm.patchValue({ cvPath: result.filename });
           this.success.set('CV téléchargé avec succès!');
         },
-        error: (err) => {
-          console.error('Error uploading CV:', err);
+        error: () => {
           this.uploadError.set('Erreur lors du téléchargement du CV. Veuillez réessayer.');
           this.uploadedFile.set(null);
         },
@@ -202,7 +188,7 @@ export class HeroAdminComponent {
   }
 
   removeFile(event: Event): void {
-    event.stopPropagation(); // Prevent triggering the file input click
+    event.stopPropagation();
     this.uploadedFile.set(null);
     this.heroForm.patchValue({ cvPath: '' });
     if (this.fileInput) {
@@ -213,7 +199,6 @@ export class HeroAdminComponent {
   getFileNameFromPath(path: string): string {
     if (!path) return '';
 
-    // Extract filename from path
     const parts = path.split('/');
     return parts[parts.length - 1];
   }
@@ -246,7 +231,6 @@ export class HeroAdminComponent {
     return this.getFileType(path) === 'pdf';
   }
 
-  // Helper method to mark all form controls as touched
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach((control) => {
       control.markAsTouched();

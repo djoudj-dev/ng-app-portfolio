@@ -166,7 +166,7 @@
                   class="w-20 h-28 border border-primary-200 rounded overflow-hidden flex items-center justify-center bg-primary-50"
                 >
                   <object
-                    [data]="getFileUrl(heroForm.get('cvPath')?.value)"
+                    [attr.data]="getSafeResourceUrl(hero()?.cvPath || '')"
                     type="application/pdf"
                     class="w-full h-full"
                   >

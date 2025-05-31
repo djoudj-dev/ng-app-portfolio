@@ -28,7 +28,7 @@ export class ContactService {
       next: (res) => {
         this._data.set(res);
       },
-      error: (err) => console.error('Erreur chargement contact:', err),
+      error: () => console.error(),
     });
   }
 
@@ -45,14 +45,14 @@ export class ContactService {
     return from(emailjs.send(this.emailJsServiceId, this.emailJsTemplateId, templateParams)).pipe(
       map(() => ({ success: true, message: 'Email sent successfully' })),
       catchError((error) => {
-        console.error('Error sending email:', error);
+        console.error();
 
         if (error.status === 400 && error.text?.includes('Public Key is invalid')) {
-          console.error('EmailJS Public Key is invalid. Please update it in app.component.ts');
+          console.error();
         } else if (error.status === 404 && error.text?.includes('service_id')) {
-          console.error('EmailJS Service ID is invalid. Please update it in contact.service.ts');
+          console.error();
         } else if (error.status === 404 && error.text?.includes('template_id')) {
-          console.error('EmailJS Template ID is invalid. Please update it in contact.service.ts');
+          console.error();
         }
 
         throw error;

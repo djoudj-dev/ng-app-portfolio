@@ -3,5 +3,5 @@ import { appConfig } from '@app/app.config';
 import { AppComponent } from '@app/app.component';
 import { environment } from '@environments/environment';
 
-bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch(() => console.error());
 console.log(environment);

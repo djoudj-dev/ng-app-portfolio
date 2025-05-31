@@ -1,26 +1,51 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
 import { ScrollService } from '@core/services/scroll.service';
 import { HeroService } from '@feat/admin/hero/service/hero.service';
 import { FileUrlService } from '@core/services/file-url.service';
+import { MetricsService } from '@core/services/metrics.service';
 
 @Component({
   selector: 'app-hero',
   imports: [ButtonComponent, NgOptimizedImage],
   templateUrl: './hero.component.html',
 })
-export class HeroComponent implements OnInit {
+export class HeroComponent {
   private readonly scrollService = inject(ScrollService);
   private readonly fileUrlService = inject(FileUrlService);
+  private readonly metricsService = inject(MetricsService);
   readonly heroService = inject(HeroService);
 
   readonly hero = computed(() => this.heroService.data());
   readonly loading = computed(() => this.heroService.loading());
   readonly error = computed(() => this.heroService.error());
+  readonly downloadCvClick = signal(false);
 
-  ngOnInit(): void {
+  constructor() {
+    // Charger les données au montage
     this.heroService.load();
+
+    // Effet pour suivre les clics et envoyer les metrics
+    effect(() => {
+      const clicked = this.downloadCvClick();
+      if (!clicked) return;
+
+      const hero = this.hero();
+      if (!hero?.id || !hero.cvPath) return;
+
+      this.metricsService.trackCvClick(hero.id).subscribe({
+        next: () => {
+          const fileUrl = this.fileUrlService.getFileUrl(hero.cvPath);
+          window.open(fileUrl, '_blank');
+          this.downloadCvClick.set(false); // Reset du signal
+        },
+        error: (err) => {
+          console.error();
+          this.downloadCvClick.set(false); // Toujours reset
+        },
+      });
+    });
   }
 
   scrollToSection(fragment: string): Promise<void> {
@@ -28,11 +53,7 @@ export class HeroComponent implements OnInit {
   }
 
   downloadCV(): void {
-    const hero = this.hero();
-    if (hero && hero.cvPath) {
-      const fileUrl = this.fileUrlService.getFileUrl(hero.cvPath);
-      window.open(fileUrl, '_blank');
-    }
+    this.downloadCvClick.set(true);
   }
 
   getFileUrl(path: string): string {

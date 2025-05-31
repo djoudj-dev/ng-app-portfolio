@@ -21,7 +21,6 @@ export class HeroService {
 
     this.http.get<Hero[]>('/heroes').subscribe({
       next: (res) => {
-        // Si l'API renvoie un tableau, prenez le premier élément
         if (res && res.length > 0) {
           const hero = res[0];
           this._data.set(hero);
@@ -30,8 +29,8 @@ export class HeroService {
         }
         this._loading.set(false);
       },
-      error: (err) => {
-        console.error('Erreur chargement hero depuis API:', err);
+      error: () => {
+        console.error();
         this._error.set("Erreur de chargement depuis l'API");
         this._loading.set(false);
       },
@@ -53,8 +52,8 @@ export class HeroService {
         this._loading.set(false);
       }),
       map((heroes) => (heroes && heroes.length > 0 ? heroes[0] : (null as unknown as Hero))),
-      catchError((err) => {
-        console.error('Erreur chargement hero depuis API:', err);
+      catchError(() => {
+        console.error();
         this._error.set("Erreur de chargement depuis l'API");
         this._loading.set(false);
         return of(null as unknown as Hero);
@@ -70,7 +69,7 @@ export class HeroService {
     const heroId = id || heroData.id || this._data()?.id;
 
     if (!heroId) {
-      console.error('Erreur: Aucun ID de héros disponible pour la mise à jour');
+      console.error();
       this._error.set('Erreur: Aucun ID de héros disponible');
       this._loading.set(false);
       return of(null as unknown as Hero);
@@ -82,8 +81,8 @@ export class HeroService {
         this._data.set(updatedHero);
         this._loading.set(false);
       }),
-      catchError((err) => {
-        console.error('Erreur mise à jour hero:', err);
+      catchError(() => {
+        console.error();
         this._error.set('Erreur lors de la mise à jour');
         this._loading.set(false);
         // Return empty observable to prevent error propagation
@@ -102,8 +101,8 @@ export class HeroService {
         this._loading.set(false);
         console.log('Nouveau héros créé avec ID:', newHero.id);
       }),
-      catchError((err) => {
-        console.error('Erreur création hero:', err);
+      catchError(() => {
+        console.error();
         this._error.set('Erreur lors de la création');
         this._loading.set(false);
         // Return empty observable to prevent error propagation
@@ -120,7 +119,7 @@ export class HeroService {
     const heroId = id || this._data()?.id;
 
     if (!heroId) {
-      console.error('Erreur: Aucun ID de héros disponible pour la suppression');
+      console.error();
       this._error.set('Erreur: Aucun ID de héros disponible');
       this._loading.set(false);
       return of(null);
@@ -132,8 +131,8 @@ export class HeroService {
         this._data.set(null);
         this._loading.set(false);
       }),
-      catchError((err) => {
-        console.error('Erreur suppression hero:', err);
+      catchError(() => {
+        console.error();
         this._error.set('Erreur lors de la suppression');
         this._loading.set(false);
         // Return empty observable to prevent error propagation
@@ -159,8 +158,8 @@ export class HeroService {
         tap(() => {
           this._loading.set(false);
         }),
-        catchError((err) => {
-          console.error('Erreur upload CV:', err);
+        catchError(() => {
+          console.error();
           this._error.set("Erreur lors de l'upload du CV");
           this._loading.set(false);
           // Return empty observable to prevent error propagation
@@ -194,7 +193,7 @@ export class HeroService {
           this._loading.set(false);
         }),
         catchError((err) => {
-          console.error('Erreur récupération info CV:', err);
+          console.error();
           this._error.set('Erreur lors de la récupération des informations du CV');
           this._loading.set(false);
           throw err; // Propager l'erreur pour permettre la gestion par l'appelant
@@ -239,7 +238,7 @@ export class HeroService {
         this._loading.set(false);
       }),
       catchError((err) => {
-        console.error('Erreur mise à jour CV:', err);
+        console.error();
 
         // Gestion des erreurs spécifiques
         if (err.status === 404) {

@@ -20,6 +20,7 @@ export class MetricsService {
   private readonly _realUserMetrics = signal<Metric[]>([]);
   private readonly _botCount = signal<number>(0);
   private readonly _realUserCount = signal<number>(0);
+  private readonly _cvClickCount = signal<number>(0);
   private readonly _isLoading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
 
@@ -30,6 +31,7 @@ export class MetricsService {
   readonly realUserMetrics = this._realUserMetrics.asReadonly();
   readonly botCount = this._botCount.asReadonly();
   readonly realUserCount = this._realUserCount.asReadonly();
+  readonly cvClickCount = this._cvClickCount.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly error = this._error.asReadonly();
 
@@ -94,8 +96,8 @@ export class MetricsService {
         this._isLoading.set(false);
       }),
       tap({
-        error: (err) => {
-          console.error('Error loading metrics:', err);
+        error: () => {
+          console.error();
           this._error.set('Failed to load metrics. Please try again later.');
           this._isLoading.set(false);
         },
@@ -113,7 +115,7 @@ export class MetricsService {
       tap(() => this._isLoading.set(false)),
       tap({
         error: (err) => {
-          console.error('Error loading metrics by path:', err);
+          console.error();
           this._error.set('Failed to load metrics by path. Please try again later.');
           this._isLoading.set(false);
         },
@@ -131,7 +133,7 @@ export class MetricsService {
       tap(() => this._isLoading.set(false)),
       tap({
         error: (err) => {
-          console.error('Error loading metrics by user:', err);
+          console.error();
           this._error.set('Failed to load metrics by user. Please try again later.');
           this._isLoading.set(false);
         },
@@ -153,7 +155,7 @@ export class MetricsService {
       }),
       tap({
         error: (err) => {
-          console.error('Error loading metric count:', err);
+          console.error();
           this._error.set('Failed to load metric count. Please try again later.');
           this._isLoading.set(false);
         },
@@ -196,7 +198,7 @@ export class MetricsService {
       }),
       tap({
         error: (err) => {
-          console.error('Error loading bot metrics:', err);
+          console.error();
           this._error.set('Failed to load bot metrics. Please try again later.');
           this._isLoading.set(false);
         },
@@ -213,7 +215,7 @@ export class MetricsService {
       tap(() => this._isLoading.set(false)),
       tap({
         error: (err) => {
-          console.error('Error loading bot metrics by path:', err);
+          console.error();
           this._error.set('Failed to load bot metrics by path. Please try again later.');
           this._isLoading.set(false);
         },
@@ -234,7 +236,7 @@ export class MetricsService {
       }),
       tap({
         error: (err) => {
-          console.error('Error loading bot metric count:', err);
+          console.error();
           this._error.set('Failed to load bot metric count. Please try again later.');
           this._isLoading.set(false);
         },
@@ -259,7 +261,7 @@ export class MetricsService {
       }),
       tap({
         error: (err) => {
-          console.error('Error loading real user metrics:', err);
+          console.error();
           this._error.set('Failed to load real user metrics. Please try again later.');
           this._isLoading.set(false);
         },
@@ -276,7 +278,7 @@ export class MetricsService {
       tap(() => this._isLoading.set(false)),
       tap({
         error: (err) => {
-          console.error('Error loading real user metrics by path:', err);
+          console.error();
           this._error.set('Failed to load real user metrics by path. Please try again later.');
           this._isLoading.set(false);
         },
@@ -297,7 +299,7 @@ export class MetricsService {
       }),
       tap({
         error: (err) => {
-          console.error('Error loading real user metric count:', err);
+          console.error();
           this._error.set('Failed to load real user metric count. Please try again later.');
           this._isLoading.set(false);
         },
@@ -307,5 +309,26 @@ export class MetricsService {
 
   getRealUserMetricsByPeriod(type: MetricType = MetricType.VISIT): Observable<MetricPeriods> {
     return this.getRealUserMetrics(type).pipe(map(() => this.realUserMetricsByPeriod()));
+  }
+
+  // CV Click metrics methods
+  getCvClickCount(): Observable<number> {
+    this._isLoading.set(true);
+    this._error.set(null);
+
+    return this.http.get<MetricCount>(`/metrics/count?type=${MetricType.CV_CLICK}`).pipe(
+      map((response) => response.count),
+      tap((count) => {
+        this._cvClickCount.set(count);
+        this._isLoading.set(false);
+      }),
+      tap({
+        error: (err) => {
+          console.error();
+          this._error.set('Failed to load CV click count. Please try again later.');
+          this._isLoading.set(false);
+        },
+      })
+    );
   }
 }
