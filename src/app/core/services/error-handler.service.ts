@@ -19,7 +19,7 @@ export class ErrorHandlerService {
       message = Array.isArray(error.error.message) ? error.error.message[0] : error.error.message;
     }
 
-    console.error('Authentication error:', error);
+    console.error();
     return message;
   }
 
@@ -35,7 +35,7 @@ export class ErrorHandlerService {
       message = Array.isArray(error.error.message) ? error.error.message[0] : error.error.message;
     }
 
-    console.error('API error:', error);
+    console.error();
     return message;
   }
 }

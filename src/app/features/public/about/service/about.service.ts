@@ -14,7 +14,7 @@ export class AboutService {
   load(): void {
     this.dataService.getSection<About>('about').subscribe({
       next: (res) => this._data.set(res),
-      error: (err) => console.error('Erreur chargement about:', err),
+      error: () => console.error(),
     });
   }
 }

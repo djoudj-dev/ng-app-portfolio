@@ -76,7 +76,7 @@ export class ContactComponent implements OnInit {
           this.toastService.showSuccess('Votre message a été envoyé avec succès!');
         },
         error: (error) => {
-          console.error('Error sending email:', error);
+          console.error();
           this.isSending.set(false); // Désactiver le spinner
 
           let errorMessage = "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer plus tard.";

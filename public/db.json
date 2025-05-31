@@ -1,11 +1,4 @@
 {
-  "hero": {
-    "firstName": "Julien",
-    "lastName": "NÉDELLEC",
-    "jobTitle": "Développeur web et web mobile",
-    "jobDescription": "Je conçois des applications web performantes et accessibles, en mettant les besoins des utilisateurs au centre de chaque projet. Mon approche combine exigence technique et sens du design pour des solutions à la fois robustes et élégantes.",
-    "cvPath": "docs/CV_Nedellec-Julien_Developpeur-Angular-NodeJS.pdf"
-  },
   "about": {
     "fullname": "Julien NÉDELLEC",
     "title": "Développeur Angular Fullstack",

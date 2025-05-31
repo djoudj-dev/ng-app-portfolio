@@ -13,7 +13,7 @@ export class ProjectService {
   load(): void {
     this.dataService.getSection<{ project: Project[] }>('projects').subscribe({
       next: (res) => this._projects.set(res.project), // Assurez-vous d'accéder à la clé correcte
-      error: (err) => console.error('Erreur chargement projects:', err),
+      error: () => console.error(),
     });
   }
 }

@@ -31,7 +31,7 @@ export class StacksService {
           this._hardSkills.set(res.hardskills);
           this._softSkills.set(res.softskills);
         },
-        error: (err) => console.error('Erreur chargement stacks:', err),
+        error: () => console.error(),
       });
   }
 }
