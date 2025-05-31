@@ -1,4 +1,6 @@
-<div class="card bg-background text-text shadow-accent-md animate-bubbleIn rounded-xl border border-primary-200">
+<div
+  class="card bg-background text-text shadow-accent-md animate-bubbleIn rounded-xl border border-primary-200 max-w-2xl mx-auto"
+>
   <div class="card-header border-b border-primary-100 px-6 py-4">
     <h5 class="card-title text-xl font-semibold text-primary tracking-tight">
       {{ isEditMode() ? 'Modifier le badge' : 'Créer un badge' }}
@@ -6,92 +8,72 @@
   </div>
 
   <div class="card-body px-6 py-6 space-y-6">
-    <form [formGroup]="badgeForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <form (ngSubmit)="onSubmit()" class="space-y-6 text-text">
       <!-- Statut -->
       <div>
-        <label for="status" class="block text-sm font-medium text-text mb-1">Statut</label>
+        <label for="status" class="block text-sm font-semibold text-primary mb-1">Statut</label>
         <select
           id="status"
-          formControlName="status"
-          class="block w-full rounded-lg border border-primary-200 bg-background text-text p-2.5 shadow-sm focus:border-primary-500 focus:ring-primary-300"
+          name="status"
+          class="w-full rounded-md bg-background border border-primary-200 text-sm p-2.5 focus:outline-none focus:border-primary-500 focus:ring-primary-300"
+          [ngModel]="status()"
+          (ngModelChange)="status.set($event)"
         >
-          @for (status of badgeStatusOptions(); track status) {
-            <option [value]="status">{{ getStatusLabel(status) }}</option>
+          @for (opt of badgeStatusOptions(); track opt) {
+            <option [value]="opt">{{ getStatusLabel(opt) }}</option>
           }
         </select>
       </div>
 
-      <!-- Date -->
+      <!-- Date de disponibilité -->
       @if (showDateField()) {
         <div>
-          <label for="availableUntil" class="block text-sm font-medium text-text mb-1">Disponible à partir de</label>
-          <div class="relative">
-            <input
-              id="availableUntil"
-              type="date"
-              formControlName="availableUntil"
-              class="block w-full rounded-lg border p-2.5 pl-10 text-text bg-background shadow-sm border-primary-200 focus:border-primary-500 focus:ring-primary-300 cursor-pointer hover:border-primary-300 transition-colors duration-200"
-              [class.border-red-500]="
-                badgeForm.get('availableUntil')?.invalid && badgeForm.get('availableUntil')?.touched
-              "
-            />
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg
-                class="w-5 h-5 text-primary-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </div>
-          </div>
-          @if (badgeForm.get('availableUntil')?.invalid && badgeForm.get('availableUntil')?.touched) {
-            <p class="mt-1 text-sm text-red-500">La date est requise pour ce statut</p>
-          } @else {
-            <p class="mt-1 text-xs text-primary-400">Cliquez pour sélectionner une date</p>
-          }
+          <label for="availableUntil" class="block text-sm font-semibold text-primary mb-1">
+            Disponible à partir de
+          </label>
+          <input
+            id="availableUntil"
+            type="date"
+            name="availableUntil"
+            class="w-full rounded-md bg-background border border-primary-200 p-2.5 text-sm focus:border-primary-500 focus:ring-primary-300"
+            [ngModel]="availableUntil()"
+            (ngModelChange)="availableUntil.set($event)"
+          />
+          <p class="mt-1 text-xs text-primary-400">Cliquez pour sélectionner une date</p>
         </div>
       }
 
-      <!-- Checkbox -->
+      <!-- Info readonly -->
       <div class="flex items-center space-x-2">
         <input
-          id="isAvailable"
           type="checkbox"
           [checked]="isCurrentlyAvailable()"
           disabled
-          class="h-4 w-4 rounded border-primary-300 accent-primary focus:ring-primary"
+          class="h-4 w-4 text-accent border-primary-300 rounded cursor-not-allowed"
         />
-        <label for="isAvailable" class="text-sm text-text">Actuellement disponible</label>
+        <label class="text-sm">Actuellement disponible</label>
       </div>
 
       <!-- Actions -->
-      <div class="flex justify-end space-x-3 pt-4 border-t border-primary-100">
+      <div class="flex justify-end gap-3 pt-4 border-t border-primary-100">
         <app-button
           type="button"
           color="secondary"
-          [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
+          [customClass]="'px-5 py-3 bg-secondary text-text hover:bg-secondary-600 transition rounded-md shadow-md'"
           (buttonClick)="onCancel()"
         >
           Annuler
         </app-button>
+
         <app-button
           type="submit"
           color="accent"
-          [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200 text-text'"
-          [disabled]="badgeForm.invalid"
+          [customClass]="'px-5 py-3 bg-accent text-text hover:bg-accent-600 transition rounded-md shadow-md'"
+          [disabled]="!formValid()"
         >
-          {{ isEditMode() ? 'Mettre à jour' : 'Créer' }}
+          {{ isEditMode() ? 'Modifier un badge' : 'Créer un badge' }}
         </app-button>
       </div>
     </form>
   </div>
 </div>
-
-<!-- Toast component for notifications -->
-<app-toast position="inside"></app-toast>

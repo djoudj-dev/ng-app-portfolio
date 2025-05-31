@@ -8,7 +8,6 @@ export class BadgeDate implements PipeTransform {
   private readonly datePipe = inject(DatePipe);
 
   transform(value: Date | null | undefined): string {
-    if (!value) return 'Non défini';
-    return this.datePipe.transform(value, 'dd/MM/yyyy') ?? 'Date invalide';
+    return value ? (this.datePipe.transform(value, 'dd/MM/yyyy') ?? 'Date invalide') : 'Non défini';
   }
 }

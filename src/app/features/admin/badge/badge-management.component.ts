@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, effect } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BadgeFormComponent } from './components/badge-form/badge-form.component';
 import { BadgeService } from './service/badge.service';
@@ -10,16 +10,7 @@ import { BadgeService } from './service/badge.service';
 })
 export class BadgeManagementComponent implements OnInit {
   badgeService = inject(BadgeService);
-  formSaved = false;
-
-  constructor() {
-    effect(() => {
-      if (this.formSaved) {
-        this.badgeService.selectedBadge.set(null);
-        this.formSaved = false;
-      }
-    });
-  }
+  formSaved = signal(false);
 
   ngOnInit(): void {
     this.loadBadges();
@@ -32,7 +23,7 @@ export class BadgeManagementComponent implements OnInit {
           this.badgeService.selectedBadge.set(badges[0]);
         }
       },
-      error: (err) => console.error('Erreur chargement badges', err),
+      error: () => console.error(),
     });
   }
 }
