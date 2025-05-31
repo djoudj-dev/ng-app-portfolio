@@ -59,7 +59,7 @@ export class DashboardComponent {
     // Load visit count
     this.metricsService.getMetricCount(MetricType.VISIT).subscribe({
       error: () => {
-        console.error('Failed to load visit count');
+        console.error();
         this.error.set('Failed to load visit count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -68,7 +68,7 @@ export class DashboardComponent {
     // Load bot count
     this.metricsService.getBotMetricCount(MetricType.VISIT).subscribe({
       error: () => {
-        console.error('Failed to load bot count');
+        console.error();
         this.error.set('Failed to load bot count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -77,7 +77,7 @@ export class DashboardComponent {
     // Load real user count
     this.metricsService.getRealUserMetricCount(MetricType.VISIT).subscribe({
       error: () => {
-        console.error('Failed to load real user count');
+        console.error();
         this.error.set('Failed to load real user count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -86,7 +86,7 @@ export class DashboardComponent {
     // Load CV click count
     this.metricsService.getCvClickCount().subscribe({
       error: () => {
-        console.error('Failed to load CV click count');
+        console.error();
         this.error.set('Failed to load CV click count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -99,7 +99,7 @@ export class DashboardComponent {
         this.isLoading.set(false);
       },
       error: () => {
-        console.error('Failed to load metrics');
+        console.error();
         this.error.set('Failed to load metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -111,7 +111,7 @@ export class DashboardComponent {
         this.botMetrics.set(data);
       },
       error: () => {
-        console.error('Failed to load bot metrics');
+        console.error();
         this.error.set('Failed to load bot metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -123,7 +123,7 @@ export class DashboardComponent {
         this.realUserMetrics.set(data);
       },
       error: () => {
-        console.error('Failed to load real user metrics');
+        console.error();
         this.error.set('Failed to load real user metrics. Please try again later.');
         this.isLoading.set(false);
       },

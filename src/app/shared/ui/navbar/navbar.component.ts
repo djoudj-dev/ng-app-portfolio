@@ -127,8 +127,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.badgeService.selectedBadge.set(badges[0]);
           }
         },
-        error: (error) => {
-          console.error('Failed to load badges', error);
+        error: () => {
+          console.error();
         },
       })
     );
