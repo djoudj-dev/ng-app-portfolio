@@ -13,7 +13,12 @@
   >
     <!-- Counter sur toute la largeur au-dessus -->
     <div class="md:col-span-3">
-      <app-visit-counter [visitCount]="visitCount" [realUserCount]="realUserCount" [botCount]="botCount" />
+      <app-visit-counter
+        [visitCount]="visitCount"
+        [realUserCount]="realUserCount"
+        [botCount]="botCount"
+        [cvClickCount]="cvClickCount"
+      />
     </div>
 
     <!-- Visitor Type Selector -->

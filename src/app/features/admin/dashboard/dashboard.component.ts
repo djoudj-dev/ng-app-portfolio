@@ -20,6 +20,7 @@ export class DashboardComponent {
   visitCount = () => this.metricsService.visitCount();
   realUserCount = () => this.metricsService.realUserCount();
   botCount = () => this.metricsService.botCount();
+  cvClickCount = () => this.metricsService.cvClickCount();
 
   selectedPeriod = signal<PeriodType>('day');
   selectedVisitorType = signal<VisitorType>('all');
@@ -57,8 +58,8 @@ export class DashboardComponent {
 
     // Load visit count
     this.metricsService.getMetricCount(MetricType.VISIT).subscribe({
-      error: (err) => {
-        console.error('Error loading visit count:', err);
+      error: () => {
+        console.error('Failed to load visit count');
         this.error.set('Failed to load visit count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -66,8 +67,8 @@ export class DashboardComponent {
 
     // Load bot count
     this.metricsService.getBotMetricCount(MetricType.VISIT).subscribe({
-      error: (err) => {
-        console.error('Error loading bot count:', err);
+      error: () => {
+        console.error('Failed to load bot count');
         this.error.set('Failed to load bot count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -75,9 +76,18 @@ export class DashboardComponent {
 
     // Load real user count
     this.metricsService.getRealUserMetricCount(MetricType.VISIT).subscribe({
-      error: (err) => {
-        console.error('Error loading real user count:', err);
+      error: () => {
+        console.error('Failed to load real user count');
         this.error.set('Failed to load real user count. Please try again later.');
+        this.isLoading.set(false);
+      },
+    });
+
+    // Load CV click count
+    this.metricsService.getCvClickCount().subscribe({
+      error: () => {
+        console.error('Failed to load CV click count');
+        this.error.set('Failed to load CV click count. Please try again later.');
         this.isLoading.set(false);
       },
     });
@@ -88,8 +98,8 @@ export class DashboardComponent {
         this.metrics.set(data);
         this.isLoading.set(false);
       },
-      error: (err) => {
-        console.error('Error loading metrics:', err);
+      error: () => {
+        console.error('Failed to load metrics');
         this.error.set('Failed to load metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -100,8 +110,8 @@ export class DashboardComponent {
       next: (data) => {
         this.botMetrics.set(data);
       },
-      error: (err) => {
-        console.error('Error loading bot metrics:', err);
+      error: () => {
+        console.error('Failed to load bot metrics');
         this.error.set('Failed to load bot metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -112,8 +122,8 @@ export class DashboardComponent {
       next: (data) => {
         this.realUserMetrics.set(data);
       },
-      error: (err) => {
-        console.error('Error loading real user metrics:', err);
+      error: () => {
+        console.error('Failed to load real user metrics');
         this.error.set('Failed to load real user metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -138,6 +148,10 @@ export class DashboardComponent {
 
   getBotCount(): number {
     return this.botCount();
+  }
+
+  getCvClickCount(): number {
+    return this.cvClickCount();
   }
 
   getCurrentMetrics(): { [key: string]: Metric[] } {

@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private readonly authFormService = inject(AuthFormService);
   private readonly el = inject(ElementRef);
   private readonly uiService = inject(NavbarUiService);
-  private readonly badgeService = inject(BadgeService);
+  readonly badgeService = inject(BadgeService);
 
   private subscription = new Subscription();
 
@@ -128,7 +128,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error loading badges:', error);
+          console.error('Failed to load badges', error);
         },
       })
     );
