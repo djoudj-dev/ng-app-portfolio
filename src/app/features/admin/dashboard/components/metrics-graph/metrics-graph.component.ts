@@ -6,7 +6,6 @@ type PeriodType = 'day' | 'week' | 'month' | 'year';
 
 @Component({
   selector: 'app-metrics-graph',
-  standalone: true,
   imports: [CommonModule],
   template: `
     <div class="bg-background rounded-lg p-5 shadow-accent-md border border-accent-200">

@@ -39,10 +39,6 @@ export class HttpAdapterService {
     });
   }
 
-  /**
-   * Gets a file from the local assets without prepending the API base URL
-   * @param path The path to the local file
-   */
   getLocal<T>(path: string): Observable<T> {
     return this.http.get<T>(path, {
       withCredentials: true,
@@ -61,13 +57,6 @@ export class HttpAdapterService {
     });
   }
 
-  /**
-   * Uploads a file using PATCH method
-   * @param path The API endpoint path
-   * @param file The file to upload
-   * @param extraData Additional data to include in the form
-   * @returns An Observable of the response
-   */
   patchFile<T>(path: string, file: File, extraData: Record<string, string> = {}): Observable<T> {
     const formData = new FormData();
     formData.append('file', file);

@@ -15,7 +15,6 @@ import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [
     CommonModule,
     NavbarComponent,

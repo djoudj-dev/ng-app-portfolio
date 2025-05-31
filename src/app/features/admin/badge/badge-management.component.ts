@@ -29,7 +29,7 @@ export class BadgeManagementComponent implements OnInit {
     this.badgeService.getAllBadges().subscribe({
       next: (badges) => {
         if (badges.length > 0) {
-          this.badgeService.selectedBadge.set(badges[0]); // sélectionne auto
+          this.badgeService.selectedBadge.set(badges[0]);
         }
       },
       error: (err) => console.error('Erreur chargement badges', err),

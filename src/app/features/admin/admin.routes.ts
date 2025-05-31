@@ -13,6 +13,10 @@ export const ADMIN_ROUTES: Routes = [
         path: 'hero',
         loadComponent: () => import('./hero/hero-admin.component').then((m) => m.HeroAdminComponent),
       },
+      {
+        path: 'badges',
+        loadComponent: () => import('./badge/badge-management.component').then((m) => m.BadgeManagementComponent),
+      },
     ],
   },
 ];

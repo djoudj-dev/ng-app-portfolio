@@ -6,10 +6,11 @@ import { BadgeService } from '../../service/badge.service';
 import { inject, signal } from '@angular/core';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { ToastService } from '@core/services/toast.service';
+import { ToastComponent } from '@shared/ui/toast/toast.component';
 
 @Component({
   selector: 'app-badge-form',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonComponent, ToastComponent],
   templateUrl: './badge-form.component.html',
 })
 export class BadgeFormComponent {
@@ -17,7 +18,6 @@ export class BadgeFormComponent {
   saved = model<boolean>(false);
   private badgeService = inject(BadgeService);
   private toastService = inject(ToastService);
-
   badgeForm = new FormGroup({
     status: new FormControl<BadgeStatus>(BadgeStatus.DISPONIBLE, [Validators.required]),
     availableUntil: new FormControl<string | null>(null),
@@ -30,28 +30,51 @@ export class BadgeFormComponent {
   ]);
 
   isEditMode = computed(() => !!this.badge());
-  showDateField = computed(() => this.badgeForm.get('status')?.value === BadgeStatus.DISPONIBLE_A_PARTIR_DE);
+  showDateField = signal<boolean>(false);
 
   constructor() {
     effect(() => {
       const currentBadge = this.badge();
       if (currentBadge) {
+        // Set form values from badge
         this.badgeForm.patchValue({
           status: currentBadge.status,
-          availableUntil: currentBadge.availableUntil ? this.formatDateForInput(currentBadge.availableUntil) : null,
+          availableUntil: currentBadge.availableUntil
+            ? this.formatDateForInput(currentBadge.availableUntil)
+            : this.formatDateForInput(new Date()),
         });
+
+        this.showDateField.set(currentBadge.status === BadgeStatus.DISPONIBLE_A_PARTIR_DE);
+
+        if (currentBadge.status === BadgeStatus.DISPONIBLE_A_PARTIR_DE && !currentBadge.availableUntil) {
+          const today = new Date();
+          this.badgeForm.get('availableUntil')?.setValue(this.formatDateForInput(today));
+        }
       }
     });
 
     effect(() => {
-      const status = this.badgeForm.get('status')?.value;
-      const available = this.badgeForm.get('availableUntil');
-      if (status === BadgeStatus.DISPONIBLE_A_PARTIR_DE) {
-        available?.setValidators([Validators.required]);
-      } else {
-        available?.clearValidators();
+      const currentBadge = this.badge();
+
+      if (!currentBadge) {
+        const status = this.badgeForm.get('status')?.value;
+        if (status === BadgeStatus.DISPONIBLE_A_PARTIR_DE) {
+          this.badgeForm.get('availableUntil')?.setValue(this.formatDateForInput(new Date()));
+        }
       }
-      available?.updateValueAndValidity();
+    });
+
+    this.badgeForm.get('status')?.valueChanges.subscribe((value) => {
+      if (value === BadgeStatus.DISPONIBLE_A_PARTIR_DE) {
+        const ctrl = this.badgeForm.get('availableUntil');
+        if (!ctrl?.value) {
+          ctrl?.setValue(this.formatDateForInput(new Date()));
+        }
+      } else {
+        this.badgeForm.get('availableUntil')?.setValue(null);
+      }
+
+      this.showDateField.set(value === BadgeStatus.DISPONIBLE_A_PARTIR_DE);
     });
   }
 
@@ -72,7 +95,6 @@ export class BadgeFormComponent {
         },
       });
     } else {
-      // Si on veut permettre la création de badge dans le futur
       this.toastService.showInfo("La création de badge n'est pas encore disponible");
     }
   }
@@ -111,7 +133,7 @@ export class BadgeFormComponent {
   }
 
   private formatDateForInput(date: Date): string {
-    return date.toISOString().slice(0, 16);
+    return date.toISOString().split('T')[0];
   }
 
   private prepareFormData(): Partial<Badge> {

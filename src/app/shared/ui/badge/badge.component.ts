@@ -20,7 +20,9 @@ export class BadgeComponent {
     effect(() => {
       const currentBadge = this.badge();
       if (currentBadge?.status === 'DISPONIBLE_A_PARTIR_DE') {
-        this.badgeDate.set(new Date('2025-12-31'));
+        // Set date to current year instead of hardcoded 2025
+        const currentYear = new Date().getFullYear();
+        this.badgeDate.set(new Date(`${currentYear}-12-31`));
       } else {
         this.badgeDate.set(new Date());
       }
