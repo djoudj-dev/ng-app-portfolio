@@ -1,11 +1,12 @@
 import { computed, inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
+
 import { HttpAdapterService } from '@app/core/http/http.adapter';
 import { ToastService } from '@app/core/services/toast.service';
 import { TokenService } from '@core/auth/service/token.service';
-import { AuthResponse, LoginCredentials } from '@core/auth/interface/auth.interface';
-import { catchError, finalize, map, Observable, of, tap } from 'rxjs';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
-import { Router } from '@angular/router';
+import { AuthResponse, LoginCredentials } from '@core/auth/interface/auth.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
   private readonly router = inject(Router);
 
   readonly isAuthenticated = computed(() => this.tokenService.authState.isAuthenticated);
+
   readonly user = computed(() => this.tokenService.authState.user);
 
   login(credentials: LoginCredentials): Observable<boolean> {
@@ -33,7 +35,6 @@ export class AuthService {
               }
             : null,
         });
-
         this.toast.showSuccess('Connexion réussie !');
       }),
       map(() => true),
@@ -46,30 +47,22 @@ export class AuthService {
   }
 
   logout(): void {
-    // Informer le serveur pour invalider les tokens
     this.http
       .post<{ message: string }>('/auth/logout', {})
       .pipe(
         tap(() => {
-          // Nettoyer les tokens côté client
           this.tokenService.clear();
           this.toast.showSuccess('Déconnexion réussie !');
-
-          // Rediriger vers la page d'accueil
           this.router.navigate(['/']);
         }),
-        catchError((error) => {
-          console.error('Erreur lors de la déconnexion:', error);
-
-          // Même en cas d'erreur, on nettoie les tokens côté client et on redirige
+        catchError(() => {
+          // Même si la requête échoue, on nettoie localement
           this.tokenService.clear();
-          this.toast.showSuccess('Déconnexion réussie !');
           this.router.navigate(['/']);
-
           return of(null);
         }),
         finalize(() => {
-          // S'assurer que l'utilisateur est redirigé même si une erreur se produit
+          // Redirection de secours si sur une route protégée
           if (this.router.url.includes('/admin')) {
             this.router.navigate(['/']);
           }

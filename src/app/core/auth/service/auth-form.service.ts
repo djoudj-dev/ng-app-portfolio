@@ -1,11 +1,8 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { LoginCredentials } from '@core/auth/interface/auth.interface';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthFormService {
-  // Form state signals
   readonly email = signal('');
   readonly password = signal('');
   readonly rememberMe = signal(false);
@@ -13,26 +10,25 @@ export class AuthFormService {
   readonly errorMessage = signal<string | null>(null);
   readonly isLoading = signal(false);
 
-  // Computed values
   readonly isValid = computed(() => this.email().trim() !== '' && this.password().trim() !== '');
-  readonly inputType = computed(() => (this.passwordVisible() ? 'text' : 'password'));
+
   readonly form = computed<LoginCredentials>(() => ({
     email: this.email(),
     password: this.password(),
     rememberMe: this.rememberMe(),
   }));
 
-  // Form methods
-  updateEmail(event: Event): void {
-    this.email.set((event.target as HTMLInputElement).value);
+  // Methods
+  updateEmail(value: string): void {
+    this.email.set(value);
   }
 
-  updatePassword(event: Event): void {
-    this.password.set((event.target as HTMLInputElement).value);
+  updatePassword(value: string): void {
+    this.password.set(value);
   }
 
-  updateRememberMe(event: Event): void {
-    this.rememberMe.set((event.target as HTMLInputElement).checked);
+  updateRememberMe(value: boolean): void {
+    this.rememberMe.set(value);
   }
 
   togglePasswordVisibility(): void {
@@ -43,8 +39,8 @@ export class AuthFormService {
     this.errorMessage.set(message);
   }
 
-  setLoading(isLoading: boolean): void {
-    this.isLoading.set(isLoading);
+  setLoading(state: boolean): void {
+    this.isLoading.set(state);
   }
 
   resetForm(): void {

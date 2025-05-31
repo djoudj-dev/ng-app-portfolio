@@ -51,8 +51,9 @@ export class TokenService {
     if (saved) {
       try {
         this._authState.set(JSON.parse(saved));
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
-        console.error('Failed to parse auth state from localStorage', e);
+        console.error();
         this.clear();
       }
     }
