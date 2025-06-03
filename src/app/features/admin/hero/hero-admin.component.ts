@@ -15,10 +15,11 @@ import { Hero } from '@feat/admin/hero/interface/hero.interface';
 import { HeroService } from '@feat/admin/hero/service/hero.service';
 import { FileSizePipe } from '@shared/pipes/file-size.pipe';
 import { FileUrlService } from '@core/services/file-url.service';
+import { ButtonComponent } from '@shared/ui/button/button.component';
 
 @Component({
   selector: 'app-hero-admin',
-  imports: [CommonModule, ReactiveFormsModule, FileSizePipe],
+  imports: [CommonModule, ReactiveFormsModule, FileSizePipe, ButtonComponent],
   templateUrl: './hero-admin.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
