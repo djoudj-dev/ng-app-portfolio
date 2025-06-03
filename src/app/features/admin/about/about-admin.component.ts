@@ -15,10 +15,11 @@ import { About, Interest } from '@feat/admin/about/interface/about.interface';
 import { AboutService } from '@feat/admin/about/service/about.service';
 import { FileSizePipe } from '@shared/pipes/file-size.pipe';
 import { FileUrlService } from '@core/services/file-url.service';
+import { ButtonComponent } from '@shared/ui/button/button.component';
 
 @Component({
   selector: 'app-about-admin',
-  imports: [CommonModule, ReactiveFormsModule, FileSizePipe],
+  imports: [CommonModule, ReactiveFormsModule, FileSizePipe, ButtonComponent],
   templateUrl: './about-admin.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
