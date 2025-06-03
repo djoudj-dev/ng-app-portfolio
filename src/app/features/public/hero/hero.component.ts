@@ -1,10 +1,11 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ScrollService } from '@core/services/scroll.service';
 import { HeroService } from '@feat/admin/hero/service/hero.service';
 import { FileUrlService } from '@core/services/file-url.service';
-import { MetricsService } from '@core/services/metrics.service';
+import { MetricsService } from '@feat/admin/dashboard/service/metrics.service';
 
 @Component({
   selector: 'app-hero',
@@ -40,8 +41,8 @@ export class HeroComponent {
           window.open(fileUrl, '_blank');
           this.downloadCvClick.set(false); // Reset du signal
         },
-        error: (err) => {
-          console.error();
+        error: (err: HttpErrorResponse) => {
+          console.error('Error tracking CV click:', err);
           this.downloadCvClick.set(false); // Toujours reset
         },
       });

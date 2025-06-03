@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MetricsService } from './service/metrics.service';
 import { Metric, MetricType } from './interface/metric.interface';
 import { VisitCounterComponent } from './components/visit-counter/visit-counter.component';
@@ -56,10 +57,20 @@ export class DashboardComponent {
     this.isLoading.set(true);
     this.error.set(null);
 
+    let metricsLoaded = false;
+    let botMetricsLoaded = false;
+    let realUserMetricsLoaded = false;
+
+    const checkAllLoaded = () => {
+      if (metricsLoaded && botMetricsLoaded && realUserMetricsLoaded) {
+        this.isLoading.set(false);
+      }
+    };
+
     // Load visit count
     this.metricsService.getMetricCount(MetricType.VISIT).subscribe({
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load visit count:', err);
         this.error.set('Failed to load visit count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -67,8 +78,8 @@ export class DashboardComponent {
 
     // Load bot count
     this.metricsService.getBotMetricCount(MetricType.VISIT).subscribe({
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load bot count:', err);
         this.error.set('Failed to load bot count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -76,8 +87,8 @@ export class DashboardComponent {
 
     // Load real user count
     this.metricsService.getRealUserMetricCount(MetricType.VISIT).subscribe({
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load real user count:', err);
         this.error.set('Failed to load real user count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -85,8 +96,8 @@ export class DashboardComponent {
 
     // Load CV click count
     this.metricsService.getCvClickCount().subscribe({
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load CV click count:', err);
         this.error.set('Failed to load CV click count. Please try again later.');
         this.isLoading.set(false);
       },
@@ -96,10 +107,11 @@ export class DashboardComponent {
     this.metricsService.getMetricsByPeriod(MetricType.VISIT).subscribe({
       next: (data) => {
         this.metrics.set(data);
-        this.isLoading.set(false);
+        metricsLoaded = true;
+        checkAllLoaded();
       },
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load metrics:', err);
         this.error.set('Failed to load metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -109,9 +121,11 @@ export class DashboardComponent {
     this.metricsService.getBotMetricsByPeriod(MetricType.VISIT).subscribe({
       next: (data) => {
         this.botMetrics.set(data);
+        botMetricsLoaded = true;
+        checkAllLoaded();
       },
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load bot metrics:', err);
         this.error.set('Failed to load bot metrics. Please try again later.');
         this.isLoading.set(false);
       },
@@ -121,9 +135,11 @@ export class DashboardComponent {
     this.metricsService.getRealUserMetricsByPeriod(MetricType.VISIT).subscribe({
       next: (data) => {
         this.realUserMetrics.set(data);
+        realUserMetricsLoaded = true;
+        checkAllLoaded();
       },
-      error: () => {
-        console.error();
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load real user metrics:', err);
         this.error.set('Failed to load real user metrics. Please try again later.');
         this.isLoading.set(false);
       },
