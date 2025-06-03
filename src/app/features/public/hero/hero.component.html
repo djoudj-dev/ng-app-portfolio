@@ -1,85 +1,43 @@
 <section class="w-full bg-background pt-14 md:pt-4 lg:pt-6 xl:pt-60 pb-12" id="hero">
-  <!-- Loading state -->
-  @if (loading()) {
-    <div class="flex justify-center items-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
-    </div>
-  }
-
-  <!-- Error message -->
-  @if (error()) {
-    <div
-      class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-md max-w-7xl mx-auto"
-      role="alert"
-    >
-      <p class="font-bold">Erreur</p>
-      <p>{{ error() }}</p>
-      <button (click)="heroService.load()" class="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-        Réessayer
-      </button>
-    </div>
-  }
-
-  <!-- Hero content when data is available -->
-  @if (hero()) {
-    <div
-      class="flex flex-col items-center justify-around gap-y-16 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden lg:flex-row lg:gap-x-20"
-    >
-      <header class="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left">
-        <div class="relative z-10">
-          <h1 class="pt-2 sm:pt-4 text-3xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-bold text-text">
-            Bonjour, je suis <br />
-            <span
-              class="bg-gradient-to-l from-accent to-text text-gradient inline-block text-transparent bg-clip-text pt-2"
-            >
-              {{ hero()?.firstName }} {{ hero()?.lastName }}
-            </span>
-          </h1>
-
-          <h2 class="text-xl sm:text-3xl text-secondary-500 font-medium mt-2">
-            {{ hero()?.jobTitle }}
-          </h2>
-
-          <p class="mt-6 text-sm sm:text-lg text-text font-medium max-w-2xl mx-auto lg:mx-0">
-            {{ hero()?.jobDescription }}
-          </p>
-
-          <!-- 🎯 Boutons stylés -->
-          <div
-            class="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-2 sm:gap-6 max-w-2xl w-full mx-auto lg:mx-0 mt-8 px-4 sm:px-0"
+  <!-- Hero content -->
+  <div
+    class="flex flex-col items-center justify-around gap-y-16 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden lg:flex-row lg:gap-x-20"
+  >
+    <header class="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left">
+      <div class="relative z-10">
+        <h1 class="pt-2 sm:pt-4 text-3xl sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl font-bold text-text">
+          Bonjour, je suis <br />
+          <span
+            class="bg-gradient-to-l from-accent to-text text-gradient inline-block text-transparent bg-clip-text pt-2"
           >
-            <a (click)="downloadCV()" class="block">
-              <app-button
-                color="secondary"
-                aria-label="Télécharger mon CV"
-                [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
-              >
-                <div class="flex items-center justify-center gap-2 sm:gap-3">
-                  <span class="font-medium text-text text-sm sm:text-base">Télécharger mon CV</span>
-                  <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
-                    <img
-                      [ngSrc]="'icons/hero/download.svg'"
-                      alt="Icône de téléchargement"
-                      class="absolute inset-0 w-full h-full object-contain icon-invert"
-                      width="20"
-                      height="20"
-                    />
-                  </div>
-                </div>
-              </app-button>
-            </a>
+            {{ hero.firstName }} {{ hero.lastName }}
+          </span>
+        </h1>
 
+        <h2 class="text-xl sm:text-3xl text-secondary-500 font-medium mt-2">
+          {{ hero.jobTitle }}
+        </h2>
+
+        <p class="mt-6 text-sm sm:text-lg text-text font-medium max-w-2xl mx-auto lg:mx-0">
+          {{ hero.jobDescription }}
+        </p>
+
+        <!-- 🎯 Boutons stylés -->
+        <div
+          class="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-2 sm:gap-6 max-w-2xl w-full mx-auto lg:mx-0 mt-8 px-4 sm:px-0"
+        >
+          <a (click)="downloadCV()" class="block">
             <app-button
-              color="accent"
-              aria-label="Découvrir mes projets"
+              color="secondary"
+              aria-label="Télécharger mon CV"
               [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
             >
               <div class="flex items-center justify-center gap-2 sm:gap-3">
-                <span class="font-medium text-text text-sm sm:text-base">Découvrir mes projets</span>
+                <span class="font-medium text-text text-sm sm:text-base">Télécharger mon CV</span>
                 <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
                   <img
-                    [ngSrc]="'icons/hero/arrow.svg'"
-                    alt="Flèche vers les projets"
+                    [ngSrc]="'icons/hero/download.svg'"
+                    alt="Icône de téléchargement"
                     class="absolute inset-0 w-full h-full object-contain icon-invert"
                     width="20"
                     height="20"
@@ -87,32 +45,41 @@
                 </div>
               </div>
             </app-button>
-          </div>
+          </a>
+
+          <app-button
+            color="accent"
+            aria-label="Découvrir mes projets"
+            [customClass]="'px-5 sm:px-6 py-3 sm:py-4 shadow-md hover:shadow-lg transition-all duration-200'"
+          >
+            <div class="flex items-center justify-center gap-2 sm:gap-3">
+              <span class="font-medium text-text text-sm sm:text-base">Découvrir mes projets</span>
+              <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
+                <img
+                  [ngSrc]="'icons/hero/arrow.svg'"
+                  alt="Flèche vers les projets"
+                  class="absolute inset-0 w-full h-full object-contain icon-invert"
+                  width="20"
+                  height="20"
+                />
+              </div>
+            </div>
+          </app-button>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <!-- ✅ Une seule image avec priority -->
-      <img
-        [ngSrc]="'images/laptop1.svg'"
-        alt="Illustration de laptop représentant le travail"
-        width="500"
-        height="286"
-        sizes="(min-width: 768px) 50vw, 100vw"
-        class="icon-invert"
-        priority
-      />
-    </div>
-  }
-
-  <!-- No data message -->
-  @if (!loading() && !error() && !hero()) {
-    <div class="flex flex-col items-center justify-center py-12 max-w-7xl mx-auto px-4">
-      <p class="text-xl text-secondary-500">Aucune donnée de héros disponible.</p>
-      <button (click)="heroService.load()" class="mt-4 px-6 py-2 bg-accent text-white rounded hover:bg-accent-600">
-        Charger les données
-      </button>
-    </div>
-  }
+    <!-- Illustration -->
+    <img
+      [ngSrc]="hero.illustration"
+      alt="Illustration de laptop représentant le travail"
+      width="500"
+      height="286"
+      sizes="(min-width: 768px) 50vw, 100vw"
+      class="icon-invert"
+      priority
+    />
+  </div>
 
   <!-- Scroll button -->
   <div class="flex justify-center pt-6 sm:pt-10 lg:pt-32">
