@@ -1,34 +1,4 @@
 {
-  "about": {
-    "fullname": "Julien NÉDELLEC",
-    "title": "Développeur Angular Fullstack",
-    "description": "Passionné par le code propre et durable, je considère chaque ligne comme une brique d’un ensemble cohérent, lisible et maintenable. Mon approche repose sur une architecture modulaire, pensée pour évoluer avec les équipes et les besoins techniques. Je conçois des interfaces claires, accessibles et centrées sur l’utilisateur, pour répondre à de vrais besoins avec sens et efficacité. Ce qui me motive, c’est d’écrire un code clair, structuré et testé, capable d’évoluer sereinement face aux besoins concrets. Je conçois des solutions simples, robustes et durables, en restant à l’écoute des usages pour offrir une expérience fluide et pertinente.",
-    "location": "Voisins-Le-Bretonneux | Paris",
-    "email": "contact@nedellec-julien.fr",
-    "imageUrl": "images/julien.webp",
-    "interests": [
-      {
-        "label": "Développement",
-        "description": "Passionné par le développement web et l'apprentissage des meilleures pratiques pour améliorer mes compétences techniques.",
-        "icon": "icons/about/dev.svg"
-      },
-      {
-        "label": "Lecture",
-        "description": "Lecture de livres techniques sur Angular, Clean Architecture et Java pour rester à jour.",
-        "icon": "icons/about/book.svg"
-      },
-      {
-        "label": "Promenade en forêt",
-        "description": "Les promenades en forêt me ressourcent et m'inspirent pour mes projets.",
-        "icon": "icons/about/trek.svg"
-      },
-      {
-        "label": "Dépollution",
-        "description": "Participation à des actions de dépollution et pêche à l'aimant pour préserver l'environnement.",
-        "icon": "icons/about/trash.svg"
-      }
-    ]
-  },
   "stacks": {
     "categories": [
       {

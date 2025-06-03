@@ -17,6 +17,10 @@ export const ADMIN_ROUTES: Routes = [
         path: 'badges',
         loadComponent: () => import('./badge/badge-management.component').then((m) => m.BadgeManagementComponent),
       },
+      {
+        path: 'about',
+        loadComponent: () => import('./about/about-admin.component').then((m) => m.AboutAdminComponent),
+      },
     ],
   },
 ];

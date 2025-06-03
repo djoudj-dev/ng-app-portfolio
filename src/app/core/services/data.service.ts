@@ -1,16 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map, shareReplay } from 'rxjs';
 import { HttpAdapterService } from '@core/http/http.adapter';
-import { About } from '@feat/public/about/interface/about.interface';
 import { Category, HardSkills, SoftSkills } from '@feat/public/stacks/interface/stacks.interface';
 import { Project, ProjectCategory } from '@feat/public/project/interface/project.interface';
 import { ContactCard, ContactCardGroup } from '@feat/public/contact/interface/contact.interface';
 
-/**
- * Interface representing the structure of the portfolio data JSON file
- */
 export interface PortfolioData {
-  about: About;
   stacks: {
     categories: Category[];
     hardskills: HardSkills[];

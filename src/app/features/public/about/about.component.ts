@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, computed } from '@angular/core';
-import { AboutService } from '@feat/public/about/service/about.service';
 import { NgOptimizedImage } from '@angular/common';
+import { AboutService } from '@feat/admin/about/service/about.service';
+import { FileUrlService } from '@core/services/file-url.service';
 
 @Component({
   selector: 'app-about',
@@ -9,10 +10,15 @@ import { NgOptimizedImage } from '@angular/common';
 })
 export class AboutComponent implements OnInit {
   private readonly aboutService = inject(AboutService);
+  private readonly fileUrlService = inject(FileUrlService);
 
   readonly about = computed(() => this.aboutService.data());
 
   ngOnInit(): void {
     this.aboutService.load();
+  }
+
+  getFileUrl(path: string): string {
+    return this.fileUrlService.getFileUrl(path);
   }
 }
