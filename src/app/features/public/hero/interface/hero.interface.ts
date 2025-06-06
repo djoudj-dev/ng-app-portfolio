@@ -3,5 +3,5 @@ export interface Hero {
   lastName: string;
   jobTitle: string;
   jobDescription: string;
-  cvPath: string;
+  illustration: string;
 }

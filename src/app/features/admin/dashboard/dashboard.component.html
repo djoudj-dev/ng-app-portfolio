@@ -1,0 +1,21 @@
+<div class="p-5 max-w-7xl mx-auto pt-4">
+  @if (error()) {
+    <div class="bg-red-100 text-red-700 dark:text-red-200 p-3 rounded-lg mb-5 text-center">
+      {{ error() }}
+    </div>
+  }
+
+  <div
+    class="grid grid-cols-1 md:grid-cols-3 gap-5"
+    [class.opacity-70]="isLoading()"
+    [class.pointer-events-none]="isLoading()"
+  >
+    <div class="md:col-span-3">
+      <app-visit-counter [realUserCount]="realUserCount" [botCount]="botCount" [cvClickCount]="cvClickCount" />
+    </div>
+
+    <div class="md:col-span-3">
+      <app-cv-upload (fileUploaded)="onCvUploaded()" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="card bg-background text-text animate-bubbleIn rounded-xl border border-gray-400 max-w-2xl mx-auto">
+  <div class="card-header border-b border-primary-100 px-6 py-4">
+    <h5 class="card-title text-xl font-semibold text-primary tracking-tight">
+      {{ isEditMode() ? 'Modifier le badge' : 'Créer un badge' }}
+    </h5>
+  </div>
+
+  <div class="card-body px-6 py-6 space-y-6">
+    <form (ngSubmit)="onSubmit()" class="space-y-6 text-text">
+      <!-- Statut -->
+      <div>
+        <label for="status" class="block text-sm font-semibold text-primary mb-1">Statut</label>
+        <select
+          id="status"
+          name="status"
+          class="w-full rounded-md bg-background border border-primary-200 text-sm p-2.5 focus:outline-none focus:border-primary-500 focus:ring-primary-300"
+          [ngModel]="status()"
+          (ngModelChange)="status.set($event)"
+        >
+          @for (opt of badgeStatusOptions(); track opt) {
+            <option [value]="opt">{{ getStatusLabel(opt) }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Date de disponibilité -->
+      @if (showDateField()) {
+        <div>
+          <label for="availableUntil" class="block text-sm font-semibold text-primary mb-1">
+            Disponible à partir de
+          </label>
+          <input
+            id="availableUntil"
+            type="date"
+            name="availableUntil"
+            class="w-full rounded-md bg-background border border-primary-200 p-2.5 text-sm focus:border-primary-500 focus:ring-primary-300"
+            [ngModel]="availableUntil()"
+            (ngModelChange)="availableUntil.set($event)"
+          />
+          <p class="mt-1 text-xs text-primary-400">Cliquez pour sélectionner une date</p>
+        </div>
+      }
+
+      <!-- Info readonly -->
+      <div class="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          [checked]="isCurrentlyAvailable()"
+          disabled
+          class="h-4 w-4 text-accent border-primary-300 rounded cursor-not-allowed"
+        />
+        <label class="text-sm">Actuellement disponible</label>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 pt-4 border-t border-primary-100">
+        <app-button
+          type="button"
+          color="secondary"
+          [customClass]="'px-5 py-3 bg-secondary text-text hover:bg-secondary-600 transition rounded-md shadow-md'"
+          (buttonClick)="onCancel()"
+        >
+          Annuler
+        </app-button>
+
+        <app-button
+          type="submit"
+          color="accent"
+          [customClass]="'px-5 py-3 bg-accent text-text hover:bg-accent-600 transition rounded-md shadow-md'"
+          [disabled]="!formValid()"
+        >
+          {{ isEditMode() ? 'Modifier un badge' : 'Créer un badge' }}
+        </app-button>
+      </div>
+    </form>
+  </div>
+</div>

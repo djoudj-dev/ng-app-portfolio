@@ -1,8 +1,18 @@
-<app-navbar />
-<app-toast />
-<app-hero />
-<app-about />
-<app-stacks />
-<app-project />
-<app-contact />
-<app-footer />
+<div class="min-h-screen bg-background text-text">
+  <app-navbar />
+  <app-toast />
+
+  <router-outlet></router-outlet>
+
+  <!-- Main content will be hidden when on admin routes -->
+  @if (!isAdminRoute()) {
+    <main class="flex flex-col">
+      <app-hero />
+      <app-about />
+      <app-stacks />
+      <app-project />
+      <app-contact />
+      <app-footer />
+    </main>
+  }
+</div>

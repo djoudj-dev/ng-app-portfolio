@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
-import { ProjectService } from '@feat/public/project/service/project.service';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ProjectCategory } from '@feat/public/project/interface/project.interface';
-import { StacksService } from '@feat/public/stacks/service/stacks.service';
-import { HardSkills } from '@feat/public/stacks/interface/stacks.interface';
+import { ProjectService } from '@feat/admin/project/service/project.service';
+import { FileUrlService } from '@core/services/file-url.service';
 
 @Component({
   selector: 'app-project',
@@ -13,35 +11,26 @@ import { HardSkills } from '@feat/public/stacks/interface/stacks.interface';
 })
 export class ProjectComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
-  private readonly stacksService = inject(StacksService);
+  private readonly fileUrlService = inject(FileUrlService);
 
-  // --- Signals locaux ---
+  ngOnInit(): void {
+    this.projectService.getProjects().subscribe();
+
+    this.projectService.getTechnologies().subscribe({
+      next: () => {},
+      error: () => {},
+    });
+  }
+
   private readonly search = signal('');
   private readonly selectedCategory = signal('all');
   readonly currentPage = signal(1);
   private readonly itemsPerPage = 3;
   readonly loadedImages = signal<Record<string, boolean>>({});
 
-  // --- Chargement des données au ngOnInit ---
-  ngOnInit(): void {
-    this.projectService.load();
-    this.stacksService.load();
-  }
-
-  // --- Exposition des signals projet & catégories ---
   readonly allProjects = this.projectService.projects;
-  readonly categories = signal<ProjectCategory[]>([
-    { id: 'web', label: 'Frontend', icon: 'icons/project/category/web.svg' },
-    { id: 'api', label: 'API', icon: 'icons/project/category/api.svg' },
-    { id: 'data', label: 'Data', icon: 'icons/project/category/data.svg' },
-    { id: 'fullstack', label: 'Fullstack', icon: 'icons/project/category/fullstack.svg' },
-    { id: 'game', label: 'Game', icon: 'icons/project/category/game.svg' },
-    { id: 'library', label: 'Library', icon: 'icons/project/category/library.svg' },
-    { id: 'mobile', label: 'Mobile', icon: 'icons/project/category/mobile.svg' },
-    { id: 'script', label: 'Script', icon: 'icons/project/category/script.svg' },
-  ]);
+  readonly categories = this.projectService.categories;
 
-  // --- Getters pour filtre & pagination --- //
   readonly filteredProjects = computed(() => {
     const query = this.search().toLowerCase();
     const category = this.selectedCategory();
@@ -63,17 +52,16 @@ export class ProjectComponent implements OnInit {
 
   readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 
-  // --- Méthodes déclenchées depuis le template ---
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.search.set(input.value);
-    this.currentPage.set(1); // Reset page
+    this.currentPage.set(1);
   }
 
   onCategoryChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedCategory.set(select.value);
-    this.currentPage.set(1); // Reset page
+    this.currentPage.set(1);
   }
 
   clearSearch(): void {
@@ -98,26 +86,34 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  // --- Accès simplifiés pour le template ---
   readonly searchQuery = this.search.asReadonly();
-  // --- Gestion du chargement des images ---
+
   onImageLoad(projectId: string): void {
-    this.loadedImages.update((images) => ({
-      ...images,
-      [projectId]: true,
-    }));
+    this.loadedImages.update((images) => ({ ...images, [projectId]: true }));
   }
 
   isImageLoaded(projectId: string): boolean {
     return this.loadedImages()[projectId];
   }
 
-  // --- Map des hardskills pour afficher les technologies ---
-  readonly hardskillsMap = computed(() => {
-    const map = new Map<string, HardSkills>();
-    this.stacksService.hardSkills().forEach((skill) => {
-      map.set(skill.id, skill);
-    });
-    return map;
-  });
+  viewProjectImage(imagePath: string): void {
+    if (!imagePath) return;
+    const fileUrl = this.fileUrlService.getFileUrl(imagePath);
+    window.open(fileUrl, '_blank');
+  }
+
+  getImageUrl(path: string): string {
+    if (!path) return '';
+    return this.fileUrlService.getFileUrl(path);
+  }
+
+  getTechnologyIcon(techId: string): string {
+    const technology = this.projectService.technologies().find((tech) => tech.id === techId);
+    return technology?.icon || 'icons/stacks/default.svg';
+  }
+
+  getTechnologyLabel(techId: string): string {
+    const technology = this.projectService.technologies().find((tech) => tech.id === techId);
+    return technology?.label || techId;
+  }
 }

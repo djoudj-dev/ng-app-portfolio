@@ -9,7 +9,7 @@
 
     <!-- Cartes par catégorie -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16">
-      @for (group of groupedSkills(); track group.category.id) {
+      @for (group of groupedSkills; track group.category.id) {
         <div
           class="bg-background-200 rounded-xl shadow-primary-md p-6 border border-primary-200 transition-transform hover:scale-105"
         >
@@ -45,7 +45,7 @@
       </div>
 
       <div class="flex flex-wrap justify-center gap-4">
-        @for (skill of softskills(); track skill.id) {
+        @for (skill of softskills; track skill.id) {
           <div
             class="w-full sm:w-[45%] md:w-[30%] lg:w-[22%] xl:w-[18%] bg-background rounded-xl p-4 shadow-accent-md border border-accent-200 text-center transition-transform hover:scale-105"
           >

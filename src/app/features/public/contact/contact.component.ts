@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContactCard, ContactCardGroup } from '@feat/public/contact/interface/contact.interface';
-import { ContactService } from '@feat/public/contact/service/contact.service';
+import { ContactCard, ContactCardGroup, ContactForm } from '@feat/public/contact/interface/contact.interface';
 import { ToastService } from '@core/services/toast.service';
 import { ToastComponent } from '@shared/ui/toast/toast.component';
 import { ButtonComponent } from '@shared/ui/button/button.component';
+import { CONTACT_DATA } from '@feat/public/contact/data/contact.data';
+import { ContactService } from '@feat/public/contact/service/contact.service';
 
 @Component({
   selector: 'app-contact',
@@ -13,15 +14,15 @@ import { ButtonComponent } from '@shared/ui/button/button.component';
   templateUrl: './contact.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent {
   contactForm: FormGroup;
-  contactCards = signal<ContactCard[]>([]);
-  contactCardGroups = signal<ContactCardGroup[]>([]);
+  contactCards = signal<ContactCard[]>(CONTACT_DATA.cards);
+  contactCardGroups = signal<ContactCardGroup[]>(CONTACT_DATA.cardGroups);
   formSubmitted = signal<boolean>(false);
-  isSending = signal<boolean>(false); // Variable pour suivre l'état d'envoi
+  isSending = signal<boolean>(false);
 
-  private readonly contactService = inject(ContactService);
   private readonly toastService = inject(ToastService);
+  private readonly contactService = inject(ContactService);
 
   constructor(private fb: FormBuilder) {
     this.contactForm = this.fb.group({
@@ -38,69 +39,8 @@ export class ContactComponent implements OnInit {
       honeypot: [''],
       formStartTime: [Date.now()],
     });
-
-    effect(() => {
-      const data = this.contactService.data();
-      if (data) {
-        this.contactCards.set(data.cards || []);
-        this.contactCardGroups.set(data.cardGroups || []);
-      }
-    });
   }
 
-  ngOnInit(): void {
-    this.contactService.load();
-  }
-
-  onSubmit(): void {
-    this.formSubmitted.set(true);
-
-    const honeypotValue = this.contactForm.get('honeypot')?.value;
-
-    // 🛡️ Protection anti-bot par champ honeypot
-    if (honeypotValue) {
-      console.warn('Honeypot déclenché – formulaire bloqué (bot détecté).');
-      this.toastService.showInfo('Merci pour votre message !');
-      return;
-    }
-
-    // ✅ Si le formulaire est valide et honeypot vide
-    if (this.contactForm.valid) {
-      this.isSending.set(true); // Activer le spinner
-
-      this.contactService.sendContactForm(this.contactForm.value).subscribe({
-        next: () => {
-          this.contactForm.reset();
-          this.formSubmitted.set(false);
-          this.isSending.set(false); // Désactiver le spinner
-          this.toastService.showSuccess('Votre message a été envoyé avec succès!');
-        },
-        error: (error) => {
-          console.error('Error sending email:', error);
-          this.isSending.set(false); // Désactiver le spinner
-
-          let errorMessage = "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer plus tard.";
-
-          if (error.status === 400 && error.text?.includes('Public Key is invalid')) {
-            errorMessage =
-              "Erreur de configuration EmailJS: Clé publique invalide. Veuillez contacter l'administrateur.";
-          } else if (
-            error.status === 404 &&
-            (error.text?.includes('service_id') || error.text?.includes('template_id'))
-          ) {
-            errorMessage =
-              "Erreur de configuration EmailJS: Service ou template invalide. Veuillez contacter l'administrateur.";
-          } else if (error.status === 0) {
-            errorMessage = "Impossible de se connecter au service d'envoi d'emails. Vérifiez votre connexion internet.";
-          }
-
-          this.toastService.showError(errorMessage);
-        },
-      });
-    }
-  }
-
-  // Helper methods for form validation
   get nameControl() {
     return this.contactForm.get('name');
   }
@@ -115,5 +55,46 @@ export class ContactComponent implements OnInit {
 
   get messageControl() {
     return this.contactForm.get('message');
+  }
+
+  onSubmit() {
+    this.formSubmitted.set(true);
+
+    if (this.contactForm.invalid) {
+      this.toastService.showError('Veuillez corriger les erreurs dans le formulaire');
+      return;
+    }
+
+    // Check for honeypot (anti-spam)
+    if (this.contactForm.get('honeypot')?.value) {
+      return;
+    }
+
+    this.isSending.set(true);
+
+    // Create the contact form data object
+    const formData: ContactForm = {
+      name: this.contactForm.get('name')?.value,
+      email: this.contactForm.get('email')?.value,
+      subject: this.contactForm.get('subject')?.value,
+      message: this.contactForm.get('message')?.value,
+    };
+
+    // Send the form data to the backend
+    this.contactService.sendContactForm(formData).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Votre message a été envoyé avec succès!');
+        this.contactForm.reset();
+        this.formSubmitted.set(false);
+        this.isSending.set(false);
+      },
+      error: (error) => {
+        console.error('Error sending contact form:', error);
+        this.toastService.showError(
+          "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer plus tard."
+        );
+        this.isSending.set(false);
+      },
+    });
   }
 }

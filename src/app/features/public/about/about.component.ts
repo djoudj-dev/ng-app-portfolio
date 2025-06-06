@@ -1,18 +1,14 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
-import { AboutService } from '@feat/public/about/service/about.service';
+import { Component } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { ABOUT_DATA } from '@feat/public/about/data/about.data';
+import { ABOUT_INFOS } from '@feat/public/about/data/about-infos.data';
 
 @Component({
   selector: 'app-about',
   imports: [NgOptimizedImage],
   templateUrl: './about.component.html',
 })
-export class AboutComponent implements OnInit {
-  private readonly aboutService = inject(AboutService);
-
-  readonly about = computed(() => this.aboutService.data());
-
-  ngOnInit(): void {
-    this.aboutService.load();
-  }
+export class AboutComponent {
+  readonly about = ABOUT_DATA;
+  readonly aboutInfos = ABOUT_INFOS;
 }

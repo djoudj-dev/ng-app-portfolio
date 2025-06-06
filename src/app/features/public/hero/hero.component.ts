@@ -1,30 +1,39 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
 import { ScrollService } from '@core/services/scroll.service';
-import { HeroService } from '@feat/public/hero/service/hero.service';
+import { FileUrlService } from '@core/services/file-url.service';
+import { MetricsService } from '@feat/admin/dashboard/service/metrics.service';
+import { DATA_HERO } from '@feat/public/hero/data/hero.data';
+import { Hero } from '@feat/public/hero/interface/hero.interface';
 
 @Component({
   selector: 'app-hero',
   imports: [ButtonComponent, NgOptimizedImage],
   templateUrl: './hero.component.html',
 })
-export class HeroComponent implements OnInit {
+export class HeroComponent {
   private readonly scrollService = inject(ScrollService);
-  private readonly heroService = inject(HeroService);
+  private readonly fileUrlService = inject(FileUrlService);
+  private readonly metricsService = inject(MetricsService);
 
-  readonly hero = computed(() => this.heroService.data());
+  readonly hero: Hero = DATA_HERO;
+  readonly cvPath = 'docs/CV_DEVELOPPEUR_ANGULAR_NEDELLEC_JULIEN.pdf';
+  readonly downloadCvClick = signal(false);
 
-  ngOnInit(): void {
-    this.heroService.load();
+  downloadCV(): void {
+    this.metricsService.trackCvClick('static-hero').subscribe({
+      next: () => {
+        const fileUrl = this.fileUrlService.getFileUrl(this.cvPath);
+        window.open(fileUrl, '_blank');
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 
   scrollToSection(fragment: string): Promise<void> {
     return this.scrollService.scrollToSection(fragment);
-  }
-
-  downloadCV(): void {
-    const hero = this.hero();
-    if (hero) window.open(hero.cvPath, '_blank');
   }
 }

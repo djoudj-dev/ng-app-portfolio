@@ -1,4 +1,5 @@
-<section class="w-full bg-background pt-14 md:pt-4 lg:pt-6 xl:pt-58 pb-12" id="hero">
+<section class="w-full bg-background pt-14 md:pt-4 lg:pt-6 xl:pt-60 pb-12" id="hero">
+  <!-- Hero content -->
   <div
     class="flex flex-col items-center justify-around gap-y-16 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden lg:flex-row lg:gap-x-20"
   >
@@ -9,16 +10,16 @@
           <span
             class="bg-gradient-to-l from-accent to-text text-gradient inline-block text-transparent bg-clip-text pt-2"
           >
-            {{ hero()?.firstName }} {{ hero()?.lastName }}
+            {{ hero.firstName }} {{ hero.lastName }}
           </span>
         </h1>
 
         <h2 class="text-xl sm:text-3xl text-secondary-500 font-medium mt-2">
-          {{ hero()?.jobTitle }}
+          {{ hero.jobTitle }}
         </h2>
 
         <p class="mt-6 text-sm sm:text-lg text-text font-medium max-w-2xl mx-auto lg:mx-0">
-          {{ hero()?.jobDescription }}
+          {{ hero.jobDescription }}
         </p>
 
         <!-- 🎯 Boutons stylés -->
@@ -36,7 +37,7 @@
                 <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
                   <img
                     [ngSrc]="'icons/hero/download.svg'"
-                    alt="Télécharger"
+                    alt="Icône de téléchargement"
                     class="absolute inset-0 w-full h-full object-contain icon-invert"
                     width="20"
                     height="20"
@@ -56,7 +57,7 @@
               <div class="w-4 sm:w-5 h-4 sm:h-5 relative flex-shrink-0">
                 <img
                   [ngSrc]="'icons/hero/arrow.svg'"
-                  alt="Découvrir"
+                  alt="Flèche vers les projets"
                   class="absolute inset-0 w-full h-full object-contain icon-invert"
                   width="20"
                   height="20"
@@ -68,10 +69,10 @@
       </div>
     </header>
 
-    <!-- 💻 Partie droite : Image laptop responsive, équilibrée -->
+    <!-- Illustration -->
     <img
-      [ngSrc]="'images/laptop1.svg'"
-      alt="Laptop"
+      [ngSrc]="hero.illustration"
+      alt="Illustration de laptop représentant le travail"
       width="500"
       height="286"
       sizes="(min-width: 768px) 50vw, 100vw"
@@ -80,7 +81,7 @@
     />
   </div>
 
-  <!-- Bouton de défilement vers la section "about" -->
+  <!-- Scroll button -->
   <div class="flex justify-center pt-6 sm:pt-10 lg:pt-32">
     <button
       (click)="scrollToSection('about')"
@@ -90,7 +91,7 @@
       <div class="w-10 h-10 relative flex-shrink-0">
         <img
           [ngSrc]="'icons/hero/arrow-b.svg'"
-          alt="Défiler vers le bas"
+          alt="Flèche vers le bas"
           class="absolute inset-0 w-full h-full object-contain icon-invert"
           width="24"
           height="24"

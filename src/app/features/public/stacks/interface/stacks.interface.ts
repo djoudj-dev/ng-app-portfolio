@@ -1,15 +1,8 @@
 export interface Category {
   id: string;
-  icon: string;
   label: string;
+  icon: string;
   priority: number;
-}
-
-export interface SoftSkills {
-  id: string;
-  label: string;
-  icon: string;
-  description?: string;
 }
 
 export interface HardSkills {
@@ -18,4 +11,11 @@ export interface HardSkills {
   icon: string;
   categoryId: string;
   priority: number;
+}
+
+export interface SoftSkill {
+  id: string;
+  label: string;
+  icon: string;
+  description?: string;
 }
