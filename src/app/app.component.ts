@@ -6,9 +6,7 @@ import { AboutComponent } from '@feat/public/about/about.component';
 import { StacksComponent } from '@feat/public/stacks/stacks.component';
 import { ProjectComponent } from '@feat/public/project/project.component';
 import { ContactComponent } from '@feat/public/contact/contact.component';
-import emailjs from '@emailjs/browser';
 import { FooterComponent } from '@shared/ui/footer/footer.component';
-import { environment } from '@environments/environment';
 import { ToastComponent } from '@shared/ui/toast/toast.component';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -36,10 +34,7 @@ export class AppComponent {
   isAdminRoute = signal<boolean>(false);
 
   constructor() {
-    // Initialize EmailJS
-    emailjs.init(environment.emailJsPublicKey);
-
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: any) => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       this.isAdminRoute.set(event.url.startsWith('/admin'));
     });
   }
