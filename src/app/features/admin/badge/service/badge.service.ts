@@ -2,7 +2,6 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap, map } from 'rxjs';
 import { HttpAdapterService } from '@app/core/http/http.adapter';
 import { Badge, BadgeResponse } from '../interface/badge.interface';
-import { ApiErrorResponse } from '@core/models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class BadgeService {

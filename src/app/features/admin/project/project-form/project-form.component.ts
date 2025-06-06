@@ -92,7 +92,7 @@ import { FileUrlService } from '@core/services/file-url.service';
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Technologies</label>
             <div formArrayName="technologies">
-              @for (tech of technologiesFormArray.controls; track $index) {
+              @for (tech of technologiesFormArray.controls; track tech) {
                 <div class="flex items-center mb-2">
                   <select
                     [formControlName]="$index"
@@ -136,7 +136,7 @@ import { FileUrlService } from '@core/services/file-url.service';
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Dépôts</label>
             <div formArrayName="repos">
-              @for (repo of reposFormArray.controls; track $index) {
+              @for (repo of reposFormArray.controls; track repo) {
                 <div [formGroupName]="$index" class="p-3 border border-gray-200 rounded-md mb-2">
                   <div class="mb-2">
                     <label class="block text-xs font-medium text-gray-700 mb-1">URL</label>
@@ -237,7 +237,7 @@ export class ProjectFormComponent implements OnInit {
 
     // Charger les projets, catégories et technologies en une seule fois
     this.projectService.getProjects().subscribe({
-      next: (projects) => {
+      next: () => {
         console.log('Projects, categories and technologies loaded in component');
       },
       error: (error) => {
