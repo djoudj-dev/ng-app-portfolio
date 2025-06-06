@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        '@environments/environment': path.resolve(__dirname, 'src/environments/environment.development.ts'),
+        '@environments': path.resolve(__dirname, 'src/environments'),
       },
     },
     test: {
