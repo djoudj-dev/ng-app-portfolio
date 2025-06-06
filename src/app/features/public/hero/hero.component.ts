@@ -28,7 +28,7 @@ export class HeroComponent {
         window.open(fileUrl, '_blank');
       },
       error: (err) => {
-        console.error('Erreur lors du tracking CV:', err);
+        console.error(err);
       },
     });
   }
