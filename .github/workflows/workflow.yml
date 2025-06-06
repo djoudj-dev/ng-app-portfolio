@@ -52,7 +52,7 @@ jobs:
       - name: Create environment file
         run: |
           mkdir -p src/environments
-          printf "${{ secrets.PORTFOLIO_CONFIG }}" > src/environments/environment.ts
+          printf "${{ secrets.API_URL }}" > src/environments/environment.ts
           cat src/environments/environment.ts
 
       # Tests
