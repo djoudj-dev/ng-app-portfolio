@@ -68,4 +68,11 @@ export class HttpAdapterService {
       withCredentials: true,
     });
   }
+
+  getBinary(path: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}${path}`, {
+      responseType: 'blob',
+      withCredentials: true,
+    });
+  }
 }

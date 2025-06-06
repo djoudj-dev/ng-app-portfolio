@@ -1,65 +1,21 @@
-<div class="p-5 max-w-7xl mx-auto pt-16">
+<div class="p-5 max-w-7xl mx-auto pt-4">
   @if (error()) {
     <div class="bg-red-100 text-red-700 dark:text-red-200 p-3 rounded-lg mb-5 text-center">
       {{ error() }}
     </div>
   }
 
-  <!-- Metrics Display -->
   <div
     class="grid grid-cols-1 md:grid-cols-3 gap-5"
     [class.opacity-70]="isLoading()"
     [class.pointer-events-none]="isLoading()"
   >
-    <!-- Counter sur toute la largeur au-dessus -->
     <div class="md:col-span-3">
-      <app-visit-counter
-        [visitCount]="visitCount"
-        [realUserCount]="realUserCount"
-        [botCount]="botCount"
-        [cvClickCount]="cvClickCount"
-      />
+      <app-visit-counter [realUserCount]="realUserCount" [botCount]="botCount" [cvClickCount]="cvClickCount" />
     </div>
 
-    <!-- Visitor Type Selector -->
-    <div class="md:col-span-3 flex justify-center mb-5">
-      <div class="flex flex-wrap justify-center gap-4">
-        <button
-          class="px-4 py-2 rounded-lg transition-colors text-text"
-          [class.bg-accent]="selectedVisitorType() === 'all'"
-          [class.bg-primary]="selectedVisitorType() !== 'all'"
-          (click)="changeVisitorType('all')"
-        >
-          Tous les visiteurs
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg transition-colors text-text"
-          [class.bg-accent]="selectedVisitorType() === 'real-users'"
-          [class.bg-primary]="selectedVisitorType() !== 'real-users'"
-          (click)="changeVisitorType('real-users')"
-        >
-          Visiteurs réels
-        </button>
-        <button
-          class="px-4 py-2 rounded-lg transition-colors text-text"
-          [class.bg-accent]="selectedVisitorType() === 'bots'"
-          [class.bg-primary]="selectedVisitorType() !== 'bots'"
-          (click)="changeVisitorType('bots')"
-        >
-          Bots
-        </button>
-      </div>
-    </div>
-
-    <!-- Graph dessous -->
     <div class="md:col-span-3">
-      <app-metrics-graph
-        [metrics]="getCurrentMetrics()"
-        [selectedPeriod]="selectedPeriod()"
-        [isLoading]="isLoading()"
-        [error]="error()"
-        [onPeriodChange]="changePeriod.bind(this)"
-      />
+      <app-cv-upload (fileUploaded)="onCvUploaded()" />
     </div>
   </div>
 </div>
