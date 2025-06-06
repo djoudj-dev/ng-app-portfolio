@@ -1,56 +1,40 @@
-# Étape 1 : Utiliser une image Node.js comme base
-FROM node:22.14 AS node
+# Étape 1 : Installer les dépendances
+FROM node:22.14 AS deps
 
-# Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers package.json et pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
-
-# Installer pnpm
 RUN npm install -g pnpm
-
-# Installer les dépendances
 RUN pnpm install --frozen-lockfile
-
-# Copier le reste des fichiers de l'application
-COPY . .
 
 # Étape 2 : Builder l'application Angular
 FROM node:22.14 AS build
 
 WORKDIR /app
 
-# Installer pnpm dans l'étape de build
-RUN npm install -g pnpm
-
-# 👇 Ajoute ceci pour que la variable soit reçue
-ARG PORTFOLIO_CONFIG_B64
-ENV PORTFOLIO_CONFIG_B64=$PORTFOLIO_CONFIG_B64
-
-RUN mkdir -p src/environments && \
-    echo "$PORTFOLIO_CONFIG_B64" | base64 -d | tr -d '%' > src/environments/environment.ts && \
-    cat src/environments/environment.ts
-
-# Copier les fichiers nécessaires pour le build
-COPY --from=node /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Builder l'application
-RUN pnpm run build
-RUN ls -l /app/dist/ng-app-portfolio
+# 👇 Variable d’environnement transmise au build
+ARG API_URL
+ENV API_URL=$API_URL
 
-# Étape 3 : Utiliser une image Nginx pour servir l'application
+# Génération du fichier environment.ts à partir de la variable
+RUN mkdir -p src/environments && \
+    echo "export const environment = {" > src/environments/environment.ts && \
+    echo "  production: false," >> src/environments/environment.ts && \
+    echo "  apiUrl: '${API_URL}'" >> src/environments/environment.ts && \
+    echo "};" >> src/environments/environment.ts && \
+    cat src/environments/environment.ts
+
+RUN npm install -g pnpm
+RUN pnpm run build
+
+# Étape 3 : NGINX pour le déploiement
 FROM nginx:alpine
 
-# Copier les fichiers de build dans le répertoire de Nginx
 COPY --from=build /app/dist/ng-app-portfolio/browser /usr/share/nginx/html
-
-# Copier le fichier de configuration Nginx personnalisé si nécessaire
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Exposer le port 80
 EXPOSE 80
-
-# Démarrer Nginx
 CMD ["nginx", "-g", "daemon off;"]
