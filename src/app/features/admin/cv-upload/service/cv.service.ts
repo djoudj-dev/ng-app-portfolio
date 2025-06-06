@@ -11,7 +11,7 @@ export class CvService {
   readonly error = this._error.asReadonly();
 
   uploadCV(file: File, metadata: Record<string, string> = {}): Observable<FileUploadResponse | ApiErrorOrNull> {
-    return this.http.uploadFile<FileUploadResponse>('/heroes/upload-cv', file, metadata).pipe(
+    return this.http.uploadFile<FileUploadResponse>('/cv/upload-file', file, metadata).pipe(
       catchError(() => {
         this._error.set("Erreur lors de l'upload du CV");
         return of(null as ApiErrorOrNull);
