@@ -23,6 +23,20 @@ export class FileUrlService {
       return path;
     }
 
+    // Si le chemin commence par ./, le supprimer
+    if (path.startsWith('./')) {
+      path = path.substring(2);
+    }
+
+    // Si le chemin contient "images/" et est un chemin d'image de projet
+    if (path.includes('images/')) {
+      // Assurer que le chemin commence par /projects/images/
+      const filename = path.split('/').pop();
+      if (filename) {
+        return `${this.apiUrl}/projects/images/${filename}`;
+      }
+    }
+
     // Si le chemin commence déjà par /uploads/, ne pas ajouter le préfixe
     if (path.startsWith('/uploads/')) {
       return `${this.apiUrl}${path}`;
