@@ -1,7 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap, map } from 'rxjs';
 import { HttpAdapterService } from '@app/core/http/http.adapter';
-import { Badge } from '../interface/badge.interface';
+import { Badge, BadgeResponse } from '../interface/badge.interface';
+import { ApiErrorResponse } from '@core/models/api-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class BadgeService {
@@ -12,14 +13,14 @@ export class BadgeService {
   readonly selectedBadge = signal<Badge | null>(null);
 
   getAllBadges(): Observable<Badge[]> {
-    return this.http.get<Badge[]>(this.endpoint).pipe(
+    return this.http.get<BadgeResponse[]>(this.endpoint).pipe(
       map((badges) => badges.map(BadgeService.transformBadge)),
       tap((badges) => this.badges.set(badges))
     );
   }
 
   updateBadge(id: string, badge: Partial<Badge>): Observable<Badge> {
-    return this.http.patch<Badge>(`${this.endpoint}/${id}`, badge).pipe(
+    return this.http.patch<BadgeResponse>(`${this.endpoint}/${id}`, badge).pipe(
       map(BadgeService.transformBadge),
       tap((updated) => {
         const list = this.badges();
@@ -39,7 +40,7 @@ export class BadgeService {
     );
   }
 
-  private static transformBadge(badge: any): Badge {
+  private static transformBadge(badge: BadgeResponse): Badge {
     return {
       ...badge,
       availableUntil: badge.availableUntil ? new Date(badge.availableUntil) : null,
