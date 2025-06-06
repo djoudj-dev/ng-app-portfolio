@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgOptimizedImage, CommonModule } from '@angular/common';
-import { StacksService } from '@feat/public/stacks/service/stacks.service';
-import { Category, HardSkills } from '@feat/public/stacks/interface/stacks.interface';
+import { HARD_SKILLS, SOFT_SKILLS, STACK_CATEGORIES } from '@feat/public/stacks/data/stacks.data';
 
 @Component({
   selector: 'app-stacks',
@@ -9,25 +8,13 @@ import { Category, HardSkills } from '@feat/public/stacks/interface/stacks.inter
   templateUrl: './stacks.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StacksComponent implements OnInit {
-  private readonly stacksService = inject(StacksService);
+export class StacksComponent {
+  readonly category = STACK_CATEGORIES;
+  readonly hardskills = HARD_SKILLS;
+  readonly softskills = SOFT_SKILLS;
 
-  readonly categories = this.stacksService.categories;
-  readonly hardskills = this.stacksService.hardSkills;
-  readonly softskills = this.stacksService.softSkills;
-
-  // Regroupe-les skills par catégorie via computed signal
-  readonly groupedSkills = computed(() => {
-    const categories = this.categories();
-    const hardskills = this.hardskills();
-
-    return categories.map((category: Category) => ({
-      category,
-      skills: hardskills.filter((skill: HardSkills) => skill.categoryId === category.id),
-    }));
-  });
-
-  ngOnInit(): void {
-    this.stacksService.load();
-  }
+  readonly groupedSkills = this.category.map((cat) => ({
+    category: cat,
+    skills: this.hardskills.filter((skill) => skill.categoryId === cat.id).sort((a, b) => a.priority - b.priority),
+  }));
 }
