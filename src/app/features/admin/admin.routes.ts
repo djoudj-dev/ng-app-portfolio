@@ -10,16 +10,17 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
-        path: 'hero',
-        loadComponent: () => import('./hero/hero-admin.component').then((m) => m.HeroAdminComponent),
-      },
-      {
         path: 'badges',
         loadComponent: () => import('./badge/badge-management.component').then((m) => m.BadgeManagementComponent),
       },
       {
-        path: 'about',
-        loadComponent: () => import('./about/about-admin.component').then((m) => m.AboutAdminComponent),
+        path: 'projects',
+        loadChildren: () => import('./project/project.routes').then((m) => m.PROJECT_ROUTES),
+      },
+      {
+        path: 'messages',
+        loadComponent: () =>
+          import('./contact/contact-message-list.component').then((m) => m.ContactMessageListComponent),
       },
     ],
   },
