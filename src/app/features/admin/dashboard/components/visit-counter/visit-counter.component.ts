@@ -6,15 +6,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="mt-8 p-5 bg-background rounded-lg shadow-accent-md border border-accent-200 mb-8">
+    <div class="mt-8 p-5 bg-background rounded-lg border border-gray-400 mb-8">
       <h2 class="text-text text-xl font-semibold mb-4">Résumé des visites</h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-        <!-- Total des visites -->
-        <div class="p-4 bg-background rounded-lg border border-primary-200">
-          <h3 class="text-lg font-medium text-text pb-2">Total des visites</h3>
-          <p class="text-3xl font-bold text-accent">{{ totalVisits.toLocaleString() }}</p>
-        </div>
-
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
         <!-- Visiteurs réels -->
         <div class="p-4 bg-background rounded-lg border border-primary-200">
           <h3 class="text-lg font-medium text-text">Visiteurs réels</h3>

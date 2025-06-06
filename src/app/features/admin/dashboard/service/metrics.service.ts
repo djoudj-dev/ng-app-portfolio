@@ -3,7 +3,8 @@ import { Observable, map, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpAdapterService } from '@core/http/http.adapter';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
-import { Metric, MetricCount, MetricType } from '../interface/metric.interface';
+import { Metric, MetricCount, MetricMetadata, MetricType } from '../interface/metric.interface';
+import { ApiErrorResponse } from '@core/models/api-response.model';
 
 type MetricPeriods = {
   day: Metric[];
@@ -111,7 +112,7 @@ export class MetricsService {
     userId?: string,
     userAgent?: string,
     ipAddress?: string,
-    metadata?: Record<string, any>
+    metadata?: MetricMetadata
   ): Observable<Metric | { skipped: boolean; reason: string }> {
     return this.postCustomMetric('/metrics/visit', { path, userId, userAgent, ipAddress, metadata }, 'track visit');
   }
@@ -122,7 +123,7 @@ export class MetricsService {
     userId?: string;
     userAgent?: string;
     ipAddress?: string;
-    metadata?: Record<string, any>;
+    metadata?: MetricMetadata;
   }): Observable<Metric> {
     return this.postCustomMetric('/metrics', createMetricDto, 'create metric');
   }
@@ -202,7 +203,11 @@ export class MetricsService {
     );
   }
 
-  private postCustomMetric<T>(url: string, body: Record<string, any>, context: string): Observable<T> {
+  private postCustomMetric<T>(
+    url: string,
+    body: Record<string, string | number | boolean | MetricMetadata | undefined>,
+    context: string
+  ): Observable<T> {
     this._isLoading.set(true);
     this._error.set(null);
 
@@ -210,6 +215,8 @@ export class MetricsService {
       tap(() => this._isLoading.set(false)),
       tap({
         error: (err: HttpErrorResponse) => {
+          // Use the ApiErrorResponse class for better error handling
+          new ApiErrorResponse(err);
           this._error.set(this.errorHandler.handleMetricsError(err, context));
           this._isLoading.set(false);
         },
@@ -219,7 +226,7 @@ export class MetricsService {
 
   private postMetric(
     url: string,
-    body: Record<string, any>,
+    body: Record<string, string | number | boolean | MetricMetadata | undefined>,
     updateSignal: (count: number) => void,
     context: string
   ): Observable<Metric> {
