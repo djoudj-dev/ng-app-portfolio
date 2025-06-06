@@ -5,6 +5,13 @@ export interface ContactForm {
   message: string;
 }
 
+export interface ContactFormResponse {
+  success: boolean;
+  message: string;
+  status?: number;
+  error?: string;
+}
+
 export interface ContactCard {
   id: string;
   title: string;
