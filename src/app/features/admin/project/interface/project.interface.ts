@@ -9,6 +9,7 @@ export interface Project {
   repos: ProjectRepo[];
   technologies: string[];
   priority: number;
+  category?: ProjectCategory;
 }
 
 export interface ProjectRepo {
@@ -18,6 +19,12 @@ export interface ProjectRepo {
 }
 
 export interface ProjectCategory {
+  id: string;
+  label: string;
+  icon: string;
+}
+
+export interface ProjectTechnology {
   id: string;
   label: string;
   icon: string;
