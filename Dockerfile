@@ -12,6 +12,9 @@ FROM node:22.14 AS build
 
 WORKDIR /app
 
+# 👇 Réinstaller PNPM dans le stage build
+RUN npm install -g pnpm
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -19,16 +22,16 @@ COPY . .
 ARG API_URL
 ENV API_URL=$API_URL
 
-# Génération du fichier environment.ts à partir de la variable
+# Génération du fichier environment.prod.ts avec la bonne URL
 RUN mkdir -p src/environments && \
-    echo "export const environment = {" > src/environments/environment.ts && \
-    echo "  production: false," >> src/environments/environment.ts && \
-    echo "  apiUrl: '${API_URL}'" >> src/environments/environment.ts && \
-    echo "};" >> src/environments/environment.ts && \
-    cat src/environments/environment.ts
+    echo "export const environment = {" > src/environments/environment.prod.ts && \
+    echo "  production: true," >> src/environments/environment.prod.ts && \
+    echo "  apiUrl: '${API_URL}'" >> src/environments/environment.prod.ts && \
+    echo "};" >> src/environments/environment.prod.ts && \
+    cat src/environments/environment.prod.ts
 
-RUN npm install -g pnpm
-RUN pnpm run build
+# ✅ Build Angular en mode production
+RUN pnpm run build --configuration=production
 
 # Étape 3 : NGINX pour le déploiement
 FROM nginx:alpine
