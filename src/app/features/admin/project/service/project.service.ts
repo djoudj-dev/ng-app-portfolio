@@ -10,35 +10,25 @@ import { PROJECT_TECHNOLOGIES } from '@feat/admin/project/data/project-technolog
 export class ProjectService {
   private readonly httpAdapter = inject(HttpAdapterService);
 
-  // Signals pour stocker les données
   projects = signal<Project[]>([]);
   categories = signal<ProjectCategory[]>([]);
   technologies = signal<ProjectTechnology[]>([]);
 
-  // Récupérer tous les projets, catégories et technologies
   getProjects(): Observable<Project[]> {
     return this.httpAdapter.get<{ projects: Project[]; categories: ProjectCategory[] }>('/projects').pipe(
       tap((response) => {
-        if (response.projects) {
-          this.projects.set(response.projects);
-        }
-        if (response.categories) {
-          this.categories.set(response.categories);
-        }
-
-        // Récupérer les technologies également
+        this.projects.set(response.projects ?? []);
+        this.categories.set(response.categories ?? []);
         this.getTechnologies().subscribe();
       }),
-      map((response) => response.projects)
+      map((res) => res.projects)
     );
   }
 
-  // Récupérer un projet par ID
   getProject(id: string): Observable<Project> {
     return this.httpAdapter.get<Project>(`/projects/${id}`);
   }
 
-  // Créer un nouveau projet
   createProject(project: Omit<Project, 'id'>): Observable<Project> {
     return this.httpAdapter.post<Project>('/projects', project).pipe(
       tap((newProject) => {
@@ -48,7 +38,6 @@ export class ProjectService {
     );
   }
 
-  // Mettre à jour un projet
   updateProject(id: string, project: Partial<Project>): Observable<Project> {
     return this.httpAdapter.patch<Project>(`/projects/${id}`, project).pipe(
       tap((updatedProject) => {
@@ -63,7 +52,6 @@ export class ProjectService {
     );
   }
 
-  // Supprimer un projet
   deleteProject(id: string): Observable<Project> {
     return this.httpAdapter.delete<Project>(`/projects/${id}`).pipe(
       tap(() => {
@@ -73,21 +61,10 @@ export class ProjectService {
     );
   }
 
-  // Upload d'image générique (sans association à un projet)
-  uploadImage(file: File): Observable<{ filename: string; path: string; mimetype: string }> {
-    return this.httpAdapter.uploadFile<{ filename: string; path: string; mimetype: string }>(
-      '/projects/upload-image',
-      file,
-      {}
-    );
-  }
-
-  // Upload d'image pour un projet spécifique
   uploadProjectImage(id: string, file: File): Observable<Project> {
     return this.httpAdapter.patchFile<Project>(`/projects/${id}/image`, file);
   }
 
-  // Récupérer toutes les catégories
   getCategories(): Observable<ProjectCategory[]> {
     return this.httpAdapter.get<ProjectCategory[]>('/projects/categories').pipe(
       tap((categories) => {
@@ -96,12 +73,6 @@ export class ProjectService {
     );
   }
 
-  // Récupérer une catégorie par ID
-  getCategoryById(id: string): Observable<ProjectCategory> {
-    return this.httpAdapter.get<ProjectCategory>(`/projects/categories/${id}`);
-  }
-
-  // Créer une nouvelle catégorie
   createCategory(category: { label: string; icon: string }): Observable<ProjectCategory> {
     return this.httpAdapter.post<ProjectCategory>('/projects/categories', category).pipe(
       tap((newCategory) => {
@@ -111,7 +82,6 @@ export class ProjectService {
     );
   }
 
-  // Mettre à jour une catégorie
   updateCategory(id: string, category: Partial<{ label: string; icon: string }>): Observable<ProjectCategory> {
     return this.httpAdapter.patch<ProjectCategory>(`/projects/categories/${id}`, category).pipe(
       tap((updatedCategory) => {
@@ -126,29 +96,7 @@ export class ProjectService {
     );
   }
 
-  // Supprimer une catégorie
-  deleteCategory(id: string): Observable<ProjectCategory> {
-    return this.httpAdapter.delete<ProjectCategory>(`/projects/categories/${id}`).pipe(
-      tap(() => {
-        const currentCategories = this.categories();
-        this.categories.set(currentCategories.filter((c) => c.id !== id));
-      })
-    );
-  }
-
-  // Récupérer l'image d'un projet par ID
-  getProjectImage(id: string): Observable<Blob> {
-    return this.httpAdapter.getBinary(`/projects/${id}/image`);
-  }
-
-  // Récupérer une image par son nom de fichier
-  getImageByFilename(filename: string): Observable<Blob> {
-    return this.httpAdapter.getBinary(`/projects/images/${filename}`);
-  }
-
-  // Récupérer toutes les technologies
   getTechnologies(): Observable<ProjectTechnology[]> {
-    // Utiliser les données statiques au lieu de faire une requête HTTP
     return of(PROJECT_TECHNOLOGIES).pipe(
       tap((technologies) => {
         this.technologies.set(technologies);
@@ -156,18 +104,7 @@ export class ProjectService {
     );
   }
 
-  // Récupérer une technologie par ID
-  getTechnologyById(id: string): Observable<ProjectTechnology> {
-    const technology = PROJECT_TECHNOLOGIES.find((tech) => tech.id === id);
-    if (!technology) {
-      return of({ id, label: id, icon: 'icons/stacks/default.svg' });
-    }
-    return of(technology);
-  }
-
-  // Créer une nouvelle technologie
   createTechnology(technology: { label: string; icon: string }): Observable<ProjectTechnology> {
-    // Générer un ID unique basé sur le timestamp
     const id = `tech-${Date.now()}`;
     const newTechnology: ProjectTechnology = {
       id,
@@ -175,49 +112,29 @@ export class ProjectService {
       icon: technology.icon || 'icons/stacks/default.svg',
     };
 
-    // Mettre à jour le signal avec la nouvelle technologie
     const currentTechnologies = this.technologies();
     this.technologies.set([...currentTechnologies, newTechnology]);
 
     return of(newTechnology);
   }
 
-  // Mettre à jour une technologie
   updateTechnology(id: string, technology: Partial<{ label: string; icon: string }>): Observable<ProjectTechnology> {
     const currentTechnologies = this.technologies();
     const index = currentTechnologies.findIndex((t) => t.id === id);
 
     if (index === -1) {
-      // Si la technologie n'existe pas, retourner une erreur
       return of({ id, label: id, icon: 'icons/stacks/default.svg' });
     }
 
-    // Créer une technologie mise à jour
     const updatedTechnology: ProjectTechnology = {
       ...currentTechnologies[index],
       ...technology,
     };
 
-    // Mettre à jour le signal
     const updatedTechnologies = [...currentTechnologies];
     updatedTechnologies[index] = updatedTechnology;
     this.technologies.set(updatedTechnologies);
 
     return of(updatedTechnology);
-  }
-
-  // Supprimer une technologie
-  deleteTechnology(id: string): Observable<ProjectTechnology> {
-    const currentTechnologies = this.technologies();
-    const technology = currentTechnologies.find((t) => t.id === id);
-
-    if (!technology) {
-      return of({ id, label: id, icon: 'icons/stacks/default.svg' });
-    }
-
-    // Mettre à jour le signal en filtrant la technologie supprimée
-    this.technologies.set(currentTechnologies.filter((t) => t.id !== id));
-
-    return of(technology);
   }
 }
