@@ -8,6 +8,7 @@ import { ApiErrorOrNull, ApiErrorResponse, FileUploadResponse } from '@core/mode
 
 @Component({
   selector: 'app-cv-upload',
+  standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   templateUrl: './cv-upload.component.html',
 })

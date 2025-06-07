@@ -9,6 +9,7 @@ import { Hero } from '@feat/public/hero/interface/hero.interface';
 
 @Component({
   selector: 'app-hero',
+  standalone: true,
   imports: [ButtonComponent, NgOptimizedImage],
   templateUrl: './hero.component.html',
 })
@@ -20,6 +21,7 @@ export class HeroComponent {
   readonly hero: Hero = DATA_HERO;
 
   downloadCV(): void {
+    // Track CV click and open the file
     this.metricsService.trackCvClick('static-hero').subscribe({
       next: () => {
         const fileUrl = this.fileUrlService.getFileUrl('/cv');
@@ -29,6 +31,10 @@ export class HeroComponent {
         console.error(err);
       },
     });
+
+    // We can also access the cvClickCount signal directly if needed
+    // const currentClicks = this.metricsService.cvClickCount();
+    // console.log(`CV has been clicked ${currentClicks} times`);
   }
 
   scrollToSection(fragment: string): Promise<void> {
