@@ -1,7 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { ProjectService } from '@feat/admin/project/service/project.service';
 import { FileUrlService } from '@core/services/file-url.service';
+import { PROJECTS } from './data/project.data';
+import { PROJECT_CATEGORIES } from './data/project-categories.data';
+import { PROJECT_TECHNOLOGIES } from './data/project-technologies.data';
+import { Project } from './interface/project.interface';
 
 @Component({
   selector: 'app-project',
@@ -9,18 +12,8 @@ import { FileUrlService } from '@core/services/file-url.service';
   templateUrl: './project.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectComponent implements OnInit {
-  private readonly projectService = inject(ProjectService);
+export class ProjectComponent {
   private readonly fileUrlService = inject(FileUrlService);
-
-  ngOnInit(): void {
-    this.projectService.getProjects().subscribe();
-
-    this.projectService.getTechnologies().subscribe({
-      next: () => {},
-      error: () => {},
-    });
-  }
 
   private readonly search = signal('');
   private readonly selectedCategory = signal('all');
@@ -28,8 +21,9 @@ export class ProjectComponent implements OnInit {
   private readonly itemsPerPage = 3;
   readonly loadedImages = signal<Record<string, boolean>>({});
 
-  readonly allProjects = this.projectService.projects;
-  readonly categories = this.projectService.categories;
+  readonly allProjects = signal<Project[]>(PROJECTS);
+  readonly categories = signal(PROJECT_CATEGORIES);
+  readonly technologies = signal(PROJECT_TECHNOLOGIES);
 
   readonly filteredProjects = computed(() => {
     const query = this.search().toLowerCase();
@@ -108,12 +102,12 @@ export class ProjectComponent implements OnInit {
   }
 
   getTechnologyIcon(techId: string): string {
-    const technology = this.projectService.technologies().find((tech) => tech.id === techId);
+    const technology = this.technologies().find((tech) => tech.id === techId);
     return technology?.icon || 'icons/stacks/default.svg';
   }
 
   getTechnologyLabel(techId: string): string {
-    const technology = this.projectService.technologies().find((tech) => tech.id === techId);
+    const technology = this.technologies().find((tech) => tech.id === techId);
     return technology?.label || techId;
   }
 }
