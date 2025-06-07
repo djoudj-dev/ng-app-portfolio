@@ -39,12 +39,6 @@ export class HttpAdapterService {
     });
   }
 
-  getLocal<T>(path: string): Observable<T> {
-    return this.http.get<T>(path, {
-      withCredentials: true,
-    });
-  }
-
   uploadFile<T>(path: string, file: File, extraData: Record<string, string>): Observable<T> {
     const formData = new FormData();
     formData.append('file', file);
