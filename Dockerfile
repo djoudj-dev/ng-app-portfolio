@@ -22,11 +22,12 @@ ENV API_URL=$API_URL
 
 # ✅ Corrigé : écriture dans environment.prod.ts
 RUN mkdir -p src/environments && \
-    echo "export const environment = {" > src/environments/environment.prod.ts && \
-    echo "  production: true," >> src/environments/environment.prod.ts && \
-    echo "  apiUrl: '${API_URL}'" >> src/environments/environment.prod.ts && \
-    echo "};" >> src/environments/environment.prod.ts && \
-    cat src/environments/environment.prod.ts
+  echo "export const environment = {" > src/environments/environment.ts && \
+  echo "  production: true," >> src/environments/environment.ts && \
+  echo "  apiUrl: '${API_URL}'" >> src/environments/environment.ts && \
+  echo "};" >> src/environments/environment.ts && \
+  cp src/environments/environment.ts src/environments/environment.prod.ts && \
+  cat src/environments/environment.prod.ts
 
 # Build Angular en mode production
 RUN pnpm run build --configuration=production
