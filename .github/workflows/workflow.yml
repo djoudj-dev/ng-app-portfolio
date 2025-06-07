@@ -53,11 +53,11 @@ jobs:
       - name: Create environment file
         run: |
           mkdir -p src/environments
-          echo "export const environment = {" > src/environments/environment.ts
-          echo "  production: true," >> src/environments/environment.ts
-          echo "  apiUrl: '${{ secrets.API_URL }}'," >> src/environments/environment.ts
-          echo "};" >> src/environments/environment.ts
-          cat src/environments/environment.ts
+          echo "export const environment = {" > src/environments/environment.prod.ts
+          echo "  production: true," >> src/environments/environment.prod.ts
+          echo "  apiUrl: '${{ secrets.API_URL }}'," >> src/environments/environment.prod.ts
+          echo "};" >> src/environments/environment.prod.ts
+          cat src/environments/environment.prod.ts
 
       # Tests
       - name: Test
