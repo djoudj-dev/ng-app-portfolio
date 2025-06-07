@@ -1,8 +1,9 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpAdapterService } from '@core/http/http.adapter';
-import { Observable, tap, map, of } from 'rxjs';
+import { Observable, tap, map, of, catchError } from 'rxjs';
 import { Project, ProjectCategory, ProjectTechnology } from '@feat/admin/project/interface/project.interface';
 import { PROJECT_TECHNOLOGIES } from '@feat/admin/project/data/project-technologies.data';
+import { ApiResponse } from '@core/models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,31 +16,81 @@ export class ProjectService {
   technologies = signal<ProjectTechnology[]>([]);
 
   getProjects(): Observable<Project[]> {
-    return this.httpAdapter.get<{ projects: Project[]; categories: ProjectCategory[] }>('/projects').pipe(
-      tap((response) => {
-        this.projects.set(response.projects ?? []);
-        this.categories.set(response.categories ?? []);
+    return this.httpAdapter.get<ApiResponse<{ projects: Project[]; categories: ProjectCategory[] }>>('/projects').pipe(
+      map((response) => {
+        // Check if the response has success: false
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message) ? response.message[0] : response.message || 'Failed to fetch projects'
+          );
+        }
+        return response.data || { projects: [], categories: [] };
+      }),
+      tap((data) => {
+        this.projects.set(data.projects ?? []);
+        this.categories.set(data.categories ?? []);
         this.getTechnologies().subscribe();
       }),
-      map((res) => res.projects)
+      map((data) => data.projects),
+      catchError((error) => {
+        console.error('Error fetching projects:', error);
+        return of([]);
+      })
     );
   }
 
   getProject(id: string): Observable<Project> {
-    return this.httpAdapter.get<Project>(`/projects/${id}`);
+    return this.httpAdapter.get<ApiResponse<Project>>(`/projects/${id}`).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message)
+              ? response.message[0]
+              : response.message || `Failed to fetch project with id ${id}`
+          );
+        }
+        return response.data as Project;
+      }),
+      catchError((error) => {
+        console.error(`Error fetching project with id ${id}:`, error);
+        throw error;
+      })
+    );
   }
 
   createProject(project: Omit<Project, 'id'>): Observable<Project> {
-    return this.httpAdapter.post<Project>('/projects', project).pipe(
+    return this.httpAdapter.post<ApiResponse<Project>>('/projects', project).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message) ? response.message[0] : response.message || 'Failed to create project'
+          );
+        }
+        return response.data as Project;
+      }),
       tap((newProject) => {
         const currentProjects = this.projects();
         this.projects.set([...currentProjects, newProject]);
+      }),
+      catchError((error) => {
+        console.error('Error creating project:', error);
+        throw error;
       })
     );
   }
 
   updateProject(id: string, project: Partial<Project>): Observable<Project> {
-    return this.httpAdapter.patch<Project>(`/projects/${id}`, project).pipe(
+    return this.httpAdapter.patch<ApiResponse<Project>>(`/projects/${id}`, project).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message)
+              ? response.message[0]
+              : response.message || `Failed to update project with id ${id}`
+          );
+        }
+        return response.data as Project;
+      }),
       tap((updatedProject) => {
         const currentProjects = this.projects();
         const index = currentProjects.findIndex((p) => p.id === id);
@@ -48,42 +99,109 @@ export class ProjectService {
           updatedProjects[index] = updatedProject;
           this.projects.set(updatedProjects);
         }
+      }),
+      catchError((error) => {
+        console.error(`Error updating project with id ${id}:`, error);
+        throw error;
       })
     );
   }
 
   deleteProject(id: string): Observable<Project> {
-    return this.httpAdapter.delete<Project>(`/projects/${id}`).pipe(
+    return this.httpAdapter.delete<ApiResponse<Project>>(`/projects/${id}`).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message)
+              ? response.message[0]
+              : response.message || `Failed to delete project with id ${id}`
+          );
+        }
+        return response.data as Project;
+      }),
       tap(() => {
         const currentProjects = this.projects();
         this.projects.set(currentProjects.filter((p) => p.id !== id));
+      }),
+      catchError((error) => {
+        console.error(`Error deleting project with id ${id}:`, error);
+        throw error;
       })
     );
   }
 
   uploadProjectImage(id: string, file: File): Observable<Project> {
-    return this.httpAdapter.patchFile<Project>(`/projects/${id}/image`, file);
+    return this.httpAdapter.patchFile<ApiResponse<Project>>(`/projects/${id}/image`, file).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message)
+              ? response.message[0]
+              : response.message || `Failed to upload image for project with id ${id}`
+          );
+        }
+        return response.data as Project;
+      }),
+      catchError((error) => {
+        console.error(`Error uploading image for project with id ${id}:`, error);
+        throw error;
+      })
+    );
   }
 
   getCategories(): Observable<ProjectCategory[]> {
-    return this.httpAdapter.get<ProjectCategory[]>('/projects/categories').pipe(
+    return this.httpAdapter.get<ApiResponse<ProjectCategory[]>>('/projects/categories').pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message) ? response.message[0] : response.message || 'Failed to fetch categories'
+          );
+        }
+        return response.data || [];
+      }),
       tap((categories) => {
         this.categories.set(categories);
+      }),
+      catchError((error) => {
+        console.error('Error fetching categories:', error);
+        return of([]);
       })
     );
   }
 
   createCategory(category: { label: string; icon: string }): Observable<ProjectCategory> {
-    return this.httpAdapter.post<ProjectCategory>('/projects/categories', category).pipe(
+    return this.httpAdapter.post<ApiResponse<ProjectCategory>>('/projects/categories', category).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message) ? response.message[0] : response.message || 'Failed to create category'
+          );
+        }
+        return response.data as ProjectCategory;
+      }),
       tap((newCategory) => {
         const currentCategories = this.categories();
         this.categories.set([...currentCategories, newCategory]);
+      }),
+      catchError((error) => {
+        console.error('Error creating category:', error);
+        throw error;
       })
     );
   }
 
   updateCategory(id: string, category: Partial<{ label: string; icon: string }>): Observable<ProjectCategory> {
-    return this.httpAdapter.patch<ProjectCategory>(`/projects/categories/${id}`, category).pipe(
+    return this.httpAdapter.patch<ApiResponse<ProjectCategory>>(`/projects/categories/${id}`, category).pipe(
+      map((response) => {
+        if (!response.success) {
+          throw new Error(
+            Array.isArray(response.message)
+              ? response.message[0]
+              : response.message || `Failed to update category with id ${id}`
+          );
+        }
+        return response.data as ProjectCategory;
+      }),
       tap((updatedCategory) => {
         const currentCategories = this.categories();
         const index = currentCategories.findIndex((c) => c.id === id);
@@ -92,6 +210,10 @@ export class ProjectService {
           updatedCategories[index] = updatedCategory;
           this.categories.set(updatedCategories);
         }
+      }),
+      catchError((error) => {
+        console.error(`Error updating category with id ${id}:`, error);
+        throw error;
       })
     );
   }
