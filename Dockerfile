@@ -11,8 +11,6 @@ RUN pnpm install --frozen-lockfile
 FROM node:22.14 AS build
 
 WORKDIR /app
-
-# 👇 Réinstaller PNPM dans le stage build
 RUN npm install -g pnpm
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -22,15 +20,16 @@ COPY . .
 ARG API_URL
 ENV API_URL=$API_URL
 
-# Génération du fichier environment.prod.ts avec la bonne URL
+# ✅ Corrigé : écriture dans environment.prod.ts
 RUN mkdir -p src/environments && \
-    echo "export const environment = {" > src/environments/environment.ts && \
-    echo "  production: true," >> src/environments/environment.ts && \
-    echo "  apiUrl: '${API_URL}'" >> src/environments/environment.ts && \
-    echo "};" >> src/environments/environment.ts && \
-    cat src/environments/environment.ts
+  echo "export const environment = {" > src/environments/environment.ts && \
+  echo "  production: true," >> src/environments/environment.ts && \
+  echo "  apiUrl: '${API_URL}'" >> src/environments/environment.ts && \
+  echo "};" >> src/environments/environment.ts && \
+  cp src/environments/environment.ts src/environments/environment.prod.ts && \
+  cat src/environments/environment.prod.ts
 
-# ✅ Build Angular en mode production
+# Build Angular en mode production
 RUN pnpm run build --configuration=production
 
 # Étape 3 : NGINX pour le déploiement
