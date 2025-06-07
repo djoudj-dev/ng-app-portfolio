@@ -1,4 +1,4 @@
-import { ProjectTechnology } from '@feat/admin/project/interface/project.interface';
+import { ProjectTechnology } from '@feat/public/project/interface/project.interface';
 
 export const PROJECT_TECHNOLOGIES: ProjectTechnology[] = [
   // Backend technologies

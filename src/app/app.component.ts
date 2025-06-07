@@ -1,6 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '@shared/ui/navbar/navbar.component';
 import { HeroComponent } from '@feat/public/hero/hero.component';
 import { AboutComponent } from '@feat/public/about/about.component';
 import { StacksComponent } from '@feat/public/stacks/stacks.component';
@@ -8,14 +7,13 @@ import { ProjectComponent } from '@feat/public/project/project.component';
 import { ContactComponent } from '@feat/public/contact/contact.component';
 import { FooterComponent } from '@shared/ui/footer/footer.component';
 import { ToastComponent } from '@shared/ui/toast/toast.component';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from '@shared/ui/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
   imports: [
     CommonModule,
-    NavbarComponent,
     HeroComponent,
     AboutComponent,
     StacksComponent,
@@ -24,18 +22,10 @@ import { filter } from 'rxjs/operators';
     FooterComponent,
     ToastComponent,
     RouterOutlet,
+    NavbarComponent,
   ],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  private readonly router = inject(Router);
-
   title = 'ng-app-portfolio';
-  isAdminRoute = signal<boolean>(false);
-
-  constructor() {
-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      this.isAdminRoute.set(event.url.startsWith('/admin'));
-    });
-  }
 }

@@ -3,14 +3,13 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactCard, ContactCardGroup, ContactForm } from '@feat/public/contact/interface/contact.interface';
 import { ToastService } from '@core/services/toast.service';
-import { ToastComponent } from '@shared/ui/toast/toast.component';
 import { ButtonComponent } from '@shared/ui/button/button.component';
 import { CONTACT_DATA } from '@feat/public/contact/data/contact.data';
 import { ContactService } from '@feat/public/contact/service/contact.service';
 
 @Component({
   selector: 'app-contact',
-  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, ToastComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, ButtonComponent],
   templateUrl: './contact.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

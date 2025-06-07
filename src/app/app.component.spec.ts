@@ -8,7 +8,7 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AppComponent], // standalone component (Angular 15+)
+      imports: [AppComponent],
     });
 
     fixture = TestBed.createComponent(AppComponent);

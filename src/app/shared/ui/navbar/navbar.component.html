@@ -1,12 +1,10 @@
 <nav class="bg-background shadow-lg shadow-primary fixed w-full z-50 overflow-x-hidden">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pr-1">
     <div class="flex items-center justify-between h-14">
-      <!-- Logo -->
       <div class="flex items-center min-w-[100px] flex-shrink-0">
         <h1 class="text-3xl text-text font-bold whitespace-nowrap">Julien<span class="text-accent-500">.</span>N</h1>
       </div>
 
-      <!-- Desktop Navigation -->
       <div class="hidden lg:flex flex-grow justify-center">
         <ul class="flex space-x-6">
           @for (item of navigationItems(); track item.label) {
@@ -38,32 +36,7 @@
       </div>
 
       <div class="flex items-center gap-1 sm:gap-2 min-w-[140px] w-auto flex-shrink-0 justify-end">
-        <app-badge [badge]="badgeService.selectedBadge()" />
-
-        <!-- Settings Button -->
-        <div class="relative">
-          <button
-            id="settings-button"
-            (click)="$event.preventDefault(); $event.stopPropagation(); toggleSettingsModal()"
-            data-settings-button
-            aria-label="Paramètres"
-            aria-haspopup="true"
-            [attr.aria-expanded]="isSettingsModalOpen()"
-            role="button"
-            class="p-1 sm:p-2 rounded-full hover:bg-accent-400 transition-colors icon-invert flex-shrink-0 w-9 sm:w-10 h-9 sm:h-10 flex items-center justify-center"
-            type="button"
-          >
-            <div class="w-5 sm:w-6 h-5 sm:h-6 relative">
-              <img
-                alt="Paramètres"
-                class="w-5 sm:w-6 h-5 sm:h-6 absolute inset-0"
-                width="24"
-                height="24"
-                [ngSrc]="'icons/navbar/settings.svg'"
-              />
-            </div>
-          </button>
-        </div>
+        <app-badge />
 
         <button
           id="theme-toggle-button"
@@ -95,7 +68,6 @@
           </div>
         </button>
 
-        <!-- Mobile Menu Toggle -->
         <button
           id="mobile-menu-button"
           (click)="toggleMenu()"
@@ -122,7 +94,6 @@
     </div>
   </div>
 
-  <!-- Mobile Menu -->
   @if (isMenuOpen()) {
     <div
       role="menu"
@@ -154,73 +125,3 @@
     </div>
   }
 </nav>
-
-<!-- Settings Mini Modal (outside navbar) -->
-@if (isSettingsModalOpen()) {
-  <div
-    role="menu"
-    aria-labelledby="settings-button"
-    (click)="$event.stopPropagation()"
-    data-settings-modal
-    class="fixed z-50 w-[150px] rounded-lg border border-accent-400 bg-background p-3 shadow-xl animate-bubbleIn"
-    [style.top.px]="settingsPosition().top"
-    [style.left.px]="settingsPosition().left"
-    style="transform-origin: top left"
-  >
-    @if (!isAuthenticated()) {
-      <button
-        type="button"
-        role="menuitem"
-        aria-label="Connexion"
-        data-login-button
-        (click)="$event.preventDefault(); $event.stopPropagation(); showLoginForm()"
-        class="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent-400 transition-colors"
-      >
-        <img [ngSrc]="'icons/navbar/login.svg'" alt="Connexion" width="20" height="20" class="w-5 h-5 icon-invert" />
-        <span class="text-sm text-text">Connexion</span>
-      </button>
-    } @else {
-      <!-- Admin Button -->
-      <button
-        id="admin-button"
-        type="button"
-        role="menuitem"
-        aria-label="Administration"
-        routerLink="/admin"
-        (click)="$event.stopPropagation(); closeSettingsModal()"
-        class="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent-400 transition-colors mb-2"
-      >
-        <img
-          [ngSrc]="'icons/navbar/admin.svg'"
-          alt="Administration"
-          width="20"
-          height="20"
-          class="w-5 h-5 icon-invert"
-        />
-        <span class="text-sm text-text">Admin</span>
-      </button>
-
-      <!-- Logout Button -->
-      <button
-        type="button"
-        role="menuitem"
-        aria-label="Déconnexion"
-        (click)="$event.preventDefault(); $event.stopPropagation(); logout()"
-        class="flex w-full items-center gap-2 p-2 rounded-lg hover:bg-accent-400 transition-colors"
-      >
-        <img [ngSrc]="'icons/navbar/logout.svg'" alt="Déconnexion" width="20" height="20" class="w-5 h-5 icon-invert" />
-        <span class="text-sm text-text">Déconnexion</span>
-      </button>
-    }
-  </div>
-}
-
-<!-- Login Modal (outside navbar and settings modal) -->
-@if (isLoginFormVisible()) {
-  <app-login
-    [position]="settingsPosition()"
-    [isCompact]="false"
-    (closeModal)="hideLoginForm()"
-    (loginSuccess)="handleLoginSuccess()"
-  />
-}

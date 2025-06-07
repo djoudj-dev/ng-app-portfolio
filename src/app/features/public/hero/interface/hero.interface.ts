@@ -4,4 +4,5 @@ export interface Hero {
   jobTitle: string;
   jobDescription: string;
   illustration: string;
+  cvPath: string;
 }
