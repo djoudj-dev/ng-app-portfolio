@@ -12,6 +12,10 @@ export class HttpAdapterService {
     return `${this.baseUrl}${path.startsWith('/') ? path : '/' + path}`;
   }
 
+  constructor() {
+    console.log('🌐 Base API URL =', this.baseUrl); // Tu verras directement si c'est localhost ou pas
+  }
+
   get<T>(path: string, params?: HttpParams): Observable<T> {
     return this.http.get<T>(this.resolveUrl(path), {
       params,
