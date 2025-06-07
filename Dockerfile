@@ -18,21 +18,20 @@ COPY . .
 
 # 👇 Variable d’environnement transmise au build
 ARG API_URL
-ENV API_URL=$API_URL
+ENV API_URL=${API_URL:-https://api.nedellec-julien.fr}
 
-# ✅ Corrigé : écriture dans environment.ts et environment.prod.ts
+# ✅ Génère un fichier d'environnement Angular avec API_URL
 RUN mkdir -p src/environments && \
-  echo "export const environment = {" > src/environments/environment.ts && \
-  echo "  production: true," >> src/environments/environment.ts && \
-  echo "  apiUrl: '${API_URL}'" >> src/environments/environment.ts && \
-  echo "};" >> src/environments/environment.ts && \
-  cp src/environments/environment.ts src/environments/environment.prod.ts && \
-  cat src/environments/environment.ts
+    echo "export const environment = {" > src/environments/environment.prod.ts && \
+    echo "  production: true," >> src/environments/environment.prod.ts && \
+    echo "  apiUrl: '${API_URL}'" >> src/environments/environment.prod.ts && \
+    echo "};" >> src/environments/environment.prod.ts && \
+    cat src/environments/environment.prod.ts
 
 # Build Angular en mode production
 RUN pnpm run build --configuration=production
 
-# Étape 3 : NGINX pour le déploiement
+# Étape 3 : Image finale avec NGINX
 FROM nginx:alpine
 
 COPY --from=build /app/dist/ng-app-portfolio/browser /usr/share/nginx/html
