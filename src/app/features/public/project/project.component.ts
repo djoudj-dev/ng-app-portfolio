@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { FileUrlService } from '@core/services/file-url.service';
 import { PROJECTS } from './data/project.data';
 import { PROJECT_CATEGORIES } from './data/project-categories.data';
 import { PROJECT_TECHNOLOGIES } from './data/project-technologies.data';
@@ -13,11 +12,10 @@ import { Project } from './interface/project.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectComponent {
-  private readonly fileUrlService = inject(FileUrlService);
-
   private readonly search = signal('');
   private readonly selectedCategory = signal('all');
   readonly currentPage = signal(1);
+  readonly searchQuery = this.search.asReadonly();
   private readonly itemsPerPage = 3;
   readonly loadedImages = signal<Record<string, boolean>>({});
 
@@ -80,8 +78,6 @@ export class ProjectComponent {
     }
   }
 
-  readonly searchQuery = this.search.asReadonly();
-
   onImageLoad(projectId: string): void {
     this.loadedImages.update((images) => ({ ...images, [projectId]: true }));
   }
@@ -90,15 +86,9 @@ export class ProjectComponent {
     return this.loadedImages()[projectId];
   }
 
-  viewProjectImage(imagePath: string): void {
-    if (!imagePath) return;
-    const fileUrl = this.fileUrlService.getFileUrl(imagePath);
-    window.open(fileUrl, '_blank');
-  }
-
   getImageUrl(path: string): string {
     if (!path) return '';
-    return this.fileUrlService.getFileUrl(path);
+    return '/' + path.replace(/^\/+/, '');
   }
 
   getTechnologyIcon(techId: string): string {
