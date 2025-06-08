@@ -6,7 +6,7 @@ export const ABOUT_DATA: About = {
   fullname: 'Julien NÉDELLEC',
   title: 'Développeur Angular Fullstack',
   email: 'contact@nedellec-julien.fr',
-  location: 'Voisins-Le-Bretonneux | Paris',
+  location: 'Voisins-Le-Bretonneux',
   imageUrl: 'images/julien.webp',
   description: `Passionné par le code propre et durable, je considère chaque ligne comme une brique d’un ensemble cohérent, lisible et maintenable.
 Mon approche repose sur une architecture modulaire, pensée pour évoluer avec les équipes et les besoins techniques.
