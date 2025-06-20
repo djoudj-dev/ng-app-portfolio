@@ -1,41 +1,25 @@
-# Étape 1 : Installer les dépendances
-FROM node:22.14 AS deps
+# Étape 1 : Builder Angular
+FROM node:22-alpine AS build
 
 WORKDIR /app
-
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
-
-# Étape 2 : Builder l'application Angular
-FROM node:22.14 AS build
-
-WORKDIR /app
-RUN npm install -g pnpm
-
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
-# 👇 Variable d’environnement transmise au build
+# Génération de l'env prod
 ARG API_URL
 ENV API_URL=${API_URL:-https://api.nedellec-julien.fr}
-
-# ✅ Génère un fichier d'environnement Angular avec API_URL
 RUN mkdir -p src/environments && \
     echo "export const environment = {" > src/environments/environment.prod.ts && \
     echo "  production: true," >> src/environments/environment.prod.ts && \
     echo "  apiUrl: '${API_URL}'" >> src/environments/environment.prod.ts && \
-    echo "};" >> src/environments/environment.prod.ts && \
-    cat src/environments/environment.prod.ts
+    echo "};" >> src/environments/environment.prod.ts
 
-# Build Angular en mode production
 RUN pnpm run build --configuration=production
 
-# Étape 3 : Image finale avec NGINX
-FROM nginx:alpine
+# Étape 2 : Serveur statique avec Caddy
+FROM caddy:2.8.4-alpine
 
-COPY --from=build /app/dist/ng-app-portfolio/browser /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/ng-app-portfolio/browser /usr/share/caddy
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Caddyfile avec headers sécurité
+COPY Caddyfile /etc/caddy/Caddyfile
