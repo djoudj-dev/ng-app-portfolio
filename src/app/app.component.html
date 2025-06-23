@@ -1,10 +1,36 @@
 <app-navbar />
 <app-hero />
-<app-about />
-<app-stacks />
-<app-project />
-<app-contact />
-<app-footer />
+
+@defer (on viewport) {
+  <app-about />
+} @placeholder {
+  <div class="loading-placeholder">Loading about section...</div>
+}
+
+@defer (on viewport) {
+  <app-stacks />
+} @placeholder {
+  <div class="loading-placeholder">Loading skills section...</div>
+}
+
+@defer (on viewport) {
+  <app-project />
+} @placeholder {
+  <div class="loading-placeholder">Loading projects section...</div>
+}
+
+@defer (on viewport) {
+  <app-contact />
+} @placeholder {
+  <div class="loading-placeholder">Loading contact section...</div>
+}
+
+@defer (on idle) {
+  <app-footer />
+} @placeholder {
+  <div class="loading-placeholder">Loading footer...</div>
+}
+
 <app-toast />
 
 <router-outlet></router-outlet>

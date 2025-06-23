@@ -848,4 +848,41 @@
     animation: bubbleInFromButton 0.3s ease-out forwards;
   }
 
+  /* Loading placeholders for deferred content */
+  .loading-placeholder {
+    padding: 2rem;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
+    background-color: var(--color-background, var(--color-primary-100));
+    color: var(--color-text);
+    text-align: center;
+    font-size: 1.125rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loading-placeholder::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-primary-200, rgba(255, 255, 255, 0.2)),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
