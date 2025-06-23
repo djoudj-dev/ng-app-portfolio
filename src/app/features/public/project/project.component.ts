@@ -91,6 +91,10 @@ export class ProjectComponent {
     return '/' + path.replace(/^\/+/, '');
   }
 
+  getProjectSizes(): string {
+    return '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
+  }
+
   getTechnologyIcon(techId: string): string {
     const technology = this.technologies().find((tech) => tech.id === techId);
     return technology?.icon || 'icons/stacks/default.svg';

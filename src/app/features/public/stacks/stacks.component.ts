@@ -17,4 +17,16 @@ export class StacksComponent {
     category: cat,
     skills: this.hardskills.filter((skill) => skill.categoryId === cat.id).sort((a, b) => a.priority - b.priority),
   }));
+
+  getTechIconSizes(): string {
+    return '(min-width: 1280px) 5vw, (min-width: 1024px) 6vw, (min-width: 768px) 8vw, (min-width: 640px) 10vw, 15vw';
+  }
+
+  getCategoryIconSizes(): string {
+    return '(min-width: 1280px) 4vw, (min-width: 1024px) 5vw, (min-width: 768px) 6vw, (min-width: 640px) 8vw, 10vw';
+  }
+
+  getSoftSkillIconSizes(): string {
+    return '(min-width: 1280px) 5vw, (min-width: 1024px) 6vw, (min-width: 768px) 8vw, (min-width: 640px) 10vw, 12vw';
+  }
 }
