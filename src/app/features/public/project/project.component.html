@@ -55,8 +55,8 @@
               [ngSrc]="getImageUrl(project.image!)"
               ngSrcset="480w, 768w, 1024w, 1280w, 1920w"
               [sizes]="getProjectSizes()"
-              width="1280"
-              height="720"
+              width="432"
+              [height]="getImageHeight(project.image!)"
               priority
               alt="Image du projet"
               (load)="onImageLoad(project.id)"
@@ -82,6 +82,7 @@
                   class="w-6 h-6"
                   width="16"
                   height="16"
+                  style="height: auto"
                 />
                 <span>{{ getTechnologyLabel(techId) }}</span>
               </div>
@@ -104,6 +105,7 @@
                   class="w-6 h-6 icon-invert"
                   width="20"
                   height="20"
+                  style="height: auto"
                 />
                 <span>{{ repo.label }}</span>
               </a>
@@ -123,6 +125,7 @@
                   class="w-6 h-6 icon-invert"
                   width="20"
                   height="20"
+                  style="height: auto"
                 />
                 <span>Démo</span>
               </a>

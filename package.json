@@ -10,7 +10,8 @@
     "lint": "eslint . --ext .ts,.html",
     "lint:fix": "eslint . --ext .ts,.html --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "optimize-images": "node scripts/optimize-images.js"
   },
   "private": true,
   "dependencies": {

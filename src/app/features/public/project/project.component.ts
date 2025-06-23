@@ -95,6 +95,27 @@ export class ProjectComponent {
     return '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
   }
 
+  /**
+   * Returns the appropriate height for a project image based on its filename
+   * @param imagePath The path to the image
+   * @returns The height value to use for the image
+   */
+  getImageHeight(imagePath: string): number {
+    if (!imagePath) return 214; // Default height
+
+    // Extract the filename from the path
+    const filename = imagePath.split('/').pop()?.toLowerCase();
+
+    // Return the appropriate height based on the filename
+    if (filename?.includes('portfolio')) {
+      return 201; // portfolio.webp has intrinsic size 432x201
+    } else if (filename?.includes('calculator')) {
+      return 202; // calculator.webp has intrinsic size 432x202
+    } else {
+      return 214; // arcadia.webp and others have intrinsic size 432x214
+    }
+  }
+
   getTechnologyIcon(techId: string): string {
     const technology = this.technologies().find((tech) => tech.id === techId);
     return technology?.icon || 'icons/stacks/default.svg';
