@@ -2,12 +2,11 @@
   root * /usr/share/caddy
   file_server
 
-  # 🔐 Headers de sécurité CSP adaptés à Angular
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains"
     Content-Security-Policy "
       default-src 'self';
-      script-src 'self';
+      script-src 'self' 'unsafe-hashes';
       style-src 'self' 'unsafe-inline';
       object-src 'none';
       frame-ancestors 'self';
