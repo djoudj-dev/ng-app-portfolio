@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgClass, NgOptimizedImage } from '@angular/common';
 import { PROJECTS } from './data/project.data';
 import { PROJECT_CATEGORIES } from './data/project-categories.data';
 import { PROJECT_TECHNOLOGIES } from './data/project-technologies.data';
 import { Project } from './interface/project.interface';
+import { ImageOptimizerService } from '@shared/services/image-optimizer.service';
 
 @Component({
   selector: 'app-project',
@@ -18,10 +19,19 @@ export class ProjectComponent {
   readonly searchQuery = this.search.asReadonly();
   private readonly itemsPerPage = 3;
   readonly loadedImages = signal<Record<string, boolean>>({});
+  private readonly imageOptimizer = inject(ImageOptimizerService);
 
   readonly allProjects = signal<Project[]>(PROJECTS);
   readonly categories = signal(PROJECT_CATEGORIES);
   readonly technologies = signal(PROJECT_TECHNOLOGIES);
+
+  private readonly projectImageSizes = {
+    xs: 100,
+    sm: 50,
+    md: 50,
+    lg: 33,
+    xl: 33,
+  };
 
   readonly filteredProjects = computed(() => {
     const query = this.search().toLowerCase();
@@ -91,15 +101,26 @@ export class ProjectComponent {
     return '/' + path.replace(/^\/+/, '');
   }
 
-  getProjectSizes(): string {
-    return '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
+  getImageSrcSet(path: string): string {
+    if (!path) return '';
+
+    // Extract the base path and extension
+    const normalizedPath = path.replace(/^\/+/, '');
+    const lastDotIndex = normalizedPath.lastIndexOf('.');
+    if (lastDotIndex === -1) return '/' + normalizedPath;
+
+    const basePath = normalizedPath.substring(0, lastDotIndex);
+    const extension = normalizedPath.substring(lastDotIndex + 1);
+
+    // Generate srcset with multiple sizes
+    // Using common responsive image sizes: 480px, 768px, 1024px, 1280px, 1920px
+    return this.imageOptimizer.generateSrcSet(basePath, extension, [480, 768, 1024, 1280, 1920]);
   }
 
-  /**
-   * Returns the appropriate height for a project image based on its filename
-   * @param imagePath The path to the image
-   * @returns The height value to use for the image
-   */
+  getProjectSizes(): string {
+    return this.imageOptimizer.generateSizes(this.projectImageSizes);
+  }
+
   getImageHeight(imagePath: string): number {
     if (!imagePath) return 214; // Default height
 

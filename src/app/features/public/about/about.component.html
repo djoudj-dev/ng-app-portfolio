@@ -10,7 +10,7 @@
           <img
             class="object-cover w-72 h-72 transition-transform hover:scale-105"
             [ngSrc]="about.imageUrl"
-            ngSrcset="288w, 384w, 576w, 768w"
+            [ngSrcset]="getPortraitSrcSet(about.imageUrl)"
             [sizes]="getPortraitSizes()"
             [alt]="'Portrait de ' + about.fullname"
             width="288"

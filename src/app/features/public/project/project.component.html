@@ -53,7 +53,7 @@
 
             <img
               [ngSrc]="getImageUrl(project.image!)"
-              ngSrcset="480w, 768w, 1024w, 1280w, 1920w"
+              [ngSrcset]="getImageSrcSet(project.image!)"
               [sizes]="getProjectSizes()"
               width="432"
               [height]="getImageHeight(project.image!)"
