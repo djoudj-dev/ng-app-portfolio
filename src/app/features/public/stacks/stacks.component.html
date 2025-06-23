@@ -16,7 +16,7 @@
           <div class="flex items-center mb-4">
             <img
               [ngSrc]="group.category.icon"
-              [ngSrcset]="getTechIconSrcSet(group.category.icon)"
+              ngSrcset="48w, 64w, 96w, 128w"
               [sizes]="getCategoryIconSizes()"
               [alt]="group.category.label"
               class="w-8 h-8 mr-3 icon-invert"
@@ -32,7 +32,7 @@
               <div class="flex flex-col items-center rounded-lg px-3 py-2 text-text">
                 <img
                   [ngSrc]="skill.icon"
-                  [ngSrcset]="getTechIconSrcSet(skill.icon)"
+                  ngSrcset="48w, 64w, 96w, 128w"
                   [sizes]="getTechIconSizes()"
                   [alt]="skill.label"
                   class="w-12 h-12"
@@ -63,7 +63,7 @@
           >
             <img
               [ngSrc]="skill.icon"
-              [ngSrcset]="getTechIconSrcSet(skill.icon)"
+              ngSrcset="48w, 64w, 96w, 128w"
               [sizes]="getSoftSkillIconSizes()"
               [alt]="skill.label"
               class="w-10 h-10 mb-2 icon-invert"
