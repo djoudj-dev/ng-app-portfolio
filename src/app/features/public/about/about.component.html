@@ -10,6 +10,8 @@
           <img
             class="object-cover w-72 h-72 transition-transform hover:scale-105"
             [ngSrc]="about.imageUrl"
+            ngSrcset="288w, 384w, 576w, 768w"
+            [sizes]="getPortraitSizes()"
             [alt]="'Portrait de ' + about.fullname"
             width="288"
             height="288"
@@ -28,7 +30,15 @@
         <ul class="flex flex-col sm:flex-row sm:flex-wrap gap-x-6 gap-y-2 pt-4">
           @for (info of aboutInfos; track info.label) {
             <li class="flex items-center gap-2">
-              <img [ngSrc]="info.icon" [alt]="info.label" class="w-5 h-5 icon-invert" width="20" height="20" />
+              <img
+                [ngSrc]="info.icon"
+                ngSrcset="48w, 64w, 96w, 128w"
+                sizes="5vw"
+                [alt]="info.label"
+                class="w-5 h-5 icon-invert"
+                width="20"
+                height="20"
+              />
               <span class="font-semibold text-primary">{{ info.label }} :</span>
               <span class="text-accent">{{ info.value }}</span>
             </li>
@@ -45,6 +55,8 @@
               >
                 <img
                   [ngSrc]="link.icon || ''"
+                  ngSrcset="48w, 64w, 96w, 128w"
+                  sizes="6vw"
                   [alt]="'Icône ' + link.label"
                   class="w-6 h-6 icon-invert"
                   width="48"
@@ -68,6 +80,8 @@
           >
             <img
               [ngSrc]="interest.icon || 'icons/about/default.svg'"
+              ngSrcset="48w, 64w, 96w, 128w"
+              sizes="12vw"
               class="w-12 h-12 mb-3 icon-invert"
               width="48"
               height="48"

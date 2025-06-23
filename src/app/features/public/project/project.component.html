@@ -53,16 +53,18 @@
 
             <img
               [ngSrc]="getImageUrl(project.image!)"
-              fill="fill"
+              ngSrcset="480w, 768w, 1024w, 1280w, 1920w"
+              [sizes]="getProjectSizes()"
+              width="1280"
+              height="720"
               priority
               alt="Image du projet"
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               (load)="onImageLoad(project.id)"
               [ngClass]="{
                 'opacity-0': !isImageLoaded(project.id),
                 'opacity-100': isImageLoaded(project.id),
               }"
-              class="transition-opacity duration-300"
+              class="transition-opacity duration-300 object-cover"
             />
           </div>
 
@@ -74,11 +76,12 @@
               <div class="flex items-center gap-2 px-2 py-1 bg-background text-text text-xs rounded-full shadow-accent">
                 <img
                   [ngSrc]="getTechnologyIcon(techId)"
+                  ngSrcset="48w, 64w, 96w, 128w"
+                  sizes="(min-width: 768px) 4vw, 10vw"
                   [alt]="getTechnologyLabel(techId)"
                   class="w-6 h-6"
                   width="16"
                   height="16"
-                  sizes="(min-width: 768px) 4vw, 10vw"
                 />
                 <span>{{ getTechnologyLabel(techId) }}</span>
               </div>
@@ -95,11 +98,12 @@
               >
                 <img
                   [ngSrc]="repo.icon"
+                  ngSrcset="48w, 64w, 96w, 128w"
+                  sizes="(min-width: 768px) 5vw, 10vw"
                   [alt]="repo.label"
                   class="w-6 h-6 icon-invert"
                   width="20"
                   height="20"
-                  sizes="(min-width: 768px) 5vw, 10vw"
                 />
                 <span>{{ repo.label }}</span>
               </a>
@@ -111,7 +115,15 @@
                 rel="noopener noreferrer"
                 class="flex items-center gap-2 text-sm text-accent hover:underline"
               >
-                <img [ngSrc]="project.iconDeploy" [alt]="'Démo'" class="w-6 h-6 icon-invert" width="20" height="20" />
+                <img
+                  [ngSrc]="project.iconDeploy"
+                  ngSrcset="48w, 64w, 96w, 128w"
+                  sizes="(min-width: 768px) 5vw, 10vw"
+                  [alt]="'Démo'"
+                  class="w-6 h-6 icon-invert"
+                  width="20"
+                  height="20"
+                />
                 <span>Démo</span>
               </a>
             }
