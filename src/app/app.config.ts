@@ -6,25 +6,18 @@ import { provideHttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { IMAGE_CONFIG, IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
 
-/**
- * Custom image loader for local images
- * Generates URLs for resized images based on the naming pattern used by the optimize-images.js script
- */
 const localImageLoader = (config: ImageLoaderConfig) => {
-  // Extract the base path and extension
   const path = config.src;
   const lastDotIndex = path.lastIndexOf('.');
   if (lastDotIndex === -1) return path;
 
   const basePath = path.substring(0, lastDotIndex);
-  const extension = path.substring(lastDotIndex + 1);
+  const extension = path.substring(lastDotIndex + 1).toLowerCase();
 
-  // If width is provided, generate a URL for the resized image
-  if (config.width) {
+  if (config.width && extension === 'webp') {
     return `${basePath}-${config.width}.${extension}`;
   }
 
-  // Otherwise, return the original image URL
   return path;
 };
 
