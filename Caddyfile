@@ -6,6 +6,9 @@ nedellec-julien.fr, www.nedellec-julien.fr {
     format json
   }
 
+  # Désactive la redirection slash implicite
+  redir / /index.html 307
+
   @staticAssets {
     path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm
   }
