@@ -1,18 +1,14 @@
-localhost:80 {
+nedellec-julien.fr, www.nedellec-julien.fr {
   root * /home/djoudj/WebstormProjects/ng-app-portfolio/dist/ng-app-portfolio/browser
+  file_server
+  encode gzip zstd
   log {
     output stdout
     format json
   }
 
-  encode gzip
-
-  @static {
+  @staticAssets {
     path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm *.json *.txt *.xml *.webmanifest
-  }
-
-  @api {
-    path /api/*
   }
 
   header {
@@ -25,21 +21,10 @@ localhost:80 {
     -Server
   }
 
-  header @static {
+  header @staticAssets {
     Cache-Control "public, max-age=31536000, immutable"
     Vary "Accept-Encoding"
   }
 
-  handle @static {
-    file_server
-  }
-
-  handle @api {
-    respond "API endpoint not implemented" 501
-  }
-
-  handle {
-    rewrite * /index.html
-    file_server
-  }
+  try_files {path} /index.html
 }
