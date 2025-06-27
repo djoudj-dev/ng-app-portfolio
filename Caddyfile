@@ -1,8 +1,10 @@
+{
+    auto_https off
+}
+
 :80 {
     root * /usr/share/caddy
     encode zstd gzip
-
-    auto_https off
 
     try_files {path} /index.html
     file_server
