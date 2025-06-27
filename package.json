@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --ext .ts,.html --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "optimize-images": "node scripts/optimize-images.js"
+    "optimize-images": "node scripts/optimize-images.js",
+    "postbuild": "node scripts/inject-preload-tags.js"
   },
   "private": true,
   "dependencies": {
