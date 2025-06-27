@@ -4,18 +4,19 @@ localhost:80 {
     output stdout
     format json
   }
-  # file_server directive is now handled by specific matchers
+
   encode gzip
 
-  # This matcher is now redundant with @static
-  # @staticAssets {
-  #   path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm *.json
-  # }
+  @static {
+    path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm *.json *.txt *.xml *.webmanifest
+  }
+
+  @api {
+    path /api/*
+  }
 
   header {
-    # Global security headers
     Strict-Transport-Security "max-age=31536000; includeSubDomains"
-    # Re-enable CSP with more permissive settings for Angular
     Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-hashes' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: wss:; media-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; worker-src 'self' blob:;"
     X-Frame-Options "SAMEORIGIN"
     X-Content-Type-Options "nosniff"
@@ -24,36 +25,21 @@ localhost:80 {
     -Server
   }
 
-  # Apply cache headers to static files
   header @static {
     Cache-Control "public, max-age=31536000, immutable"
     Vary "Accept-Encoding"
   }
 
-  # Create a matcher for static files
-  @static {
-    path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm *.json *.txt *.xml *.webmanifest
-  }
-
-  # Create a matcher for API requests that should not be handled by the SPA
-  @api {
-    path /api/*
-  }
-
-  # Order matters: first handle static files
   handle @static {
     file_server
   }
 
-  # Then handle API requests
   handle @api {
     respond "API endpoint not implemented" 501
   }
 
-  # Finally, handle all other requests by serving index.html for Angular routes
   handle {
-    # Simple approach: just serve index.html for all non-static, non-API routes
-    # This is the most reliable approach for Angular applications
     rewrite * /index.html
+    file_server
   }
 }
