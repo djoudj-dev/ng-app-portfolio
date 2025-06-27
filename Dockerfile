@@ -20,6 +20,7 @@ RUN pnpm run build --configuration=production
 FROM caddy:2.8.4-alpine
 
 COPY --from=build /app/dist/ng-app-portfolio /usr/share/caddy
-
-# Caddyfile avec headers sécurité
 COPY Caddyfile /etc/caddy/Caddyfile
+
+# Exposer seulement le port 80 si derrière un reverse proxy
+EXPOSE 80

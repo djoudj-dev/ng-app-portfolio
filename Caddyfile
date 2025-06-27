@@ -1,4 +1,4 @@
-:80 {
+nedellec-julien.fr, www.nedellec-julien.fr {
   root * /usr/share/caddy
   encode zstd gzip
 
@@ -34,7 +34,7 @@
 
   # Redirection vers index.html pour routes Angular
   handle {
-    rewrite * /index.html
+    try_files {path} /index.html
     file_server
   }
 }
