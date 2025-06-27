@@ -2,6 +2,22 @@
   root * /usr/share/caddy
   file_server
 
+  # Define static assets matcher - covers all static resources from the issue
+  @staticAssets {
+    # Include all common static file extensions
+    path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg
+    path *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm
+    # Also match specific paths from the issue if needed
+    path /chunk-* /main-* /polyfills-* /styles-* /images/*
+  }
+
+  # Define non-static assets matcher (everything else)
+  @nonStaticAssets {
+    # Anything that doesn't match the static assets matcher
+    not @staticAssets
+  }
+
+  # Security headers for all responses
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains"
     Content-Security-Policy "
@@ -17,6 +33,17 @@
     Referrer-Policy "strict-origin-when-cross-origin"
     Permissions-Policy "geolocation=(), microphone=(), camera=()"
     -Server
+  }
+
+  # Cache headers for static assets (long-lived)
+  header @staticAssets {
+    Cache-Control "public, max-age=31536000, immutable"
+    Vary "Accept-Encoding"
+  }
+
+  # Cache headers for non-static assets (shorter-lived)
+  header @nonStaticAssets {
+    Cache-Control "public, max-age=3600"
   }
 
   try_files {path} /index.html
