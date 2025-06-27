@@ -1,7 +1,7 @@
 :80 {
   root * /usr/share/caddy
   file_server
-  encode gzip zstd br
+  encode gzip zstd
 
   # Matcher pour assets statiques
   @staticAssets {
