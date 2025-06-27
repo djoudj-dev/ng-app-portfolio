@@ -11,12 +11,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/ng-app-portfolio",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": [],
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -26,14 +26,7 @@
               }
             ],
             "styles": ["src/styles.css"],
-            "scripts": [],
-            "optimization": true,
-            "commonChunk": true,
-            "vendorChunk": false,
-            "namedChunks": false,
-            "extractLicenses": true,
-            "buildOptimizer": true,
-            "subresourceIntegrity": true
+            "scripts": []
           },
           "configurations": {
             "production": {

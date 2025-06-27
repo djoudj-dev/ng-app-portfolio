@@ -19,8 +19,7 @@ RUN pnpm run build --configuration=production
 # Étape 2 : Serveur statique avec Caddy
 FROM caddy:2.8.4-alpine
 
-COPY --from=build /app/dist/ng-app-portfolio /usr/share/caddy
-COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=build /app/dist/ng-app-portfolio/browser /usr/share/caddy
 
-# Exposer seulement le port 80 si derrière un reverse proxy
-EXPOSE 80
+# Caddyfile avec headers sécurité
+COPY Caddyfile /etc/caddy/Caddyfile
