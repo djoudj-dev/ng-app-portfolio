@@ -1,5 +1,5 @@
-:80 {
-  root * /usr/share/caddy
+localhost:80 {
+  root * /home/djoudj/WebstormProjects/ng-app-portfolio/dist/ng-app-portfolio
   file_server
   encode gzip zstd
 
@@ -11,14 +11,7 @@
   header {
     # Global security headers
     Strict-Transport-Security "max-age=31536000; includeSubDomains"
-    Content-Security-Policy "
-      default-src 'self';
-      script-src 'self' 'unsafe-hashes' 'unsafe-inline';
-      style-src 'self' 'unsafe-inline';
-      object-src 'none';
-      frame-ancestors 'self';
-      base-uri 'self';
-    "
+    Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-hashes' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'"
     X-Frame-Options "SAMEORIGIN"
     X-Content-Type-Options "nosniff"
     Referrer-Policy "strict-origin-when-cross-origin"
