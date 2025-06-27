@@ -28,8 +28,13 @@ nedellec-julien.fr, www.nedellec-julien.fr {
     Vary "Accept-Encoding"
   }
 
-  # Disable trailing slash redirects
-  uri strip_suffix /
+  # Handle paths with or without trailing slashes
+  @notFile {
+    not file {
+      try_files {path} {path}/index.html
+    }
+  }
+  rewrite @notFile /index.html
 
-  try_files {path} /index.html
+  try_files {path} {path}/index.html /index.html
 }
