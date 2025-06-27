@@ -4,11 +4,7 @@
 
   # Define static assets matcher - covers all static resources from the issue
   @staticAssets {
-    # Include all common static file extensions
-    path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg
-    path *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm
-    # Also match specific paths from the issue if needed
-    path /chunk-* /main-* /polyfills-* /styles-* /images/*
+    path *.css *.js *.webp *.jpg *.jpeg *.png *.gif *.ico *.svg *.woff *.woff2 *.ttf *.eot *.pdf *.mp4 *.webm /chunk-* /main-* /polyfills-* /styles-* /images/*
   }
 
   # Define non-static assets matcher (everything else)
